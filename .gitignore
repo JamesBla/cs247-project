@@ -16,6 +16,10 @@
 *.lib
 
 # Executables
+straights
 *.exe
 *.out
 *.app
+
+# Dependency files
+*.d
