@@ -19,7 +19,7 @@ void Controller::initializeModel(){
 
 	char playerType;
 	for (int i = 0; i < Model::getPlayerCount(); i++){
-		_view->requestPlayerType(i+1);
+		_view->requestPlayerType(i);
 		cin >> playerType;
 		playerTypes[i] = playerType;
 	}

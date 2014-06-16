@@ -2,6 +2,7 @@
 #define _MODEL_
 
 #include <vector>
+#include <set>
 
 #include "Card.h"
 #include "Player.h"
@@ -13,6 +14,7 @@ class Controller;
 class Model{
 
 public:
+	Model();
 	~Model();
 	void setView(View*);
 
@@ -30,6 +32,12 @@ private:
 	std::vector<Card*> _deck;
 	int _firstPlayer;
 	View* _view;
+
+
+
+
+	struct _cardComparator;
+	std::set<Card*, bool(*)(const Card*& lhs, const Card*& rhs)> _playedCards;
 	// int firstPlayer;
 };
 

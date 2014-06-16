@@ -12,9 +12,9 @@ View::View(Controller* controller, Model* model){
 }
 
 void View::requestPlayerType(int playerNumber) const{
-	cout << "Is player " << playerNumber << " a human(h) or a computer(c)?" << endl;
+	cout << "Is player " << playerNumber + 1 << " a human(h) or a computer(c)?" << endl;
 }
 
 void View::announceNewRound(int firstPlayer) const{
-	cout << "A new round begins. It’s player " << firstPlayer << "’s turn to play." << endl;
+	cout << "A new round begins. It’s player " << firstPlayer + 1 << "’s turn to play." << endl;
 }

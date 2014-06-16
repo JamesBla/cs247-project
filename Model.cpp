@@ -14,11 +14,15 @@ const int Model::PLAYER_COUNT = 4;
 const int Model::CARD_COUNT = 52;
 
 
+Model::Model(){
+	
+}
+
 Card initSevenOfSpades(){
 	Card c(SPADE, SEVEN);
 	return c;
 }
-static Card SevenOfSpades = initSevenOfSpades();
+static const Card SEVEN_OF_SPADES = initSevenOfSpades();
 
 void Model::setView(View* view){
 	this->_view = view;
@@ -75,8 +79,8 @@ void Model::shuffle(){
 void Model::deal(){
 	for (int i = 0; i < CARD_COUNT; i++){
 		_players[i/(CARD_COUNT/PLAYER_COUNT)]->addCard(_deck.at(i));
-		if (*_deck[i] == SevenOfSpades){
-			_firstPlayer = i/13 + 1;
+		if (*_deck[i] == SEVEN_OF_SPADES){
+			_firstPlayer = i/(CARD_COUNT/PLAYER_COUNT);
 		}
 	}
 }
@@ -104,6 +108,7 @@ void Model::playGame(){
 		int curPlayer = _firstPlayer;
 		do {
 			_players[curPlayer]->playTurn();
+			curPlayer = (curPlayer + 1) % 4;
 
 			// calculate min hand size
 			for (int i = 0; i < PLAYER_COUNT; i++){
@@ -111,8 +116,14 @@ void Model::playGame(){
 					minHandSize = _players[i]->getHandSize();
 				}
 			}
-			curPlayer++;
+			
 		}
 		while(minHandSize > 0);
 	}
 }
+
+struct Model::_cardComparator{
+	bool operator() (const Card* & c1, const Card* & c2) const{
+        return c1->getSuit() < c2->getSuit() || ((c1->getSuit() == c2->getSuit()) && (c1->getRank() < c2->getRank()));
+    }
+};
