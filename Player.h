@@ -5,8 +5,11 @@
 
 #include <set>
 
+typedef std::set<Card*, bool(*)(const Card*& lhs, const Card*& rhs)> CardSet;
+
 class Player{
 public:
+	Player(CardSet*);
 	virtual void playTurn() = 0;
 	virtual ~Player(){};
 	int getScore();
@@ -15,6 +18,7 @@ public:
 private:
 	std::set<Card*> _hand;
 	std::set<Card*> _discards;
+	CardSet *_playedCards;
 	int _score;
 };
 

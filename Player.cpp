@@ -1,6 +1,10 @@
 #include "Player.h"
 #include "Card.h"
 
+Player::Player(CardSet* cs){
+	_playedCards = cs;
+}
+
 int Player::getScore(){
 	return _score;
 }

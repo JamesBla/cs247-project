@@ -14,10 +14,6 @@ const int Model::PLAYER_COUNT = 4;
 const int Model::CARD_COUNT = 52;
 
 
-Model::Model(){
-	
-}
-
 Card initSevenOfSpades(){
 	Card c(SPADE, SEVEN);
 	return c;
@@ -56,10 +52,10 @@ void Model::setPlayers(char playerTypes[]){
 		assert(playerTypes[i] == 'h' || playerTypes[i] == 'c' || playerTypes[i] == 'H' || playerTypes[i] == 'C');
 		
 		if ((playerTypes[i] == 'h' || playerTypes[i] == 'H') ){
-			_players.push_back(new HumanPlayer());
+			_players.push_back(new HumanPlayer(&Model::_playedCards));
 		}
 		else{
-			_players.push_back(new ComputerPlayer());
+			_players.push_back(new ComputerPlayer(&Model::_playedCards));
 		}
 	}
 }
