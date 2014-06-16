@@ -8,5 +8,7 @@ int main( int argc, char * argv[] ) {
 	Controller controller( &model ); // Create controller
 	View view( &controller, &model ); // Create the view
 
+	controller.run();
+	
 	return 0;
 }

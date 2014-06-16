@@ -11,5 +11,5 @@ View::View(Controller* controller, Model* model){
 }
 
 void View::requestPlayerType(int playerNumber) const{
-	cout << "Is player " << playerNumber << "a human(h) or a computer(c)?" << endl;
+	cout << "Is player " << playerNumber << " a human(h) or a computer(c)?" << endl;
 }

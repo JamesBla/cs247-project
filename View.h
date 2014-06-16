@@ -3,7 +3,8 @@
 
 #include "Model.h"
 #include "Controller.h"
-
+class Model;
+class Controller;
 class View{
 public:
 	View(Controller*, Model*);
