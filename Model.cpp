@@ -52,10 +52,10 @@ void Model::setPlayers(char playerTypes[]){
 		assert(playerTypes[i] == 'h' || playerTypes[i] == 'c' || playerTypes[i] == 'H' || playerTypes[i] == 'C');
 		
 		if ((playerTypes[i] == 'h' || playerTypes[i] == 'H') ){
-			_players.push_back(new HumanPlayer(&Model::_playedCards));
+			_players.push_back(new HumanPlayer(&_playedCards));
 		}
 		else{
-			_players.push_back(new ComputerPlayer(&Model::_playedCards));
+			_players.push_back(new ComputerPlayer(&_playedCards));
 		}
 	}
 }
@@ -117,9 +117,3 @@ void Model::playGame(){
 		while(minHandSize > 0);
 	}
 }
-
-struct Model::_cardComparator{
-	bool operator() (const Card* & c1, const Card* & c2) const{
-        return c1->getSuit() < c2->getSuit() || ((c1->getSuit() == c2->getSuit()) && (c1->getRank() < c2->getRank()));
-    }
-};

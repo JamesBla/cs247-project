@@ -1,8 +1,10 @@
 #include "Player.h"
 #include "Card.h"
 
-Player::Player(CardSet* cs){
-	_playedCards = cs;
+using namespace std;
+
+Player::Player(map<Card*, bool>* cardMap){
+	_playedCards = cardMap;
 }
 
 int Player::getScore(){

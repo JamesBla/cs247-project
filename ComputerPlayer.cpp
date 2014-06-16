@@ -1,8 +1,9 @@
 #include "ComputerPlayer.h"
+#include <map>
 
-typedef std::set<Card*, bool(*)(const Card*& lhs, const Card*& rhs)> CardSet;
+using namespace std;
 
-ComputerPlayer::ComputerPlayer(CardSet *cs) : Player(cs){}
+ComputerPlayer::ComputerPlayer(std::map<Card*, bool> *cardMap) : Player(cardMap){}
 
 void ComputerPlayer::playTurn(){
 	

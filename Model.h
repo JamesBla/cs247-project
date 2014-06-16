@@ -2,7 +2,7 @@
 #define _MODEL_
 
 #include <vector>
-#include <set>
+#include <map>
 
 #include "Card.h"
 #include "Player.h"
@@ -10,8 +10,6 @@
 
 class View;
 class Controller;
-
-typedef std::set<Card*, bool(*)(const Card*& lhs, const Card*& rhs)> CardSet;
 
 class Model{
 
@@ -34,9 +32,9 @@ private:
 	int _firstPlayer;
 	View* _view;
 
-	struct _cardComparator;
-	CardSet _playedCards(_cardComparator);
-	// int firstPlayer;
+	std::map<Card*, bool> _playedCards;
+
+
 };
 
 #endif

@@ -3,13 +3,12 @@
 
 #include "Card.h"
 
+#include <map>
 #include <set>
-
-typedef std::set<Card*, bool(*)(const Card*& lhs, const Card*& rhs)> CardSet;
 
 class Player{
 public:
-	Player(CardSet*);
+	Player(std::map<Card*, bool>*);
 	virtual void playTurn() = 0;
 	virtual ~Player(){};
 	int getScore();
@@ -18,7 +17,7 @@ public:
 private:
 	std::set<Card*> _hand;
 	std::set<Card*> _discards;
-	CardSet *_playedCards;
+	std::map<Card*, bool> *_playedCards;
 	int _score;
 };
 

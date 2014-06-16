@@ -3,11 +3,11 @@
 
 #include "Player.h"
 
-typedef std::set<Card*, bool(*)(const Card*& lhs, const Card*& rhs)> CardSet;
+#include <map>
 
 class ComputerPlayer: public Player{
 public:
-	ComputerPlayer(CardSet*);
+	ComputerPlayer(std::map<Card*, bool>*);
 	~ComputerPlayer(){};
 	void playTurn();
 };

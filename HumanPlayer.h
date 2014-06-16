@@ -2,12 +2,12 @@
 #define _HUMANPLAYER_
 
 #include "Player.h"
-
-typedef std::set<Card*, bool(*)(const Card*& lhs, const Card*& rhs)> CardSet;
+#include "Card.h"
+#include <map>
 
 class HumanPlayer: public Player{
 public:
-	HumanPlayer(CardSet*);
+	HumanPlayer(std::map<Card*, bool>*);
 	~HumanPlayer(){};
 	void playTurn();
 };
