@@ -1,1 +1,1 @@
-Model.o: Model.cpp Model.h Card.h Player.h HumanPlayer.h ComputerPlayer.h
+Model.o: Model.cpp Card.h Model.h Player.h HumanPlayer.h ComputerPlayer.h

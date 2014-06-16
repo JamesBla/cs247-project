@@ -8,7 +8,7 @@
 class Player{
 public:
 	virtual void playTurn() = 0;
-	virtual ~Player();
+	virtual ~Player(){};
 	int getScore();
 	int getHandSize();
 private:

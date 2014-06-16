@@ -1,10 +1,12 @@
 #include <cassert>
+#include <cstdlib>
 
+#include "Card.h"
 #include "Model.h"
 #include "Player.h"
 #include "HumanPlayer.h"
 #include "ComputerPlayer.h"
-#include "Card.h"
+
 
 using namespace std;
 
