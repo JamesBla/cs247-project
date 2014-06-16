@@ -11,6 +11,7 @@ class View{
 public:
 	View(Controller*, Model*);
 	void requestPlayerType(int) const;
+	void announceNewRound(int) const;
 };
 
 #endif

@@ -11,6 +11,7 @@ public:
 	virtual ~Player(){};
 	int getScore();
 	int getHandSize();
+	void addCard(Card*);
 private:
 	std::set<Card*> _hand;
 	std::set<Card*> _discards;
