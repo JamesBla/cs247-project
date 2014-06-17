@@ -1,6 +1,7 @@
 #include "HumanPlayer.h"
 #include <map>
 #include <string>
+#include <iostream>
 
 using namespace std;
 
@@ -18,7 +19,16 @@ void HumanPlayer::playTurn(bool (&cardMap)[4][13]){
 
 	for (int i = 0; i < 4; i++) {
 		if (onTable[i] != "") {
-			onTable[i] = obTable[i].substr(0, onTable[i].length()-1);
+			onTable[i] = onTable[i].substr(0, onTable[i].length()-1);
 		}
 	}
+
+	getView()->printCardsOnTable(onTable);
+	//getView()->printCardsInHand(/*put correct string here*/);
+	//getView()->printLegalPlays(/*put correct string here*/);
+	getView()->printPrompt();
+
+	string command;
+	cin >> command;
+
 }

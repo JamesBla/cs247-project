@@ -12,9 +12,11 @@ public:
 	Player(View*);
 	virtual void playTurn(bool (&cardMap)[4][13]) = 0;
 	virtual ~Player(){};
-	int getScore();
-	int getHandSize();
+	int getScore() const;
+	int getHandSize() const;
 	void addCard(Card*);
+protected:
+	View* getView() const;
 private:
 	std::vector<Card*> _hand;
 	std::vector<Card*> _discards;
