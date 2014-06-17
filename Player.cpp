@@ -3,8 +3,8 @@
 
 using namespace std;
 
-Player::Player(map<Card*, bool>* cardMap){
-	_playedCards = cardMap;
+Player::Player(View* view){
+	_view = view;
 }
 
 int Player::getScore(){
@@ -16,5 +16,5 @@ int Player::getHandSize(){
 }
 
 void Player::addCard(Card* card){
-	_hand.insert(card);
+	_hand.push_back(card);
 }

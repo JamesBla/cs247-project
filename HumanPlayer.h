@@ -3,13 +3,15 @@
 
 #include "Player.h"
 #include "Card.h"
+#include "View.h"
+
 #include <map>
 
 class HumanPlayer: public Player{
 public:
-	HumanPlayer(std::map<Card*, bool>*);
+	HumanPlayer(View* view);
 	~HumanPlayer(){};
-	void playTurn();
+	void playTurn(bool (&cardMap)[4][13]);
 };
 
 #endif

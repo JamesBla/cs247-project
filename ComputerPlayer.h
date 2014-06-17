@@ -2,14 +2,15 @@
 #define _COMPUTERPLAYER_
 
 #include "Player.h"
+#include "View.h"
 
 #include <map>
 
 class ComputerPlayer: public Player{
 public:
-	ComputerPlayer(std::map<Card*, bool>*);
+	ComputerPlayer(View* view);
 	~ComputerPlayer(){};
-	void playTurn();
+	void playTurn(bool (&cardMap)[4][13]);
 };
 
 #endif

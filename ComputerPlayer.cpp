@@ -3,8 +3,8 @@
 
 using namespace std;
 
-ComputerPlayer::ComputerPlayer(std::map<Card*, bool> *cardMap) : Player(cardMap){}
+ComputerPlayer::ComputerPlayer(View* view) : Player(view){}
 
-void ComputerPlayer::playTurn(){
+void ComputerPlayer::playTurn(bool (&cardMap)[4][13]){
 	
 }

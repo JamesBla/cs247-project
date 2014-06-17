@@ -27,7 +27,9 @@ void Model::setView(View* view){
 void Model::initializeDeck(){
 	for (int suit = 0; suit < SUIT_COUNT; suit++){
 		for (int rank = 0; rank < RANK_COUNT; rank++){
-			_deck.push_back(new Card(static_cast<Suit>(suit), static_cast<Rank>(rank)));
+			Card* newCard = new Card(static_cast<Suit>(suit), static_cast<Rank>(rank));
+			_deck.push_back(newCard);
+			_playedCards[suit][rank] = false;
 		}
 	}
 }
@@ -52,10 +54,10 @@ void Model::setPlayers(char playerTypes[]){
 		assert(playerTypes[i] == 'h' || playerTypes[i] == 'c' || playerTypes[i] == 'H' || playerTypes[i] == 'C');
 		
 		if ((playerTypes[i] == 'h' || playerTypes[i] == 'H') ){
-			_players.push_back(new HumanPlayer(&_playedCards));
+			_players.push_back(new HumanPlayer(_view));
 		}
 		else{
-			_players.push_back(new ComputerPlayer(&_playedCards));
+			_players.push_back(new ComputerPlayer(_view));
 		}
 	}
 }
@@ -103,7 +105,9 @@ void Model::playGame(){
 		_view->announceNewRound(_firstPlayer);
 		int curPlayer = _firstPlayer;
 		do {
-			_players[curPlayer]->playTurn();
+
+			_players[curPlayer]->playTurn(_playedCards);
+
 			curPlayer = (curPlayer + 1) % 4;
 
 			// calculate min hand size

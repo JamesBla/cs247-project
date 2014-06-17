@@ -10,9 +10,9 @@
 
 class View;
 class Controller;
+class Player;
 
 class Model{
-
 public:
 	~Model();
 	void setView(View*);
@@ -32,7 +32,7 @@ private:
 	int _firstPlayer;
 	View* _view;
 
-	std::map<Card*, bool> _playedCards;
+	bool _playedCards[4][13];
 
 
 };
