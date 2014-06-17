@@ -16,7 +16,6 @@ class Model{
 public:
 	~Model();
 	void setView(View*);
-
 	static int getPlayerCount();
 	void setPlayers(char[]);
 	void playGame();

@@ -20,20 +20,41 @@ void View::announceNewRound(int firstPlayer) const{
 	cout << "A new round begins. It’s player " << firstPlayer + 1 << "’s turn to play." << endl;
 }
 
-void View::printCardsOnTable(string suits[4]) const{
+void View::printCardsOnTable(const bool (&cardMap)[4][13]) const{
+	string onTable[4];
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 13; j++) {
+			if (cardMap[i][j]) {
+				onTable[i] += j+1 + " ";
+			}
+		}
+	}
+
+	for (int i = 0; i < 4; i++) {
+		if (onTable[i] != "") {
+			onTable[i] = onTable[i].substr(0, onTable[i].length()-1);
+		}
+	}
+
 	cout << "Cards on the table:\n";
-	cout << "Clubs: " << suits[0] << endl;
-	cout << "Diamonds: " << suits[1] << endl;
-	cout << "Hearts: " << suits[2] << endl;
-	cout << "Spades: " << suits[3] << endl;
+	cout << "Clubs: " << onTable[0] << endl;
+	cout << "Diamonds: " << onTable[1] << endl;
+	cout << "Hearts: " << onTable[2] << endl;
+	cout << "Spades: " << onTable[3] << endl;
 }
 
-void View::printCardsInHand(string hand) const{
-	cout << "Your hand: " << hand << endl;
+void View::printCardsInHand(const std::vector<Card*> &cards) const{
+	cout << "Your hand:";
+	for (vector<Card*>::const_iterator it = cards.begin(); it != cards.end(); it++) {
+		cout << " " << *it;
+	}
 }
 
-void View::printLegalPlays(string plays) const{
-	cout << "Legal plays: " << plays << endl;
+void View::printLegalPlays(const std::vector<Card*> &cards) const{
+	cout << "Legal plays:";
+	for (vector<Card*>::const_iterator it = cards.begin(); it != cards.end(); it++) {
+		cout << " " << *it;
+	}
 }
 
 void View::printPrompt() const{

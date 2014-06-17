@@ -4,8 +4,6 @@
 #include "View.h"
 #include "Controller.h"
 
-
-
 int main( int argc, char * argv[] ) {
 	srand48( (argc > 1)? atoi(argv[1]) : 0);
 

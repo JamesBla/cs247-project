@@ -17,6 +17,8 @@ public:
 	void addCard(Card*);
 protected:
 	View* getView() const;
+	std::vector<Card*> getHand() const;
+	bool playable(Card*, bool (&cardMap)[4][13]) const;
 private:
 	std::vector<Card*> _hand;
 	std::vector<Card*> _discards;
