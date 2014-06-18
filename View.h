@@ -27,6 +27,7 @@ public:
 	void printIllegalPlay() const;
 	void printDiscard(Player*&, Card*&) const;
 	void printMayNotDiscard() const;
+	void printDeck(std::vector<Card*> &) const;
 };
 
 #endif

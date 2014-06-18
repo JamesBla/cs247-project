@@ -68,9 +68,15 @@ void Controller::requestCommand(Player* player, vector<Card*>& legalPlays, vecto
 			}
 			else{
 				_view->printMayNotDiscard();
-			}
-			
+			}	
+		} else if (command.type == DECK) {
+			std::vector<Card*> deck = this->_model->getDeck();
+			_view->printDeck(deck);
+		} else if (command.type == QUIT){
+			exit(0);
 		}
 	}
 }
+
+
 

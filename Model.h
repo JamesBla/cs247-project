@@ -26,6 +26,7 @@ public:
 	void shuffle();
 	void deal();
 	void putCardOnTable(Card*&);
+	std::vector<Card*> getDeck() const;
 private:
 	static const int PLAYER_COUNT;
 	static const int CARD_COUNT;

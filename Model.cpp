@@ -24,6 +24,10 @@ void Model::setView(View* view){
 	this->_view = view;
 }
 
+std::vector<Card*> Model::getDeck() const{
+	return _deck;
+}
+
 void Model::setController(Controller* controller){
 	_controller = controller;
 }
@@ -46,7 +50,6 @@ Model::~Model(){
 	for (vector<Player*>::iterator it = _players.begin(); it != _players.end(); it++){
 		delete *it;
 	}
-	
 }
 
 int Model::getPlayerCount(){
@@ -117,7 +120,7 @@ void Model::playGame(){
 			_players[curPlayer]->playTurn(_playedCards);
 
 			curPlayer = (curPlayer + 1) % 4;
-
+			
 			// calculate min hand size
 			for (int i = 0; i < PLAYER_COUNT; i++){
 				if (_players[i]->getHandSize() < minHandSize){

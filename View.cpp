@@ -99,3 +99,15 @@ void View::printMayNotDiscard() const{
 	cout << "You have a legal play. You may not discard." << endl;
 	printPrompt();
 }
+
+void View::printDeck(vector<Card*> & deck) const{
+	for (int i = 0; i < deck.size(); i++){
+		cout << *deck[i];
+		if ((i + 1) % 13 == 0){
+			cout << endl;
+		}
+		else{
+			cout << " ";
+		}
+	}
+}
