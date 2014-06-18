@@ -101,7 +101,7 @@ void View::printMayNotDiscard() const{
 }
 
 void View::printDeck(vector<Card*> & deck) const{
-	for (int i = 0; i < deck.size(); i++){
+	for (unsigned int i = 0; i < deck.size(); i++){
 		cout << *deck[i];
 		if ((i + 1) % 13 == 0){
 			cout << endl;

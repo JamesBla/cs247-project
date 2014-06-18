@@ -43,13 +43,7 @@ void Model::initializeDeck(){
 }
 
 Model::~Model(){
-	for (vector<Card*>::iterator it = _deck.begin(); it != _deck.end(); it++){
-		delete *it;
-	}
-
-	for (vector<Player*>::iterator it = _players.begin(); it != _players.end(); it++){
-		delete *it;
-	}
+	cleanUp();
 }
 
 int Model::getPlayerCount(){
@@ -130,5 +124,15 @@ void Model::playGame(){
 			
 		}
 		while(minHandSize > 0);
+	}
+}
+
+void Model::cleanUp(){
+	for (vector<Card*>::iterator it = _deck.begin(); it != _deck.end(); it++){
+		delete *it;
+	}
+
+	for (vector<Player*>::iterator it = _players.begin(); it != _players.end(); it++){
+		delete *it;
 	}
 }

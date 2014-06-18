@@ -27,6 +27,7 @@ public:
 	void deal();
 	void putCardOnTable(Card*&);
 	std::vector<Card*> getDeck() const;
+	void cleanUp();
 private:
 	static const int PLAYER_COUNT;
 	static const int CARD_COUNT;

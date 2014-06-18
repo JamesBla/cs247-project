@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdlib>
 
 #include "Model.h"
 #include "View.h"
@@ -73,6 +74,7 @@ void Controller::requestCommand(Player* player, vector<Card*>& legalPlays, vecto
 			std::vector<Card*> deck = this->_model->getDeck();
 			_view->printDeck(deck);
 		} else if (command.type == QUIT){
+			_model->cleanUp();
 			exit(0);
 		}
 	}
