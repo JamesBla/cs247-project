@@ -36,10 +36,13 @@ void Controller::run(){
 }
 
 void Controller::requestCommand(Player* player, vector<Card*>& legalPlays, vector<Card*>& hand){
+	
 	Command command;
 	bool cardPlayLegal = false;
 	while (!cin.eof()) {
+
 		cin >> command;
+
 		Card* c = &(command.card);
 		if (command.type == PLAY) {
 
@@ -53,13 +56,15 @@ void Controller::requestCommand(Player* player, vector<Card*>& legalPlays, vecto
 			if (cardPlayLegal){
 				
 				player->playCard(c);
+				break;
 			} else {
 				_view->printIllegalPlay();
 			}
+
 		} else if (command.type == DISCARD) {
-			if (legalPlays.size() != 0) {
-				
+			if (legalPlays.size() == 0) {
 				player->discard(c);
+				break;
 			}
 			else{
 				_view->printMayNotDiscard();

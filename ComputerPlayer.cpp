@@ -3,7 +3,7 @@
 
 using namespace std;
 
-ComputerPlayer::ComputerPlayer(View* view, Model* model, int number): Player(view, model, number){}
+ComputerPlayer::ComputerPlayer(Model* model, View* view, Controller* controller, int number) : Player(model, view, controller, number){}
 
 void ComputerPlayer::playTurn(bool (&cardMap)[4][13]){
 	vector<Card*> legalCards = getLegalPlays(cardMap);

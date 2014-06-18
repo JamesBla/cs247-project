@@ -3,10 +3,11 @@
 
 using namespace std;
 
-Player::Player(View* view, Model* model, int number){
+Player::Player(Model* model, View* view, Controller* controller, int number){
 	_view = view;
 	_playerNumber = number;
 	_model = model;
+	_controller = controller;
 }
 
 int Player::getScore() const{
@@ -78,4 +79,8 @@ vector<Card*> Player::getLegalPlays(bool (&cardMap)[4][13]) const{
 		}
 	}
 	return legalCards;
+}
+
+Controller* Player::getController() const{
+	return _controller;
 }

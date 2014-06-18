@@ -8,7 +8,7 @@
 
 class ComputerPlayer: public Player{
 public:
-	ComputerPlayer(View* view, Model* model, int playerNumber);
+	ComputerPlayer(Model* model, View* view, Controller* controller, int playerNumber);
 	~ComputerPlayer(){};
 	void playTurn(bool (&cardMap)[4][13]);
 };

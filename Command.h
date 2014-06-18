@@ -13,6 +13,6 @@ struct Command{
 	Command() : type(BAD_COMMAND), card(SPADE, ACE) {}
 };
 
-std::istream &operator>>(std::istream &, Command &);
+std::istream& operator>>(std::istream &, Command &);
 
 #endif

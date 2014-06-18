@@ -1,11 +1,13 @@
 #include "HumanPlayer.h"
+
 #include <map>
 #include <string>
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
-HumanPlayer::HumanPlayer(View* view, Model* model, int number) : Player(view, model, number){}
+HumanPlayer::HumanPlayer(Model* model, View* view, Controller* controller, int number) : Player(model, view, controller, number){}
 
 void HumanPlayer::playTurn(bool (&cardMap)[4][13]){
 	vector<Card*> hand = getHand();
@@ -15,10 +17,12 @@ void HumanPlayer::playTurn(bool (&cardMap)[4][13]){
 
 	// populate legal plays
 	vector<Card*> legalCards = getLegalPlays(cardMap);
+	
 	getView()->printLegalPlays(legalCards);
+	
 	getView()->printPrompt();
 
-	string command;
-	cin >> command;
-
+	
+	getController()->requestCommand(this, legalCards, hand);
+	
 }

@@ -12,6 +12,7 @@
 class Model;
 class Controller;
 class Card;
+class Player;
 
 class View{
 public:
