@@ -35,11 +35,14 @@ void Controller::run(){
 	_model->playGame();
 }
 
-void Controller::requestCommand(int player, vector<Card*>& legalPlays, vector<Card*>& hand){
+void Controller::requestCommand(Player* player, vector<Card*>& legalPlays, vector<Card*>& hand){
 	Command command;
 	bool cardPlayLegal = false;
 	while (!cin.eof()) {
+		cin >> command;
+		Card* c = &(command.card);
 		if (command.type == PLAY) {
+
 			for (vector<Card*>::iterator it = legalPlays.begin(); it != legalPlays.end(); it++){
 				if (*(*it) == command.card){
 					cardPlayLegal = true;
@@ -48,20 +51,20 @@ void Controller::requestCommand(int player, vector<Card*>& legalPlays, vector<Ca
 			}
 
 			if (cardPlayLegal){
-				for (vector<Card*>::iterator it = hand.begin(); it != hand.end(); it++){
-					if (*(*it) == command.card){
-						hand.erase(it);
-						Card* c = &(command.card);
-						_view->printLegalPlay(player, c);
-						_model->putCardOnTable(c);
-						break;
-					}
-				}
+				
+				player->playCard(c);
 			} else {
 				_view->printIllegalPlay();
 			}
 		} else if (command.type == DISCARD) {
-
+			if (legalPlays.size() != 0) {
+				
+				player->discard(c);
+			}
+			else{
+				_view->printMayNotDiscard();
+			}
+			
 		}
 	}
 }

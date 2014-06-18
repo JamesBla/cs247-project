@@ -4,6 +4,7 @@
 #include "Model.h"
 #include "View.h"
 #include "Controller.h"
+#include "Player.h"
 
 using namespace std;
 
@@ -64,11 +65,19 @@ void View::printPrompt() const{
 	cout << ">";
 }
 
-void View::printLegalPlay(int player, Card*& card) const{
-	cout << "Player " << player << " " << *card << endl;
+void View::printLegalPlay(Player*& player, Card*& card) const{
+	cout << "Player " << player->getNumber() << " plays " << *card << endl;
 };
 
 void View::printIllegalPlay() const{
 	cout << "This is not a legal play.\n";
 	printPrompt();
+}
+
+void View::printDiscard(Player*& player, Card*& card) const{
+	cout << "Player " << player->getNumber() << " discards " << *card << endl;
+}
+
+void View::printMayNotDiscard() const{
+	cout << "You have a legal play. You may not discard." << endl;
 }

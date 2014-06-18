@@ -58,10 +58,10 @@ void Model::setPlayers(char playerTypes[]){
 		assert(playerTypes[i] == 'h' || playerTypes[i] == 'c' || playerTypes[i] == 'H' || playerTypes[i] == 'C');
 		
 		if ((playerTypes[i] == 'h' || playerTypes[i] == 'H') ){
-			_players.push_back(new HumanPlayer(_view));
+			_players.push_back(new HumanPlayer(_view, this, i+1));
 		}
 		else{
-			_players.push_back(new ComputerPlayer(_view));
+			_players.push_back(new ComputerPlayer(_view, this, i+1));
 		}
 	}
 }

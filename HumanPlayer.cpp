@@ -5,7 +5,7 @@
 
 using namespace std;
 
-HumanPlayer::HumanPlayer(View* view) : Player(view){}
+HumanPlayer::HumanPlayer(View* view, Model* model, int number) : Player(view, model, number){}
 
 void HumanPlayer::playTurn(bool (&cardMap)[4][13]){
 	vector<Card*> hand = getHand();
@@ -14,12 +14,7 @@ void HumanPlayer::playTurn(bool (&cardMap)[4][13]){
 	getView()->printCardsInHand(hand);
 
 	// populate legal plays
-	vector<Card*> legalCards;
-	for (vector<Card*>::iterator it = hand.begin(); it != hand.end(); it++){
-		if (playable(*it, cardMap)){
-			legalCards.push_back(*it);
-		}
-	}
+	vector<Card*> legalCards = getLegalPlays(cardMap);
 	getView()->printLegalPlays(legalCards);
 	getView()->printPrompt();
 

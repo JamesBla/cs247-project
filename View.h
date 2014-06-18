@@ -4,6 +4,7 @@
 #include "Model.h"
 #include "Controller.h"
 #include "Card.h"
+#include "Player.h"
 
 #include <string>
 #include <vector>
@@ -21,8 +22,10 @@ public:
 	void printCardsInHand(const std::vector<Card*>&) const;
 	void printLegalPlays(const std::vector<Card*>&) const;
 	void printPrompt() const;
-	void printLegalPlay(int, Card*&) const;
+	void printLegalPlay(Player*&, Card*&) const;
 	void printIllegalPlay() const;
+	void printDiscard(Player*&, Card*&) const;
+	void printMayNotDiscard() const;
 };
 
 #endif

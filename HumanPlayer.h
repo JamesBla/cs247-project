@@ -9,7 +9,7 @@
 
 class HumanPlayer: public Player{
 public:
-	HumanPlayer(View* view);
+	HumanPlayer(View* view, Model* model, int playerNumber);
 	~HumanPlayer(){};
 	void playTurn(bool (&cardMap)[4][13]);
 };
