@@ -27,7 +27,24 @@ void View::printCardsOnTable(const bool (&cardMap)[4][13]) const{
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 13; j++) {
 			if (cardMap[i][j]) {
-				onTable[i] = onTable[i] + static_cast<char>(j+1+48) + " ";
+				string rankPrintForm;
+				switch(j) {
+					case 9:
+						rankPrintForm = "10";
+						break;
+					case 10:
+						rankPrintForm = 'J';
+						break;
+					case 11:
+						rankPrintForm = 'Q';
+						break;
+					case 12:
+						rankPrintForm = 'K';
+						break;
+					default:
+						rankPrintForm = static_cast<char>(j+49);
+				}
+				onTable[i] = onTable[i] + rankPrintForm + " ";
 			}
 		}
 	}
@@ -80,4 +97,5 @@ void View::printDiscard(Player*& player, Card*& card) const{
 
 void View::printMayNotDiscard() const{
 	cout << "You have a legal play. You may not discard." << endl;
+	printPrompt();
 }
