@@ -36,7 +36,7 @@ void Controller::run(){
 	_model->playGame();
 }
 
-void Controller::requestCommand(Player* player, vector<Card*>& legalPlays, vector<Card*>& hand){
+void Controller::requestCommand(HumanPlayer* player, vector<Card*>& legalPlays, vector<Card*>& hand){
 	
 	Command command;
 	bool cardPlayLegal = false;
@@ -76,6 +76,10 @@ void Controller::requestCommand(Player* player, vector<Card*>& legalPlays, vecto
 		} else if (command.type == QUIT){
 			_model->cleanUp();
 			exit(0);
+		} else if (command.type == RAGEQUIT){
+			_model->computerizePlayer(player);
+
+
 		}
 	}
 }

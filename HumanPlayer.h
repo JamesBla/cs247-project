@@ -7,6 +7,8 @@
 
 #include <map>
 
+class View;
+
 class HumanPlayer: public Player{
 public:
 	HumanPlayer(Model* model, View* view, Controller* controller, int playerNumber);

@@ -50,6 +50,14 @@ int Model::getPlayerCount(){
 	return Model::PLAYER_COUNT;
 }
 
+void Model::computerizePlayer(HumanPlayer* humanPlayer){
+	int playerIndex = humanPlayer->getNumber() - 1;
+	ComputerPlayer* computerPlayer = new ComputerPlayer(*humanPlayer);
+	delete humanPlayer;
+	_players[playerIndex] = computerPlayer;
+	_curPlayer = (_curPlayer - 1) % 4;
+}
+
 void Model::setPlayers(char playerTypes[]){
 	for (int i = 0; i < PLAYER_COUNT; i++){
 		assert(playerTypes[i] == 'h' || playerTypes[i] == 'c' || playerTypes[i] == 'H' || playerTypes[i] == 'C');
@@ -108,12 +116,12 @@ void Model::playGame(){
 		int minHandSize = 1000;
 
 		_view->announceNewRound(_firstPlayer);
-		int curPlayer = _firstPlayer;
+		_curPlayer = _firstPlayer;
 		do {
 
-			_players[curPlayer]->playTurn(_playedCards);
+			_players[_curPlayer]->playTurn(_playedCards);
 
-			curPlayer = (curPlayer + 1) % 4;
+			_curPlayer = (_curPlayer + 1) % 4;
 			
 			// calculate min hand size
 			for (int i = 0; i < PLAYER_COUNT; i++){

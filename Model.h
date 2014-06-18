@@ -7,6 +7,7 @@
 #include "Controller.h"
 #include "Card.h"
 #include "Player.h"
+#include "HumanPlayer.h"
 #include "View.h"
 
 class View;
@@ -28,6 +29,7 @@ public:
 	void putCardOnTable(Card*&);
 	std::vector<Card*> getDeck() const;
 	void cleanUp();
+	void computerizePlayer(HumanPlayer*);
 private:
 	static const int PLAYER_COUNT;
 	static const int CARD_COUNT;
@@ -35,6 +37,7 @@ private:
 	std::vector<Player*> _players;
 	std::vector<Card*> _deck;
 	int _firstPlayer;
+	int _curPlayer;
 	View* _view;
 	bool _playedCards[4][13];
 };

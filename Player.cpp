@@ -10,6 +10,16 @@ Player::Player(Model* model, View* view, Controller* controller, int number){
 	_controller = controller;
 }
 
+Player::Player(const Player& player){
+	_hand = player._hand;
+	_discards = player._discards;
+	_score = player._score;
+	_view = player._view;
+	_playerNumber = player._playerNumber;
+	_model = player._model;
+	_controller = player._controller;
+}
+
 int Player::getScore() const{
 	return _score;
 }
