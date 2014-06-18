@@ -3,6 +3,7 @@
 
 #include "Model.h"
 #include "View.h"
+#include<vector>
 
 class Model;
 class View;
@@ -13,6 +14,7 @@ public:
 	void run();
 	void initializeModel();
 	void setView(View* view);
+	void requestCommand(int, std::vector<Card*>&, std::vector<Card*>&);
 private:
 	Model* _model;
 	View* _view;

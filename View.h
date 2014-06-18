@@ -21,6 +21,8 @@ public:
 	void printCardsInHand(const std::vector<Card*>&) const;
 	void printLegalPlays(const std::vector<Card*>&) const;
 	void printPrompt() const;
+	void printLegalPlay(int, Card*&) const;
+	void printIllegalPlay() const;
 };
 
 #endif

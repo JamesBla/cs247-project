@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 
 #include "Model.h"
 #include "View.h"
@@ -25,7 +26,7 @@ void View::printCardsOnTable(const bool (&cardMap)[4][13]) const{
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 13; j++) {
 			if (cardMap[i][j]) {
-				onTable[i] += j+1 + " ";
+				onTable[i] = onTable[i] + static_cast<char>(j+1+48) + " ";
 			}
 		}
 	}
@@ -46,17 +47,28 @@ void View::printCardsOnTable(const bool (&cardMap)[4][13]) const{
 void View::printCardsInHand(const std::vector<Card*> &cards) const{
 	cout << "Your hand:";
 	for (vector<Card*>::const_iterator it = cards.begin(); it != cards.end(); it++) {
-		cout << " " << *it;
+		cout << " " << **it;
 	}
+	cout << endl;
 }
 
 void View::printLegalPlays(const std::vector<Card*> &cards) const{
 	cout << "Legal plays:";
 	for (vector<Card*>::const_iterator it = cards.begin(); it != cards.end(); it++) {
-		cout << " " << *it;
+		cout << " " << **it;
 	}
+	cout << endl;
 }
 
 void View::printPrompt() const{
 	cout << ">";
+}
+
+void View::printLegalPlay(int player, Card*& card) const{
+	cout << "Player " << player << " " << *card << endl;
+};
+
+void View::printIllegalPlay() const{
+	cout << "This is not a legal play.\n";
+	printPrompt();
 }

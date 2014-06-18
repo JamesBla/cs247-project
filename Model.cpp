@@ -24,6 +24,10 @@ void Model::setView(View* view){
 	this->_view = view;
 }
 
+void Model::setController(Controller* controller){
+	_controller = controller;
+}
+
 void Model::initializeDeck(){
 	for (int suit = 0; suit < SUIT_COUNT; suit++){
 		for (int rank = 0; rank < RANK_COUNT; rank++){
@@ -91,6 +95,10 @@ int Model::getMaxScore() const{
 		}
 	}
 	return maxScore;
+}
+
+void Model::putCardOnTable(Card* &card){
+	_playedCards[card->getSuit()][card->getRank()] = true;
 }
 
 void Model::playGame(){
