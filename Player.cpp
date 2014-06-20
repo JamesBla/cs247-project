@@ -10,12 +10,15 @@ Player::Player(Model* model, View* view, Controller* controller, int number){
 	_playerNumber = number;
 	_model = model;
 	_controller = controller;
+	_score = 0;
+	_roundScore = 0;
 }
 
 Player::Player(const Player& player){
 	_hand = player._hand;
 	_discards = player._discards;
 	_score = player._score;
+	_roundScore = player._roundScore;
 	_view = player._view;
 	_playerNumber = player._playerNumber;
 	_model = player._model;
@@ -64,11 +67,28 @@ void Player::discard(Card*& card){
 			_hand.erase(it);
 			Player* p = this;
 			_view->printDiscard(p, card);
-			_score += (card->getRank() + 1);
+			
 			_discards.push_back(card);
 			break;
 		}
 	}
+}
+
+void Player::updateScore(){
+	for (int i = 0; i < _discards.size(); i++){
+		_roundScore += (_discards[i]->getRank() + 1);
+	}
+
+	int newScore = _score + _roundScore;
+
+	_view->printNewScore(_discards, _score, _roundScore, newScore, _playerNumber);
+	_score = newScore;
+}
+
+void Player::prepForNewRound(){
+	_discards.clear();
+	_roundScore = 0;
+
 }
 
 bool Player::playable(Card* card, bool (&cardMap)[4][13]) const{
@@ -85,9 +105,14 @@ bool Player::playable(Card* card, bool (&cardMap)[4][13]) const{
 vector<Card*> Player::getLegalPlays(bool (&cardMap)[4][13]) const{
 	// populate legal plays
 	vector<Card*> legalCards;
-	for (vector<Card*>::const_iterator it = _hand.begin(); it != _hand.end(); it++){
-		if (playable(*it, cardMap)){
-			legalCards.push_back(*it);
+	for (int i = 0; i < _hand.size(); i++){
+		if (playable(_hand[i], cardMap)){
+			legalCards.push_back(_hand[i]);
+		}
+		if (*(_hand[i]) == *(_model->sevenOfSpades())){
+			legalCards.clear();
+			legalCards.push_back(_hand[i]);
+			return legalCards;
 		}
 	}
 	return legalCards;

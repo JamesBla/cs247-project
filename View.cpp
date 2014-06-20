@@ -13,9 +13,20 @@ View::View(Controller* controller, Model* model){
 	model->setView(this);
 }
 
+void View::printNewScore(std::vector<Card*>& discards, int oldScore, int gainedScore, int newScore, int playerNumber) const{
+	cout << "Player " << playerNumber << "'s discards: ";
+	for (int i = 0; i < discards.size(); i++){
+		cout << *(discards[i]);
+		if (i != discards.size() - 1){
+			cout << " ";
+		}
+	}
+	cout << endl;
+	cout << "Player " << playerNumber << "'s score: " << oldScore << " + " << gainedScore << " = " << newScore << endl;
+}
+
 void View::requestPlayerType(int playerNumber) const{
 	cout << "Is player " << playerNumber + 1 << " a human(h) or a computer(c)?\n";
-	printPrompt();
 }
 
 void View::announceNewRound(int firstPlayer) const{
@@ -83,21 +94,23 @@ void View::printPrompt() const{
 }
 
 void View::printLegalPlay(Player*& player, Card*& card) const{
-	cout << "Player " << player->getNumber() << " plays " << *card << endl;
+	cout << "Player " << player->getNumber() << " plays " << *card << "." << endl;
 };
 
 void View::printIllegalPlay() const{
 	cout << "This is not a legal play.\n";
-	printPrompt();
 }
 
 void View::printDiscard(Player*& player, Card*& card) const{
-	cout << "Player " << player->getNumber() << " discards " << *card << endl;
+	cout << "Player " << player->getNumber() << " discards " << *card << "." << endl;
 }
 
 void View::printMayNotDiscard() const{
 	cout << "You have a legal play. You may not discard." << endl;
-	printPrompt();
+}
+
+void View::announceWinner(int playerNumber) const{
+	cout << "Player " << playerNumber << " wins!" << endl;
 }
 
 void View::printDeck(vector<Card*> & deck) const{

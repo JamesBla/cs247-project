@@ -21,9 +21,6 @@ void HumanPlayer::playTurn(bool (&cardMap)[4][13]){
 	
 	getView()->printLegalPlays(legalCards);
 	
-	getView()->printPrompt();
-
-	
 	getController()->requestCommand(this, legalCards, hand);
 	
 }

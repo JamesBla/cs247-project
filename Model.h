@@ -22,7 +22,6 @@ public:
 	static int getPlayerCount();
 	void setPlayers(char[]);
 	void playGame();
-	int getMaxScore() const;
 	void initializeDeck();
 	void shuffle();
 	void deal();
@@ -30,9 +29,13 @@ public:
 	std::vector<Card*> getDeck() const;
 	void cleanUp();
 	void computerizePlayer(HumanPlayer*);
+	void clearCardsOnTable();
+	int getWinner() const;
+	static const Card* sevenOfSpades();
 private:
 	static const int PLAYER_COUNT;
 	static const int CARD_COUNT;
+	static const Card SEVEN_OF_SPADES;
 	Controller* _controller;
 	std::vector<Player*> _players;
 	std::vector<Card*> _deck;

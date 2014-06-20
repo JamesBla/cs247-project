@@ -23,6 +23,8 @@ public:
 	void printDiscard(Player*&, Card*&) const;
 	void printMayNotDiscard() const;
 	void printDeck(std::vector<Card*> &) const;
+	void printNewScore(std::vector<Card*> &, int, int, int, int) const;
+	void announceWinner(int) const;
 };
 
 #endif

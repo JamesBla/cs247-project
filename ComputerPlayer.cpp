@@ -1,6 +1,8 @@
 #include "ComputerPlayer.h"
 #include <map>
 
+#include <iostream>
+
 using namespace std;
 
 ComputerPlayer::ComputerPlayer(Model* model, View* view, Controller* controller, int number) : Player(model, view, controller, number){}

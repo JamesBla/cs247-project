@@ -22,7 +22,9 @@ void Controller::initializeModel(){
 
 	char playerType;
 	for (int i = 0; i < Model::getPlayerCount(); i++){
+
 		_view->requestPlayerType(i);
+		_view->printPrompt();
 		cin >> playerType;
 		playerTypes[i] = playerType;
 	}
@@ -41,7 +43,7 @@ void Controller::requestCommand(HumanPlayer* player, vector<Card*>& legalPlays, 
 	Command command;
 	bool cardPlayLegal = false;
 	while (!cin.eof()) {
-
+		_view->printPrompt();
 		cin >> command;
 
 		Card* c = &(command.card);
@@ -55,7 +57,6 @@ void Controller::requestCommand(HumanPlayer* player, vector<Card*>& legalPlays, 
 			}
 
 			if (cardPlayLegal){
-				
 				player->playCard(c);
 				break;
 			} else {
@@ -78,7 +79,7 @@ void Controller::requestCommand(HumanPlayer* player, vector<Card*>& legalPlays, 
 			exit(0);
 		} else if (command.type == RAGEQUIT){
 			_model->computerizePlayer(player);
-
+			break;
 
 		}
 	}

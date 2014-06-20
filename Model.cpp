@@ -7,7 +7,6 @@
 #include "HumanPlayer.h"
 #include "ComputerPlayer.h"
 
-
 using namespace std;
 
 const int Model::PLAYER_COUNT = 4;
@@ -18,7 +17,11 @@ Card initSevenOfSpades(){
 	Card c(SPADE, SEVEN);
 	return c;
 }
-static const Card SEVEN_OF_SPADES = initSevenOfSpades();
+const Card Model::SEVEN_OF_SPADES = initSevenOfSpades();
+
+const Card* Model::sevenOfSpades(){
+	return &SEVEN_OF_SPADES;
+}
 
 void Model::setView(View* view){
 	this->_view = view;
@@ -37,6 +40,13 @@ void Model::initializeDeck(){
 		for (int rank = 0; rank < RANK_COUNT; rank++){
 			Card* newCard = new Card(static_cast<Suit>(suit), static_cast<Rank>(rank));
 			_deck.push_back(newCard);
+		}
+	}
+}
+
+void Model::clearCardsOnTable(){
+	for (int suit = 0; suit < SUIT_COUNT; suit++){
+		for (int rank = 0; rank < RANK_COUNT; rank++){
 			_playedCards[suit][rank] = false;
 		}
 	}
@@ -92,47 +102,66 @@ void Model::deal(){
 	}
 }
 
-int Model::getMaxScore() const{
-	int maxScore = 0;
-	for (int i = 0; i < PLAYER_COUNT; i++){
-		if (_players[i]->getScore() > maxScore){
-			maxScore = _players[i]->getScore();
-		}
-	}
-	return maxScore;
-}
-
 void Model::putCardOnTable(Card* &card){
 	_playedCards[card->getSuit()][card->getRank()] = true;
 }
 
 void Model::playGame(){
 	// each loop iteration is a round
-	while (getMaxScore() < 80){
-		// shuffle
+	bool doneGame = 0;
+	
+	// this loop is the whole game
+	do{
+		clearCardsOnTable();
 		shuffle();
-		// deal
 		deal();
-		int minHandSize = 1000;
+
+		for (int i = 0; i < PLAYER_COUNT; i++){
+			_players[i]->prepForNewRound();
+		}
+
+		bool hasCards = false;
 
 		_view->announceNewRound(_firstPlayer);
 		_curPlayer = _firstPlayer;
+
+		// this loop is a round
 		do {
-
 			_players[_curPlayer]->playTurn(_playedCards);
-
 			_curPlayer = (_curPlayer + 1) % 4;
-			
 			// calculate min hand size
+			hasCards = false;
 			for (int i = 0; i < PLAYER_COUNT; i++){
-				if (_players[i]->getHandSize() < minHandSize){
-					minHandSize = _players[i]->getHandSize();
+				if (_players[i]->getHandSize() > 0){
+					hasCards = true;
 				}
 			}
-			
 		}
-		while(minHandSize > 0);
+		while(hasCards);
+		// round is over. now we update scores
+		for (int i = 0; i < PLAYER_COUNT; i++){
+			_players[i]->updateScore();
+			if (_players[i]->getScore() >= 80){
+				doneGame = true;
+			}
+		}
+
+	} while(!doneGame);
+
+	
+	_view->announceWinner(getWinner());
+}
+
+int Model::getWinner() const{
+	int minScore = 1337;
+	int winner = 0;
+	for (int i = 0; i < _players.size(); i++){
+		if (_players[i]->getScore() < minScore){
+			minScore = _players[i]->getScore();
+			winner = _players[i]->getNumber();
+		}
 	}
+	return winner;
 }
 
 void Model::cleanUp(){

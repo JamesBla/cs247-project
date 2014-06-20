@@ -22,6 +22,8 @@ public:
 	void playCard(Card*& card);
 	void discard(Card*& card);
 	int getNumber() const;
+	void updateScore();
+	void prepForNewRound();
 protected:
 	View* getView() const;
 	std::vector<Card*> getHand() const;
@@ -32,6 +34,7 @@ private:
 	std::vector<Card*> _hand;
 	std::vector<Card*> _discards;
 	int _score;
+	int _roundScore;
 	View* _view;
 	int _playerNumber;
 	Model* _model;
