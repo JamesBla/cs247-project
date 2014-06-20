@@ -2,14 +2,13 @@
 #define _CONTROLLER_
 
 #include "Model.h"
-#include "View.h"
 #include "Player.h"
-#include "HumanPlayer.h"
 
 #include <vector>
 
 class Model;
 class View;
+class HumanPlayer;
 
 class Controller{
 public:

@@ -1,4 +1,5 @@
 #include "HumanPlayer.h"
+#include "Controller.h"
 
 #include <map>
 #include <string>

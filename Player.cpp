@@ -1,5 +1,7 @@
-#include "Player.h"
 #include "Card.h"
+#include "Model.h"
+#include "View.h"
+#include "Controller.h"
 
 using namespace std;
 

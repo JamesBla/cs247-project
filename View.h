@@ -1,17 +1,12 @@
 #ifndef _VIEW_
 #define _VIEW_
 
-#include "Model.h"
-#include "Controller.h"
-#include "Card.h"
-#include "Player.h"
-
 #include <string>
 #include <vector>
 
-class Model;
-class Controller;
 class Card;
+class Controller;
+class Model;
 class Player;
 
 class View{

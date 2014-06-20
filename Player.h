@@ -1,18 +1,14 @@
 #ifndef _PLAYER_
 #define _PLAYER_
 
-#include "Card.h"
-#include "Model.h"
-#include "View.h"
-#include "Controller.h"
-
-
 #include <map>
 #include <set>
+#include <vector>
 
 class Model;
 class View;
 class Controller;
+class Card;
 
 class Player{
 public:
