@@ -15,7 +15,7 @@ View::View(Controller* controller, Model* model){
 
 void View::printNewScore(std::vector<Card*>& discards, int oldScore, int gainedScore, int newScore, int playerNumber) const{
 	cout << "Player " << playerNumber << "'s discards: ";
-	for (int i = 0; i < discards.size(); i++){
+	for (unsigned int i = 0; i < discards.size(); i++){
 		cout << *(discards[i]);
 		if (i != discards.size() - 1){
 			cout << " ";

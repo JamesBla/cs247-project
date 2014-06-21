@@ -1,0 +1,19 @@
+h
+c
+c
+c
+play 8S
+discard 2D
+discard 10S
+discard 3S
+play 3S
+play 5D
+play 10C
+play 10D
+play 2C
+play 3H
+play AC
+discard 2S
+discard KH
+discard KC
+discard QH

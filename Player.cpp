@@ -2,6 +2,7 @@
 #include "Model.h"
 #include "View.h"
 #include "Controller.h"
+#include <iostream>
 
 using namespace std;
 
@@ -61,7 +62,7 @@ void Player::playCard(Card*& card){
 	}
 }
 
-void Player::discard(Card*& card){
+void Player::discard(Card* card){
 	for (vector<Card*>::iterator it = _hand.begin(); it != _hand.end(); it++){
 		if (*(*it) == *(card)){
 			_hand.erase(it);
@@ -75,7 +76,7 @@ void Player::discard(Card*& card){
 }
 
 void Player::updateScore(){
-	for (int i = 0; i < _discards.size(); i++){
+	for (unsigned int i = 0; i < _discards.size(); i++){
 		_roundScore += (_discards[i]->getRank() + 1);
 	}
 
@@ -88,7 +89,6 @@ void Player::updateScore(){
 void Player::prepForNewRound(){
 	_discards.clear();
 	_roundScore = 0;
-
 }
 
 bool Player::playable(Card* card, bool (&cardMap)[4][13]) const{
@@ -105,7 +105,7 @@ bool Player::playable(Card* card, bool (&cardMap)[4][13]) const{
 vector<Card*> Player::getLegalPlays(bool (&cardMap)[4][13]) const{
 	// populate legal plays
 	vector<Card*> legalCards;
-	for (int i = 0; i < _hand.size(); i++){
+	for (unsigned int i = 0; i < _hand.size(); i++){
 		if (playable(_hand[i], cardMap)){
 			legalCards.push_back(_hand[i]);
 		}

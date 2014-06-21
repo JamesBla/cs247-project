@@ -12,7 +12,6 @@ using namespace std;
 const int Model::PLAYER_COUNT = 4;
 const int Model::CARD_COUNT = 52;
 
-
 Card initSevenOfSpades(){
 	Card c(SPADE, SEVEN);
 	return c;
@@ -120,8 +119,6 @@ void Model::playGame(){
 			_players[i]->prepForNewRound();
 		}
 
-		bool hasCards = false;
-
 		_view->announceNewRound(_firstPlayer);
 		_curPlayer = _firstPlayer;
 
@@ -129,15 +126,9 @@ void Model::playGame(){
 		do {
 			_players[_curPlayer]->playTurn(_playedCards);
 			_curPlayer = (_curPlayer + 1) % 4;
-			// calculate min hand size
-			hasCards = false;
-			for (int i = 0; i < PLAYER_COUNT; i++){
-				if (_players[i]->getHandSize() > 0){
-					hasCards = true;
-				}
-			}
 		}
-		while(hasCards);
+		while(_players[_curPlayer]->getHandSize() > 0);
+
 		// round is over. now we update scores
 		for (int i = 0; i < PLAYER_COUNT; i++){
 			_players[i]->updateScore();
@@ -155,7 +146,7 @@ void Model::playGame(){
 int Model::getWinner() const{
 	int minScore = 1337;
 	int winner = 0;
-	for (int i = 0; i < _players.size(); i++){
+	for (unsigned int i = 0; i < _players.size(); i++){
 		if (_players[i]->getScore() < minScore){
 			minScore = _players[i]->getScore();
 			winner = _players[i]->getNumber();
@@ -172,4 +163,13 @@ void Model::cleanUp(){
 	for (vector<Player*>::iterator it = _players.begin(); it != _players.end(); it++){
 		delete *it;
 	}
+}
+
+Card* Model::findCard(Card* target) const {
+	for (unsigned int i = 0; i < _deck.size(); i++) {
+		if (*target == *(_deck[i])){
+			return _deck[i];
+		}
+	}
+	return NULL;
 }

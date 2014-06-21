@@ -20,7 +20,7 @@ public:
 	int getHandSize() const;
 	void addCard(Card*);
 	void playCard(Card*& card);
-	void discard(Card*& card);
+	void discard(Card* card);
 	int getNumber() const;
 	void updateScore();
 	void prepForNewRound();

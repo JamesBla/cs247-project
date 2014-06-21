@@ -30,6 +30,7 @@ public:
 	void cleanUp();
 	void computerizePlayer(HumanPlayer*);
 	void clearCardsOnTable();
+	Card* findCard(Card*) const;
 	int getWinner() const;
 	static const Card* sevenOfSpades();
 private:

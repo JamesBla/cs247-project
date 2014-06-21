@@ -65,7 +65,7 @@ void Controller::requestCommand(HumanPlayer* player, vector<Card*>& legalPlays, 
 
 		} else if (command.type == DISCARD) {
 			if (legalPlays.size() == 0) {
-				player->discard(c);
+				player->discard(_model->findCard(c));
 				break;
 			}
 			else{
