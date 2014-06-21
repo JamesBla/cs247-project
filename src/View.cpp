@@ -129,6 +129,7 @@ void View::printDeck(vector<Card*> &deck) const{
 			cout << " ";
 		}
 	}
+	cout << endl;
 }
 
 void View::printRagequit(HumanPlayer* player) const {

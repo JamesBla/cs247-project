@@ -1,0 +1,10 @@
+h
+c
+c
+h
+deck
+play 7H
+play 8S
+ragequit
+deck
+quit
