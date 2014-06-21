@@ -13,7 +13,7 @@ play 10D
 play 2C
 play 3H
 play AC
-discard 2S
+discard 3S
 discard KH
 discard KC
 discard QH

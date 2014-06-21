@@ -33,7 +33,7 @@ void View::requestPlayerType(int playerNumber) const{
 }
 
 void View::announceNewRound(int firstPlayer) const{
-	cout << "A new round begins. It’s player " << firstPlayer + 1 << "’s turn to play." << endl;
+	cout << "A new round begins. It's player " << firstPlayer + 1 << "'s turn to play." << endl;
 }
 
 void View::printCardsOnTable(const bool (&cardMap)[4][13]) const{
@@ -43,6 +43,9 @@ void View::printCardsOnTable(const bool (&cardMap)[4][13]) const{
 			if (cardMap[i][j]) {
 				string rankPrintForm;
 				switch(j) {
+					case 0:
+						rankPrintForm = "A";
+						break;
 					case 9:
 						rankPrintForm = "10";
 						break;

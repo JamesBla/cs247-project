@@ -10,4 +10,7 @@ ${EXEC}: ${OBJECTS}
 clean:
 	rm -rf ${OBJECTS} ${EXEC} ${DEPENDS}
 
+test:
+	sh ./test.sh
+
 -include ${DEPENDS} 
