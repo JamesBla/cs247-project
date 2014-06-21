@@ -14,12 +14,11 @@ public:
 	Player(Model*, View*, Controller*, int);
 	Player(const Player&);
 	virtual void playTurn(bool (&cardMap)[4][13]) = 0;
-	virtual ~Player(){};
 	int getScore() const;
 	int getHandSize() const;
 	void addCard(Card*);
-	void playCard(Card*& card);
-	void discard(Card* card);
+	void playCard(Card*);
+	void discard(Card*);
 	int getNumber() const;
 	void updateScore();
 	void prepForNewRound();

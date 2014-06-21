@@ -12,7 +12,6 @@ class ComputerPlayer: public Player{
 public:
 	ComputerPlayer(Model* model, View* view, Controller* controller, int playerNumber);
 	ComputerPlayer(const HumanPlayer&);
-	~ComputerPlayer(){};
 	void playTurn(bool (&cardMap)[4][13]);
 };
 
