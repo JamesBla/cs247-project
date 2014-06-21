@@ -1,8 +1,9 @@
-#include "Card.h"
 #include "Model.h"
 #include "View.h"
 #include "Controller.h"
-#include <iostream>
+
+#include "Player.h"
+#include "Card.h"
 
 using namespace std;
 

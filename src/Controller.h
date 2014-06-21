@@ -1,14 +1,13 @@
 #ifndef _CONTROLLER_
 #define _CONTROLLER_
 
-#include "Model.h"
-#include "Player.h"
-
 #include <vector>
 
 class Model;
 class View;
+
 class HumanPlayer;
+class Card;
 
 class Controller{
 public:

@@ -1,10 +1,14 @@
-#include <iostream>
 #include <cstdlib>
+#include <iostream>
 
 #include "Model.h"
 #include "View.h"
 #include "Controller.h"
+
 #include "Command.h"
+#include "Player.h"
+#include "HumanPlayer.h"
+#include "Card.h"
 
 using namespace std;
 

@@ -4,7 +4,10 @@
 #include "Model.h"
 #include "View.h"
 #include "Controller.h"
+
 #include "Player.h"
+#include "Card.h"
+
 
 using namespace std;
 

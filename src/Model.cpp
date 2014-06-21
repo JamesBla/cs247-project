@@ -1,8 +1,12 @@
 #include <cassert>
 #include <cstdlib>
 
-#include "Card.h"
 #include "Model.h"
+#include "View.h"
+#include "Controller.h"
+
+#include "Card.h"
+
 #include "Player.h"
 #include "HumanPlayer.h"
 #include "ComputerPlayer.h"

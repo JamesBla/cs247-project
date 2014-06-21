@@ -2,17 +2,13 @@
 #define _MODEL_
 
 #include <vector>
-#include <map>
-
-#include "Controller.h"
-#include "Card.h"
-#include "Player.h"
-#include "HumanPlayer.h"
-#include "View.h"
 
 class View;
 class Controller;
+
 class Player;
+class HumanPlayer;
+class Card;
 
 class Model{
 public:

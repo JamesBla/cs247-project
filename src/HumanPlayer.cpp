@@ -1,10 +1,10 @@
+#include <vector>
+
+#include "Player.h"
 #include "HumanPlayer.h"
 #include "Controller.h"
+#include "View.h"
 
-#include <map>
-#include <string>
-#include <iostream>
-#include <vector>
 
 using namespace std;
 
@@ -18,9 +18,7 @@ void HumanPlayer::playTurn(bool (&cardMap)[4][13]){
 
 	// populate legal plays
 	vector<Card*> legalCards = getLegalPlays(cardMap);
-	
 	getView()->printLegalPlays(legalCards);
-	
 	getController()->requestCommand(this, legalCards, hand);
 	
 }

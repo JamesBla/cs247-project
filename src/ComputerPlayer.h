@@ -2,10 +2,11 @@
 #define _COMPUTERPLAYER_
 
 #include "Player.h"
-#include "View.h"
 #include "HumanPlayer.h"
 
-#include <map>
+class Model;
+class View;
+class Controller;
 
 class ComputerPlayer: public Player{
 public:

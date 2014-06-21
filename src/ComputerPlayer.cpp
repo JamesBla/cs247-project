@@ -1,7 +1,16 @@
+#include <vector>
+
+#include "Player.h"
 #include "ComputerPlayer.h"
-#include <map>
+#include "HumanPlayer.h"
 
 using namespace std;
+
+class Model;
+class View;
+class Controller;
+
+class Card;
 
 ComputerPlayer::ComputerPlayer(Model* model, View* view, Controller* controller, int number) : Player(model, view, controller, number){}
 

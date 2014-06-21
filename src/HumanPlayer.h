@@ -2,12 +2,10 @@
 #define _HUMANPLAYER_
 
 #include "Player.h"
-#include <map>
 
 class Model;
 class View;
 class Controller;
-class Card;
 
 class HumanPlayer: public Player{
 public:

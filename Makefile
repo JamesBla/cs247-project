@@ -1,7 +1,7 @@
 EXEC = straights
 CXX = g++
 CXXFLAGS = -g -Wall -MMD
-OBJECTS = Straights.o Model.o View.o Controller.o Player.o HumanPlayer.o ComputerPlayer.o Card.o Command.o
+OBJECTS = src/Straights.o src/Model.o src/View.o src/Controller.o src/Player.o src/HumanPlayer.o src/ComputerPlayer.o src/Card.o src/Command.o
 DEPENDS = ${OBJECTS:.o=.d}
 
 ${EXEC}: ${OBJECTS}

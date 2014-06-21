@@ -1,13 +1,12 @@
 #ifndef _PLAYER_
 #define _PLAYER_
 
-#include <map>
-#include <set>
 #include <vector>
 
 class Model;
 class View;
 class Controller;
+
 class Card;
 
 class Player{

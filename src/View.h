@@ -4,9 +4,10 @@
 #include <string>
 #include <vector>
 
-class Card;
-class Controller;
 class Model;
+class Controller;
+
+class Card;
 class Player;
 
 class View{
