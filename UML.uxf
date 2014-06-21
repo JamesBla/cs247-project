@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="12.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>40</x>
+      <y>640</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>Main</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>260</x>
+      <y>0</y>
+      <w>440</w>
+      <h>490</h>
+    </coordinates>
+    <panel_attributes>Model
+--
+_-PLAYER_COUNT : int = 4_
+_-CARD_COUNT: int = 52_
+_-SEVEN_OF_SPADES : Card = {Suit: Spade, Rank: 7}_
+-firstPlayer: int
+-curPlayer: int
+-playedCards: bool[4][52]
+--
++setView(view : View) : void
++setController(controller : Controller) : void
++setPlayers(playerTypes : char[]) : void
+_+getPlayerCount() : void_
++playGame() : void
++initializeDeck() : void
++shuffle() : void
++deal() : void
++putCardOnTable(card : Card) : void
+&lt;&lt;{const}&gt;&gt;
++getDeck() : list&lt;Card&gt;
++cleanUp() : void
++computerizePlayer(humanPlayer : HumanPlayer) : void
++clearCardsOnTable() : void
+&lt;&lt;{const}&gt;&gt;
++findCard(card : Card) : Card
+&lt;&lt;{const}&gt;&gt;
++getWinner() : Player
+&lt;&lt;{const}&gt;&gt;
+_+sevenOfSpades() : Card_</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>110</x>
+      <y>400</y>
+      <w>170</w>
+      <h>270</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m2=1</panel_attributes>
+    <additional_attributes>30;250;150;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>260</x>
+      <y>520</y>
+      <w>440</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>View
+--
++View(controller : Controller, model : Model)
+&lt;&lt;{const}&gt;&gt;
++requestPlayerType(playerType : int) : void
+&lt;&lt;{const}&gt;&gt;
++announceNewRound(firstPlayer : Player) : void
+&lt;&lt;{const}&gt;&gt;
++setPlayers(playerTypes : char[]) : void
+&lt;&lt;{const}&gt;&gt;
++printCardsOnTable(cards : bool[4][13]) : void
+&lt;&lt;{const}&gt;&gt;
++printCardsInHand(cards : List&lt;Card&gt; ) : void
+&lt;&lt;{const}&gt;&gt;
++printLegalPlays(cards : List&lt;Card&gt; ) : void
+&lt;&lt;{const}&gt;&gt;
++printPrompt() : void
+&lt;&lt;{const}&gt;&gt;
++printLegalPlay(player : Player, card : Card) : void
+&lt;&lt;{const}&gt;&gt;
++printIllegalPlay() : void
+&lt;&lt;{const}&gt;&gt;
++printDiscard(player : Player, card : Card) : void
+&lt;&lt;{const}&gt;&gt;
++printMayNotDiscard() : void
+&lt;&lt;{const}&gt;&gt;
++printDeck(cards : List&lt;Card&gt; ) : void
+&lt;&lt;{const}&gt;&gt;
++printDeck(cards : List&lt;Card&gt; , oldScore : int, gainedScore : int, newScore : int, player : Player) : void
+&lt;&lt;{const}&gt;&gt;
++announceWinner(winner : Player) : void
+&lt;&lt;{const}&gt;&gt;
++printRageQuit(soreLoser : HumanPlayer) : void
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>260</x>
+      <y>750</y>
+      <w>440</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>Controller
+--
++Controller(model : Model)
++run() : void
++initializeModel() : void
++setView(view : View) void
++requestCommand(player : HumanPlayer, legalPlays : List&lt;Card&gt;, hand : List&lt;Card&gt;) : void
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>110</x>
+      <y>570</y>
+      <w>170</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m2=1</panel_attributes>
+    <additional_attributes>30;90;150;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>100</x>
+      <y>640</y>
+      <w>180</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m2=1</panel_attributes>
+    <additional_attributes>30;30;160;140</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1030</x>
+      <y>370</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>Player
+--
++Player(model : Model, view : View, controller : Controller, playerNumber : int)
++Player( player : Player)
+
++run() : void
++initializeModel() : void
++setView(view : View) void
++requestCommand(player : HumanPlayer, legalPlays : List&lt;Card&gt;, hand : List&lt;Card&gt;) : void
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>810</x>
+      <y>440</y>
+      <w>210</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>Human Player
+--
+id: Long="36548"
+[waiting for message]</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>830</x>
+      <y>370</y>
+      <w>220</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>200;30;30;70</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1140</x>
+      <y>440</y>
+      <w>210</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>Computer Player
+--
+id: Long="36548"
+[waiting for message]</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1060</x>
+      <y>370</y>
+      <w>210</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>30;30;190;70</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>670</x>
+      <y>360</y>
+      <w>380</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>30;30;360;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>810</x>
+      <y>640</y>
+      <w>210</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>Card
+{Some Properties}
+--
+-id: Long
+_-ClassAttribute: Long_
+--
+#Operation(i: int): int
+/+AbstractOperation()/
+--
+Responsibilities
+-- Resp1
+*-- Resp2*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>670</x>
+      <y>380</y>
+      <w>160</w>
+      <h>290</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m2=52</panel_attributes>
+    <additional_attributes>30;30;140;270</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>960</x>
+      <y>370</y>
+      <w>120</w>
+      <h>290</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-
+m2=13</panel_attributes>
+    <additional_attributes>100;30;30;270</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>0</x>
+      <y>370</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>Command</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>70</x>
+      <y>350</y>
+      <w>210</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>30;30;190;30</additional_attributes>
+  </element>
+</diagram>
