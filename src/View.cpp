@@ -16,8 +16,8 @@ View::View(Controller* controller, Model* model){
 	model->setView(this);
 }
 
-void View::printNewScore(std::vector<Card*>& discards, int oldScore, int gainedScore, int newScore, int playerNumber) const{
-	cout << "Player " << playerNumber << "'s discards: ";
+void View::printNewScore(std::vector<Card*>& discards, int oldScore, int gainedScore, int newScore, Player* player) const{
+	cout << "Player " << player->getNumber() << "'s discards: ";
 	for (unsigned int i = 0; i < discards.size(); i++){
 		cout << *(discards[i]);
 		if (i != discards.size() - 1){
@@ -25,15 +25,15 @@ void View::printNewScore(std::vector<Card*>& discards, int oldScore, int gainedS
 		}
 	}
 	cout << endl;
-	cout << "Player " << playerNumber << "'s score: " << oldScore << " + " << gainedScore << " = " << newScore << endl;
+	cout << "Player " << player->getNumber() << "'s score: " << oldScore << " + " << gainedScore << " = " << newScore << endl;
 }
 
 void View::requestPlayerType(int playerNumber) const{
-	cout << "Is player " << playerNumber + 1 << " a human(h) or a computer(c)?\n";
+	cout << "Is player " << playerNumber << " a human(h) or a computer(c)?\n";
 }
 
-void View::announceNewRound(int firstPlayer) const{
-	cout << "A new round begins. It's player " << firstPlayer + 1 << "'s turn to play." << endl;
+void View::announceNewRound(Player* firstPlayer) const{
+	cout << "A new round begins. It's player " << firstPlayer->getNumber() << "'s turn to play." << endl;
 }
 
 void View::printCardsOnTable(const bool (&cardMap)[4][13]) const{

@@ -26,14 +26,15 @@ void Controller::initializeModel(){
 
 	char playerType;
 	for (int i = 0; i < Model::getPlayerCount(); i++){
+		_view->requestPlayerType(i+1);
 
-		_view->requestPlayerType(i);
 		_view->printPrompt();
 		cin >> playerType;
+
 		playerTypes[i] = playerType;
 	}
 
-	_model->setPlayers(playerTypes);
+	_model->initializePlayers(playerTypes);
 	_model->initializeDeck();
 }
 

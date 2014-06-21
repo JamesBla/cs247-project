@@ -83,7 +83,7 @@ void Player::updateScore(){
 
 	int newScore = _score + _roundScore;
 
-	_view->printNewScore(_discards, _score, _roundScore, newScore, _playerNumber);
+	_view->printNewScore(_discards, _score, _roundScore, newScore, this);
 	_score = newScore;
 }
 

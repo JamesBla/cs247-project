@@ -16,7 +16,7 @@ public:
 	void setView(View*);
 	void setController(Controller*);
 	static int getPlayerCount();
-	void setPlayers(char[]);
+	void initializePlayers(char[]);
 	void playGame();
 	void initializeDeck();
 	void shuffle();

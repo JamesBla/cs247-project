@@ -72,7 +72,7 @@ void Model::computerizePlayer(HumanPlayer* humanPlayer){
 	_curPlayer = (_curPlayer - 1) % 4;
 }
 
-void Model::setPlayers(char playerTypes[]){
+void Model::initializePlayers(char playerTypes[]){
 	for (int i = 0; i < PLAYER_COUNT; i++){
 		assert(playerTypes[i] == 'h' || playerTypes[i] == 'c' || playerTypes[i] == 'H' || playerTypes[i] == 'C');
 		
@@ -124,7 +124,7 @@ void Model::playGame(){
 			_players[i]->prepForNewRound();
 		}
 
-		_view->announceNewRound(_firstPlayer);
+		_view->announceNewRound(_players[_firstPlayer]);
 		_curPlayer = _firstPlayer;
 
 		// this loop is a round
