@@ -156,7 +156,7 @@ m2=1</panel_attributes>
     <coordinates>
       <x>920</x>
       <y>0</y>
-      <w>420</w>
+      <w>440</w>
       <h>470</h>
     </coordinates>
     <panel_attributes>Player
@@ -167,13 +167,15 @@ m2=1</panel_attributes>
 -_roundScore : int
 -_playerNumber : int
 --
-+Player(model : Model, view : View, controller : Controller, playerNumber : int)
++Player(model : Model, view : View, controller : Controller,
+playerNumber : int)
 +Player( player : Player)
 
 +run() : void
 +initializeModel() : void
 +setView(view : View) void
-+requestCommand(player : HumanPlayer, legalPlays : List&lt;Card&gt;, hand : List&lt;Card&gt;) : void
++requestCommand(player : HumanPlayer,
+legalPlays : List&lt;Card&gt;, hand : List&lt;Card&gt;) : void
 /playTurn(cardMap : bool[4][13]) : void/
 &lt;&lt;{const}&gt;&gt;
 +getScore() : int

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-for file in tests/case1.txt tests/case2.txt 
+for file in tests/case1.txt tests/case2.txt tests/case3.txt
 do
     echo "Running test $file"
     ./straights < $file > output_own.txt

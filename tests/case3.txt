@@ -1,0 +1,46 @@
+c
+c
+c
+h
+play 7H
+discard QC
+play 5C
+play 4C
+play 8D
+play 9D
+discard 2S
+play JD
+discard QS
+discard AH
+play AH
+discard JS
+play 9H
+discard AS
+play 7H
+play 8C
+play 10S
+play JS
+play 6D
+play 6C
+play 9D
+play 10D
+play QC
+play 6S
+play 5H
+play 3S
+play 3C
+play 8C
+play 6C
+play 7H
+play 6D
+play 3C
+play 8S
+play 9D
+play 2C
+play 5H
+play 3D
+play 9S
+play 5H
+play JS
+play KC
+play 2D

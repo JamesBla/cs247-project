@@ -12,6 +12,7 @@ class Card;
 class Player{
 public:
 	Player(Model*, View*, Controller*, int);
+	virtual ~Player();
 	Player(const Player&);
 	virtual void playTurn(bool (&cardMap)[4][13]) = 0;
 	int getScore() const;

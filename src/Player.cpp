@@ -27,6 +27,8 @@ Player::Player(const Player& player){
 	_controller = player._controller;
 }
 
+Player::~Player() {};
+
 int Player::getScore() const{
 	return _score;
 }
