@@ -152,12 +152,18 @@ m2=1</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>1030</x>
-      <y>370</y>
+      <x>980</x>
+      <y>240</y>
       <w>100</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>Player
+--
+-_hand : List&lt;Card&gt;
+-_discards : List&lt;Card&gt;
+-_score : int
+-_roundScore : int
+-_playerNumber : int
 --
 +Player(model : Model, view : View, controller : Controller, playerNumber : int)
 +Player( player : Player)
@@ -166,6 +172,29 @@ m2=1</panel_attributes>
 +initializeModel() : void
 +setView(view : View) void
 +requestCommand(player : HumanPlayer, legalPlays : List&lt;Card&gt;, hand : List&lt;Card&gt;) : void
+/playTurn(cardMap : bool[4][13]) : void/
+&lt;&lt;{const}&gt;&gt;
++getScore() : int
+&lt;&lt;{const}&gt;&gt;
++getHandSize() : int
++addCard( card : Card ) : void
++playCard( card : Card ) : void
++discard( card : Card ) : void
+&lt;&lt;{const}&gt;&gt;
++getNumber() : int
++updateScore() : void
++prepForNewRound() : void
+&lt;&lt;{const}&gt;&gt;
+#getView() : View
+&lt;&lt;{const}&gt;&gt;
+getHand() : List&lt;Card&gt;
+&lt;&lt;{const}&gt;&gt;
+playable(card : Card, cardMap : bool[4][13]) : bool
+&lt;&lt;{const}&gt;&gt;
+playable(card : Card, cardMap : bool[4][13]) : List&lt;Card&gt;
+&lt;&lt;{const}&gt;&gt;
+getController() : Controller
+
 </panel_attributes>
     <additional_attributes/>
   </element>
@@ -177,22 +206,26 @@ m2=1</panel_attributes>
       <w>210</w>
       <h>70</h>
     </coordinates>
-    <panel_attributes>Human Player
+    <panel_attributes>HumanPlayer
 --
-id: Long="36548"
-[waiting for message]</panel_attributes>
+
++HumanPlayer(model : Model, view : View, controller : Controller, playerNumber : int) 
++playTurn(cardMap : bool[4][13]) : void
+
+
+</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>830</x>
-      <y>370</y>
-      <w>220</w>
-      <h>90</h>
+      <y>240</y>
+      <w>170</w>
+      <h>220</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>200;30;30;70</additional_attributes>
+    <additional_attributes>150;30;30;200</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
@@ -202,33 +235,38 @@ id: Long="36548"
       <w>210</w>
       <h>70</h>
     </coordinates>
-    <panel_attributes>Computer Player
+    <panel_attributes>ComputerPlayer
 --
-id: Long="36548"
-[waiting for message]</panel_attributes>
+
++ComputerPlayer(model : Model, view : View, controller : Controller, playerNumber : int)
++ComputerPlayer(humanPlayer : HumanPlayer)
++playTurn(cardMap : bool[4][13]) : void
+
+
+</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>1060</x>
-      <y>370</y>
-      <w>210</w>
-      <h>90</h>
+      <x>1010</x>
+      <y>240</y>
+      <w>260</w>
+      <h>220</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>30;30;190;70</additional_attributes>
+    <additional_attributes>30;30;240;200</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>670</x>
-      <y>360</y>
-      <w>380</w>
-      <h>50</h>
+      <y>230</y>
+      <w>330</w>
+      <h>180</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>30;30;360;30</additional_attributes>
+    <additional_attributes>30;160;310;30</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
@@ -241,15 +279,13 @@ id: Long="36548"
     <panel_attributes>Card
 {Some Properties}
 --
--id: Long
-_-ClassAttribute: Long_
+-suit_ : Suit
+_rank_ : Rank
 --
-#Operation(i: int): int
-/+AbstractOperation()/
---
-Responsibilities
--- Resp1
-*-- Resp2*</panel_attributes>
+Card(suit : Suit, rank : Rank)
+getSuit() : Suit
+getRank() : Rank
+</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -268,34 +304,39 @@ m2=52</panel_attributes>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>960</x>
-      <y>370</y>
-      <w>120</w>
-      <h>290</h>
+      <y>240</y>
+      <w>70</w>
+      <h>420</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-
 m2=13</panel_attributes>
-    <additional_attributes>100;30;30;270</additional_attributes>
+    <additional_attributes>50;30;30;400</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>0</x>
-      <y>370</y>
+      <y>340</y>
       <w>100</w>
       <h>30</h>
     </coordinates>
-    <panel_attributes>Command</panel_attributes>
+    <panel_attributes>Command
+--
++type : Type
++card : Card
+--
++Command()</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>70</x>
-      <y>350</y>
+      <y>320</y>
       <w>210</w>
-      <h>50</h>
+      <h>80</h>
     </coordinates>
     <panel_attributes>lt=&lt;.</panel_attributes>
-    <additional_attributes>30;30;190;30</additional_attributes>
+    <additional_attributes>30;30;190;60</additional_attributes>
   </element>
 </diagram>
