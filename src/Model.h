@@ -21,13 +21,13 @@ public:
 	void initializeDeck();
 	void shuffle();
 	void deal();
-	void putCardOnTable(Card*&);
+	void putCardOnTable(Card*);
 	std::vector<Card*> getDeck() const;
 	void cleanUp();
 	void computerizePlayer(HumanPlayer*);
 	void clearCardsOnTable();
 	Card* findCard(Card*) const;
-	int getWinner() const;
+	Player* getWinner() const;
 	static const Card* sevenOfSpades();
 private:
 	static const int PLAYER_COUNT;

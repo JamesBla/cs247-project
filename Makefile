@@ -13,4 +13,7 @@ clean:
 test:
 	sh ./test.sh
 
+zip:
+	zip straights.zip src/*.h src/*.cpp Makefile
+
 -include ${DEPENDS} 

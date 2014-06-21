@@ -1,5 +1,6 @@
 #include <cassert>
 #include <cstdlib>
+#include <iostream>
 
 #include "Model.h"
 #include "View.h"
@@ -105,7 +106,7 @@ void Model::deal(){
 	}
 }
 
-void Model::putCardOnTable(Card* &card){
+void Model::putCardOnTable(Card* card){
 	_playedCards[card->getSuit()][card->getRank()] = true;
 }
 
@@ -147,13 +148,13 @@ void Model::playGame(){
 	_view->announceWinner(getWinner());
 }
 
-int Model::getWinner() const{
+Player* Model::getWinner() const{
 	int minScore = 1337;
-	int winner = 0;
+	Player* winner;
 	for (unsigned int i = 0; i < _players.size(); i++){
 		if (_players[i]->getScore() < minScore){
 			minScore = _players[i]->getScore();
-			winner = _players[i]->getNumber();
+			winner = _players[i];
 		}
 	}
 	return winner;

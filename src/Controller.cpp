@@ -46,7 +46,7 @@ void Controller::requestCommand(HumanPlayer* player, vector<Card*>& legalPlays, 
 	
 	Command command;
 	bool cardPlayLegal = false;
-	while (!cin.eof()) {
+	while(true) {
 		_view->printPrompt();
 		cin >> command;
 
@@ -82,6 +82,7 @@ void Controller::requestCommand(HumanPlayer* player, vector<Card*>& legalPlays, 
 			_model->cleanUp();
 			exit(0);
 		} else if (command.type == RAGEQUIT){
+			_view->printRagequit(player);
 			_model->computerizePlayer(player);
 			break;
 

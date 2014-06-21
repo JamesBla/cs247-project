@@ -6,8 +6,8 @@
 #include "Controller.h"
 
 #include "Player.h"
+#include "HumanPlayer.h"
 #include "Card.h"
-
 
 using namespace std;
 
@@ -99,7 +99,7 @@ void View::printPrompt() const{
 	cout << ">";
 }
 
-void View::printLegalPlay(Player*& player, Card*& card) const{
+void View::printLegalPlay(Player* player, Card* card) const{
 	cout << "Player " << player->getNumber() << " plays " << *card << "." << endl;
 };
 
@@ -107,7 +107,7 @@ void View::printIllegalPlay() const{
 	cout << "This is not a legal play.\n";
 }
 
-void View::printDiscard(Player*& player, Card*& card) const{
+void View::printDiscard(Player* player, Card* card) const{
 	cout << "Player " << player->getNumber() << " discards " << *card << "." << endl;
 }
 
@@ -115,11 +115,11 @@ void View::printMayNotDiscard() const{
 	cout << "You have a legal play. You may not discard." << endl;
 }
 
-void View::announceWinner(int playerNumber) const{
-	cout << "Player " << playerNumber << " wins!" << endl;
+void View::announceWinner(Player* player) const{
+	cout << "Player " << player->getNumber() << " wins!" << endl;
 }
 
-void View::printDeck(vector<Card*> & deck) const{
+void View::printDeck(vector<Card*> &deck) const{
 	for (unsigned int i = 0; i < deck.size(); i++){
 		cout << *deck[i];
 		if ((i + 1) % 13 == 0){
@@ -129,4 +129,8 @@ void View::printDeck(vector<Card*> & deck) const{
 			cout << " ";
 		}
 	}
+}
+
+void View::printRagequit(HumanPlayer* player) const {
+	cout << "Player " << player->getNumber() << " ragequits. A computer will now take over.\n";
 }
