@@ -27,7 +27,7 @@ public:
 	void computerizePlayer(HumanPlayer*);
 	void clearCardsOnTable();
 	Card* findCard(Card*) const;
-	Player* getWinner() const;
+	std::vector<Player*> getWinners() const;
 	static const Card* sevenOfSpades();
 private:
 	static const int PLAYER_COUNT;

@@ -145,19 +145,26 @@ void Model::playGame(){
 	} while(!doneGame);
 
 	
-	_view->announceWinner(getWinner());
+	_view->announceWinners(getWinners());
 }
 
-Player* Model::getWinner() const{
+vector<Player*> Model::getWinners() const{
 	int minScore = 1337;
-	Player* winner;
+	vector<Player*> winners;
 	for (unsigned int i = 0; i < _players.size(); i++){
-		if (_players[i]->getScore() < minScore){
-			minScore = _players[i]->getScore();
-			winner = _players[i];
+		int curScore = _players[i]->getScore();
+
+		if (curScore <= minScore){
+
+			if (curScore < minScore){
+				minScore = curScore;
+				winners.clear();
+			}
+
+			winners.push_back(_players[i]);
 		}
 	}
-	return winner;
+	return winners;
 }
 
 void Model::cleanUp(){

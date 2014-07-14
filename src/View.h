@@ -26,7 +26,7 @@ public:
 	void printMayNotDiscard() const;
 	void printDeck(std::vector<Card*> &) const;
 	void printNewScore(std::vector<Card*> &, int, int, int, Player*) const;
-	void announceWinner(Player*) const;
+	void announceWinners(std::vector<Player*>) const;
 	void printRagequit(HumanPlayer* player) const;
 };
 

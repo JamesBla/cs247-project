@@ -115,8 +115,10 @@ void View::printMayNotDiscard() const{
 	cout << "You have a legal play. You may not discard." << endl;
 }
 
-void View::announceWinner(Player* player) const{
-	cout << "Player " << player->getNumber() << " wins!" << endl;
+void View::announceWinners(std::vector<Player*> winners) const{
+	for (unsigned int i = 0; i < winners.size(); i++){
+		cout << "Player " << winners[i]->getNumber() << " wins!" << endl;
+	}
 }
 
 void View::printDeck(vector<Card*> &deck) const{
