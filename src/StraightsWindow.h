@@ -6,8 +6,10 @@
 #include <gtkmm/button.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/frame.h>
+#include <gtkmm/table.h>
 
 #include "DeckGUI.h"
+#include "PlayerView.h"
 
 class StraightsWindow : public Gtk::Window {
 public:
@@ -28,10 +30,19 @@ private:
 	Gtk::Frame                      frame;            // Create a nice framed border for the box.
 
 	Gtk::VBox topContainer;
+
 	Gtk::HBox toolbar;
 	Gtk::Button newGameButton;
 	Gtk::Entry seedEntry;
 	Gtk::Button endGameButton;
+
+	Gtk::Frame cardsOnTableFrame;
+	Gtk::Table cardsOnTable;
+	Gtk::Image *cardsPlayed[4][13];
+
+	Gtk::HBox playersContainer;
+	PlayerView *playerViews[4];
+
 };
 
 #endif
