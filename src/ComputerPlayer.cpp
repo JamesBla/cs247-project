@@ -25,3 +25,7 @@ void ComputerPlayer::playTurn(bool (&cardMap)[4][13]){
 		discard(getHand().at(0));
 	}
 }
+
+bool ComputerPlayer::isHuman() const{
+	return false;
+}

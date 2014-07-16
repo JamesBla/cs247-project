@@ -1,5 +1,13 @@
 #include <iostream>
 #include <string>
+#include <vector>
+#include <gtkmm/window.h>
+#include <gtkmm/image.h>
+#include <gtkmm/box.h>
+#include <gtkmm/button.h>
+#include <gtkmm/entry.h>
+#include <gtkmm/frame.h>
+#include <gtkmm/table.h>
 
 #include "Model.h"
 #include "View.h"
@@ -8,12 +16,26 @@
 #include "Player.h"
 #include "HumanPlayer.h"
 #include "Card.h"
+#include "CardButtonView.h"
 
 using namespace std;
 
-View::View(Controller* controller, Model* model){
-	controller->setView(this);
-	model->setView(this);
+void View::notify() const {
+	//foreach (state in Model.States){
+		//if (state.changed)
+			//view.updateWindow(state)
+	//}
+
+	if (_model->isStartOfNewRound()) {
+		cout << "A new round begins. It's player " << _model->getFirstPlayer()->getNumber() << "'s turn to play." << endl;
+	}
+
+	if (_model->getCurrentPlayer()->isHuman()){
+		vector<Card*> curHand = _model->getCurrentPlayer()->getHand();
+
+	}
+
+
 }
 
 void View::printNewScore(std::vector<Card*>& discards, int oldScore, int gainedScore, int newScore, Player* player) const{
@@ -28,8 +50,8 @@ void View::printNewScore(std::vector<Card*>& discards, int oldScore, int gainedS
 	cout << "Player " << player->getNumber() << "'s score: " << oldScore << " + " << gainedScore << " = " << newScore << endl;
 }
 
-void View::requestPlayerType(int playerNumber) const{
-	cout << "Is player " << playerNumber << " a human(h) or a computer(c)?\n";
+bool View::requestPlayerType(int playerNumber) const{
+	return playerViews[playerNumber]->isHuman();
 }
 
 void View::announceNewRound(Player* firstPlayer) const{
@@ -136,4 +158,106 @@ void View::printDeck(vector<Card*> &deck) const{
 
 void View::printRagequit(HumanPlayer* player) const {
 	cout << "Player " << player->getNumber() << " ragequits. A computer will now take over.\n";
+}
+
+// Sets the horizontal box to have homogeneous spacing (all elements are of the same size), and to put 10 pixels
+// between each widget. Initializes the pixel buffer for the null place holder card, and the 10 of spades.
+// Puts a frame in the window, and lays out the widgets horizontally. Four widgets are images, the fifth is a button
+// with an image in it.
+//
+// Since widgets cannot be shared, must use pixel buffers to share images.
+
+void View::onNewGame(){
+	srand48( atoi(static_cast<string>(seedEntry.get_text()).c_str()) );
+	_controller->run();
+}
+
+void View::onEndGame(){
+
+}
+
+
+View::View(Controller* controller, Model* model) : hbox( true, 10 ), newGameButton("Start new game with seed:"), endGameButton("End current game"), 
+cardsOnTable(4, 13, true) {
+
+	controller->setView(this);
+	model->setView(this);
+	_model = model;
+	_controller = controller;
+
+	set_title("Straights UI");
+	// Sets the border width of the window.
+	set_border_width( 10 );
+
+	topContainer.pack_start(toolbar);
+	topContainer.pack_start(cardsOnTableFrame);
+	topContainer.pack_start(playersContainer);
+	topContainer.pack_end(frame);
+
+	toolbar.pack_start(newGameButton);
+	toolbar.pack_start(seedEntry);
+	toolbar.pack_end(endGameButton);
+
+	newGameButton.signal_clicked().connect( sigc::mem_fun( *this, &View::onNewGame ) );
+	seedEntry.set_text("0");
+	seedEntry.set_alignment(0.5);
+	endGameButton.signal_clicked().connect( sigc::mem_fun( *this, &View::onEndGame ) );
+
+	const Glib::RefPtr<Gdk::Pixbuf> nullCardPixbuf = deck.getNullCardImage();
+	const Glib::RefPtr<Gdk::Pixbuf> cardPixbuf     = deck.getCardImage( TEN, SPADE );
+
+	cardsOnTableFrame.set_label("Cards on the table");
+	cardsOnTable.set_row_spacings(5);
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 13; j++) {
+			cardsPlayed[i][j] = new Gtk::Image(nullCardPixbuf);
+			cardsOnTable.attach(*cardsPlayed[i][j], j, j+1, i, i+1);
+		}
+	}
+	cardsOnTableFrame.add(cardsOnTable);
+
+	for (int i = 0; i < 4; i++) {
+		playerViews[i] = new PlayerView(i+1);
+		playersContainer.pack_start(*playerViews[i]);
+	}
+
+	// Set the look of the frame.
+	frame.set_label( "Cards:" );
+	
+	// Add the vbox to the window. Windows can only hold one widget, same for frames.
+	add( topContainer );
+	
+	// Add the horizontal box for laying out the images to the frame.	
+	frame.add( hbox );
+	
+	// Initialize 4 empty cards and place them in the box.
+	for (int i = 0; i < 13; i++ ) {
+		cardButtonViews[i] = new CardButtonView(_controller, true);
+		hbox.add( *cardButtonViews[i] );
+	} // for
+
+	// // Initialize the 5th card and place the image into the button.
+	// card[4] = new Gtk::Image( cardPixbuf );	
+	// button.set_image( *card[4] );	
+			
+	// // Add the button to the box.
+	// hbox.add( button );
+	
+	// The final step is to display this newly created widget.
+	show_all();
+}
+
+View::~View() {
+	for (int i = 0; i < 13; i++ ) {
+		delete card[i];
+		delete cardButtonViews[i];
+	}
+
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 13; j++) delete cardsPlayed[i][j];
+	}
+	
+	for (int i = 0; i < 4; i++) {
+		delete playerViews[i];
+	}
 }

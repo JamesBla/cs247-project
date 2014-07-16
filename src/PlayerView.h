@@ -10,11 +10,14 @@ class PlayerView : public Gtk::Frame {
 public:
 	PlayerView(int);
 	virtual ~PlayerView();
+	bool isHuman() const;
 private:
 	Gtk::VBox container;
 	Gtk::Button togglePlayer;
 	Gtk::Label points;
 	Gtk::Label discards;
+
+	void onTypeChange();
 };
 
 #endif

@@ -15,6 +15,7 @@ public:
 	virtual ~Player();
 	Player(const Player&);
 	virtual void playTurn(bool (&cardMap)[4][13]) = 0;
+	virtual bool isHuman() const = 0;
 	int getScore() const;
 	int getHandSize() const;
 	void addCard(Card*);
@@ -23,9 +24,9 @@ public:
 	int getNumber() const;
 	void updateScore();
 	void prepForNewRound();
+	std::vector<Card*> getHand() const;
 protected:
 	View* getView() const;
-	std::vector<Card*> getHand() const;
 	bool playable(Card*, bool (&cardMap)[4][13]) const;
 	std::vector<Card*> getLegalPlays(bool (&cardMap)[4][13]) const;
 	Controller* getController() const;

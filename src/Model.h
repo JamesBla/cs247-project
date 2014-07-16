@@ -29,6 +29,9 @@ public:
 	Card* findCard(Card*) const;
 	std::vector<Player*> getWinners() const;
 	static const Card* sevenOfSpades();
+	bool isStartOfNewRound() const;
+	Player* getFirstPlayer() const;
+	Player* getCurrentPlayer() const;
 private:
 	static const int PLAYER_COUNT;
 	static const int CARD_COUNT;
@@ -40,6 +43,7 @@ private:
 	int _curPlayer;
 	View* _view;
 	bool _playedCards[4][13];
+	bool startOfNewRound;
 };
 
 #endif

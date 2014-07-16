@@ -17,6 +17,7 @@ public:
 	Rank getRank() const;
 	
 private:
+	bool nothing;
 	Suit suit_;
 	Rank rank_;
 };

@@ -26,10 +26,8 @@ void Controller::initializeModel(){
 
 	char playerType;
 	for (int i = 0; i < Model::getPlayerCount(); i++){
-		_view->requestPlayerType(i+1);
 
-		_view->printPrompt();
-		cin >> playerType;
+		playerType = (_view->requestPlayerType(i))? 'h' : 'c';
 
 		playerTypes[i] = playerType;
 	}

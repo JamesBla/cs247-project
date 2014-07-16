@@ -124,7 +124,11 @@ void Model::playGame(){
 			_players[i]->prepForNewRound();
 		}
 
-		_view->announceNewRound(_players[_firstPlayer]);
+		//_view->announceNewRound(_players[_firstPlayer]);
+		startOfNewRound = true;
+		_view->notify();
+		startOfNewRound = false;
+
 		_curPlayer = _firstPlayer;
 
 		// this loop is a round
@@ -184,4 +188,16 @@ Card* Model::findCard(Card* target) const {
 		}
 	}
 	return NULL;
+}
+
+Player* Model::getFirstPlayer() const {
+	return _players.at(_firstPlayer);
+}
+
+bool Model::isStartOfNewRound() const {
+	return startOfNewRound;
+}
+
+Player* Model::getCurrentPlayer() const{
+	return _players.at(_curPlayer);
 }
