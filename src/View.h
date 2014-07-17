@@ -20,7 +20,7 @@
 class Model;
 class Controller;
 
-//class Card;
+class Card;
 class Player;
 class HumanPlayer;
 class CardButtonView;
@@ -47,6 +47,8 @@ public:
 	void printMayNotDiscard() const;
 	void printDeck(std::vector<Card*> &) const;
 	void printRagequit(HumanPlayer* player) const;
+
+	void setHandView(std::vector<Card*> *);
 
 	void printLegalPlays(const std::vector<Card*>&) const; // bonus
 private:

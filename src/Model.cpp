@@ -65,7 +65,7 @@ void Model::computerizePlayer(Player* player){
 	ComputerPlayer* computerPlayer = new ComputerPlayer(*player);
 	delete player;
 	_players[playerIndex] = computerPlayer;
-	_curPlayer = (_curPlayer - 1) % 4;
+	
 	playATurn(NULL);
 }
 
@@ -197,17 +197,17 @@ void Model::playATurn(Card* card){
 
 		return;
 	}
-
 	
 	//increment player if good play
 	if (_players[_curPlayer]->playTurn(card, _playedCards)){
 		_curPlayer = (_curPlayer + 1) % 4;
 	}
 	
-
 	if (!_players[_curPlayer]->isHuman()){
 		playATurn(NULL);
 	}
+
+	
 
 	notify();
 }
@@ -232,6 +232,9 @@ vector<Player*> Model::getWinners() const{
 }
 
 void Model::cleanUp(){
+	_resetView = true;
+	notify();
+	_resetView = false;
 	clearCardsOnTable();
 
 	for (vector<Card*>::iterator it = _deck.begin(); it != _deck.end(); it++){
@@ -245,9 +248,6 @@ void Model::cleanUp(){
 	_deck.clear();
 	_players.clear();
 	_startOfNewRound = _roundEnded = _roundInProgress = false;
-	_resetView = true;
-	notify();
-	_resetView = false;
 }
 
 bool Model::resetView() const{

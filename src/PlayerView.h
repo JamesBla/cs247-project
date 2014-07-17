@@ -9,10 +9,11 @@
 #include <string>
 
 class Model;
+class View;
 
 class PlayerView : public Gtk::Frame {
 public:
-	PlayerView(int, Model*);
+	PlayerView(int, Model*, View*);
 	virtual ~PlayerView();
 	void setButton(bool sensitive, std::string text);
 	bool isHuman() const;
@@ -20,6 +21,7 @@ public:
 private:
 	int playerIndex;
 	Model* _model;
+	View* _view;
 	Gtk::VBox container;
 	Gtk::Button togglePlayer;
 	Gtk::Label points;

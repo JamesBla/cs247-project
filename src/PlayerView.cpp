@@ -1,5 +1,6 @@
 #include "PlayerView.h"
 #include "Model.h"
+#include "View.h"
 #include "HumanPlayer.h"
 
 #include <gtkmm/box.h>
@@ -17,7 +18,7 @@ void PlayerView::setButton(bool sensitive, std::string text){
 	togglePlayer.set_label(text);
 }
 
-PlayerView::PlayerView(int playerNumber, Model* model) : playerIndex(playerNumber-1), _model(model), togglePlayer("Human"), points("0 points"), discards("0 discards") {
+PlayerView::PlayerView(int playerNumber, Model* model, View* view) : playerIndex(playerNumber-1), _model(model), _view(view), togglePlayer("Human"), points("0 points"), discards("0 discards") {
 	// required because ustring cannot append int directly
 	Glib::ustring playerNumberStr = intToString(playerNumber);
 
@@ -37,6 +38,8 @@ PlayerView::~PlayerView() {
 void PlayerView::onClick(){
 	if (togglePlayer.get_label() == "Rage!"){
 		_model->computerizePlayer(_model->getCurrentPlayer());
+		setButton(false,"Rage!");
+		_view->setHandView(NULL);
 	}
 	else {
 		togglePlayer.set_label( (togglePlayer.get_label() == "Human") ? "Computer" : "Human" );

@@ -26,9 +26,7 @@ using namespace std;
 void View::update() {
 	cout << "hello" << endl;
 	if (_model->resetView()){
-		for (unsigned int i = 0; i < 13; i++){
-			cardButtonViews[i]->setCard(NULL);
-		}
+		setHandView(NULL);
 
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 13; j++) {
@@ -39,6 +37,12 @@ void View::update() {
 		for (int i = 0; i < 4; i++){
 			playerViews[i]->update();
 		}
+
+		for (int i = 0; i < 4; i++) {
+			playerViews[i]->setButton(true, (_model->getPlayer(i)->isHuman()) ? "Human" : "Computer");
+		}
+
+		return;
 	}
 	cout << "farewell" << endl;
 
@@ -110,13 +114,7 @@ void View::update() {
 			set_title("Straights UI - Player " + numberString + "'s Turn");
 			vector<Card*> curHand = _model->getCurrentPlayer()->getHand();
 
-			for (unsigned int i = 0; i < curHand.size(); i++ ) {
-				cardButtonViews[i]->setCard(curHand[i]);
-			}
-			
-			for (unsigned int i = curHand.size(); i < 13; i++){
-				cardButtonViews[i]->setCard(NULL);
-			}
+			setHandView(&curHand);
 			
 		}
 
@@ -134,6 +132,12 @@ void View::update() {
 	}
 
 	
+}
+
+void View::setHandView(vector<Card*> * hand){
+	for (unsigned int i = 0; i < 13; i++){
+		cardButtonViews[i]->setCard((!hand && i < (*hand).size())? (*hand)[i] : NULL);
+	}
 }
 
 void View::printNewScore(std::vector<Card*>& discards, int oldScore, int gainedScore, int newScore, Player* player) const{
@@ -320,7 +324,7 @@ cardsOnTable(4, 13, true) {
 	cardsOnTableFrame.add(cardsOnTable);
 
 	for (int i = 0; i < 4; i++) {
-		playerViews[i] = new PlayerView(i+1, _model);
+		playerViews[i] = new PlayerView(i+1, _model, this);
 		playersContainer.pack_start(*playerViews[i]);
 	}
 
