@@ -124,3 +124,7 @@ vector<Card*> Player::getLegalPlays(bool (&cardMap)[4][13]) const{
 Controller* Player::getController() const{
 	return _controller;
 }
+
+int Player::getDiscardedCount() const{
+	return _discards.size();
+};

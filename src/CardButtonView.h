@@ -7,24 +7,25 @@
 #include <vector>
 #include <string>
 
-#include "Card.h"
-#include "DeckGUI.h"
+#include "View.h"
 
 using std::vector;
 using std::string;
 
 class Controller;
+class View;
+class Card;
 
 class CardButtonView : public Gtk::Button {
 public:
-	CardButtonView(Controller*, bool, Rank r = ACE, Suit s = CLUB);
+	CardButtonView(Controller*, View*);
 	void setCard(Card*);
 	virtual ~CardButtonView();
 private:
 	void cardButtonClicked();
 	Controller* _controller;
+	View* _view;
 	Gtk::Image* image;
-	DeckGUI deck;
 	Card* currentCard;
 };
 

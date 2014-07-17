@@ -20,39 +20,31 @@ bool HumanPlayer::playTurn(Card* card, bool (&cardMap)[4][13]){
 
 	// need to update table after each playTurn();
 
-	
-
 	// populate legal plays
 	
 	vector<Card*> legalPlays = getLegalPlays(cardMap);
 
 	bool cardPlayLegal = false;
 
-		// cout << "hi" << endl;
+	for (vector<Card*>::iterator it = legalPlays.begin(); it != legalPlays.end(); it++){
+		// cout << card << endl;
+		if (*(*it) == *card){
+			
+			cardPlayLegal = true;
+			break;
+		}
+	}
 
-			for (vector<Card*>::iterator it = legalPlays.begin(); it != legalPlays.end(); it++){
-				// cout << card << endl;
-				if (*(*it) == *card){
-					
-					cardPlayLegal = true;
-					break;
-				}
-			}
+	// cout << "bye" << endl;
 
-			// cout << "bye" << endl;
-
-			if (cardPlayLegal){
-
-				playCard(card);
-				
-			} else if (legalPlays.size() == 0) {
-				discard(card);
-				
-			}else{
-				return false;
-			}
-			return true;
-	cout << "done " << endl;
+	if (cardPlayLegal){
+		playCard(card);
+	} else if (legalPlays.empty()){
+		discard(card);
+	} else{
+		return false;
+	}
+	return true;
 
 	// getView()->printLegalPlays(legalCards);
 	// getController()->requestCommand(this, legalCards, hand); 

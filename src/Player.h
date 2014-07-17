@@ -25,6 +25,7 @@ public:
 	void updateScore();
 	void prepForNewRound();
 	std::vector<Card*> getHand() const;
+	int getDiscardedCount() const;
 protected:
 	View* getView() const;
 	bool playable(Card*, bool (&cardMap)[4][13]) const;

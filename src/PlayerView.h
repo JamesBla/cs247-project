@@ -6,18 +6,24 @@
 #include <gtkmm/frame.h>
 #include <gtkmm/label.h>
 
+class Model;
+
 class PlayerView : public Gtk::Frame {
 public:
-	PlayerView(int);
+	PlayerView(int, Model*);
 	virtual ~PlayerView();
 	bool isHuman() const;
+	void update();
 private:
+	int playerIndex;
+	Model* _model;
 	Gtk::VBox container;
 	Gtk::Button togglePlayer;
 	Gtk::Label points;
 	Gtk::Label discards;
 
 	void onTypeChange();
+	Glib::ustring intToString(int);
 };
 
 #endif

@@ -12,13 +12,14 @@
 #include <gtkmm/frame.h>
 #include <gtkmm/table.h>
 
+#include "Card.h"
 #include "DeckGUI.h"
 #include "PlayerView.h"
 
 class Model;
 class Controller;
 
-class Card;
+//class Card;
 class Player;
 class HumanPlayer;
 class CardButtonView;
@@ -28,6 +29,8 @@ public:
 	View(Controller*, Model*);
 	virtual ~View();
 	void notify();
+	Glib::RefPtr<Gdk::Pixbuf> getNullCardImage() const;
+	Glib::RefPtr<Gdk::Pixbuf> getCardImage(Rank r, Suit s) const;
 
 	void announceNewRound(Player*);
 	void printCardsOnTable(const bool (&cardMap)[4][13]) const;

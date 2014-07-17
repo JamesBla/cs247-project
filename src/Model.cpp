@@ -227,3 +227,11 @@ bool Model::isStartOfNewRound() const {
 Player* Model::getCurrentPlayer() const{
 	return _players.at(_curPlayer);
 }
+
+int Model::getPlayerScore(int playerIndex) const{
+	return _players.at(playerIndex)->getScore();
+}
+
+int Model::getPlayerDiscardedCount(int playerIndex) const{
+	return _players.at(playerIndex)->getDiscardedCount();
+}

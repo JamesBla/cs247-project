@@ -32,6 +32,8 @@ public:
 	bool isStartOfNewRound() const;
 	Player* getFirstPlayer() const;
 	Player* getCurrentPlayer() const;
+	int getPlayerScore(int) const;
+	int getPlayerDiscardedCount(int) const;
 	
 	void playATurn(Card* card);
 	bool beenPlayed(int rank, int suit) const;
