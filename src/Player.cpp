@@ -7,8 +7,8 @@
 
 using namespace std;
 
-Player::Player(Model* model, View* view, Controller* controller, int number){
-	_view = view;
+Player::Player(Model* model, Controller* controller, int number){
+	// _view = view;
 	_playerNumber = number;
 	_model = model;
 	_controller = controller;
@@ -23,7 +23,6 @@ Player::Player(const Player& player){
 	_score = player._score;
 	_roundScore = player._roundScore;
 	_oldScore = player._oldScore;
-	_view = player._view;
 	_playerNumber = player._playerNumber;
 	_model = player._model;
 	_controller = player._controller;
@@ -55,9 +54,6 @@ void Player::addCard(Card* card){
 	_hand.push_back(card);
 }
 
-View* Player::getView() const{
-	return _view;
-}
 
 vector<Card*> Player::getHand() const{
 	return _hand;
@@ -68,7 +64,7 @@ void Player::playCard(Card* card){ //play card by value
 		if (*(*it) == *(card)){
 			_hand.erase(it);
 			Player* p = this;
-			_view->printLegalPlay(p, card);
+			// _view->printLegalPlay(p, card);
 			_model->putCardOnTable(card);
 			break;
 		}
@@ -80,7 +76,7 @@ void Player::discard(Card* card){
 		if (*(*it) == *(card)){
 			_hand.erase(it);
 			Player* p = this;
-			_view->printDiscard(p, card);
+			// _view->printDiscard(p, card);
 			
 			_discards.push_back(card);
 			break;

@@ -23,7 +23,7 @@
 using namespace std;
 
 // TODO: implement observer pattern (list of observers)
-void View::notify() {
+void View::update() {
 	if (_model->isStartOfNewRound()) {
 		cout << "start" << endl;
 		int number = _model->getFirstPlayer()->getNumber();       // number to be converted to a string
@@ -40,6 +40,9 @@ void View::notify() {
 	if (_model->isRoundFinished()) {
 		// TODO: display correct message
 		cout << "round is finished" << endl;
+
+
+
 		string message = "";
 		for (int i = 0; i < 4; i++) {
 			Player* player = _model->getPlayer(i);
@@ -240,7 +243,7 @@ void View::onNewGame(){
 }
 
 void View::onEndGame(){
-
+	_model->cleanUp();
 }
 
 
@@ -248,7 +251,7 @@ View::View(Controller* controller, Model* model) : hbox( true, 10 ), newGameButt
 cardsOnTable(4, 13, true) {
 
 	controller->setView(this);
-	model->setView(this);
+	model->subscribe(this);
 	_model = model;
 	_controller = controller;
 

@@ -3,7 +3,6 @@
 #include "Player.h"
 #include "HumanPlayer.h"
 #include "Controller.h"
-#include "View.h"
 #include "Model.h"
 #include "Card.h"
 
@@ -11,7 +10,7 @@
 
 using namespace std;
 
-HumanPlayer::HumanPlayer(Model* model, View* view, Controller* controller, int number) : Player(model, view, controller, number){}
+HumanPlayer::HumanPlayer(Model* model, Controller* controller, int number) : Player(model, controller, number){}
 
 bool HumanPlayer::playTurn(Card* card, bool (&cardMap)[4][13]){
 	vector<Card*> hand = getHand();

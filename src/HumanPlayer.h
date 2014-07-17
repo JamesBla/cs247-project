@@ -4,12 +4,11 @@
 #include "Player.h"
 
 class Model;
-class View;
 class Controller;
 
 class HumanPlayer: public Player{
 public:
-	HumanPlayer(Model* model, View* view, Controller* controller, int playerNumber);
+	HumanPlayer(Model* model, Controller* controller, int playerNumber);
 	virtual bool isHuman() const;
 	bool playTurn(Card*, bool (&cardMap)[4][13]);
 };

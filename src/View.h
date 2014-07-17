@@ -15,6 +15,7 @@
 #include "Card.h"
 #include "DeckGUI.h"
 #include "PlayerView.h"
+#include "Observer.h"
 
 class Model;
 class Controller;
@@ -24,11 +25,11 @@ class Player;
 class HumanPlayer;
 class CardButtonView;
 
-class View : public Gtk::Window {
+class View : public Gtk::Window, public Observer {
 public:
 	View(Controller*, Model*);
 	virtual ~View();
-	void notify();
+	void update();
 	Glib::RefPtr<Gdk::Pixbuf> getNullCardImage() const;
 	Glib::RefPtr<Gdk::Pixbuf> getCardImage(Rank r, Suit s) const;
 

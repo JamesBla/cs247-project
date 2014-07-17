@@ -7,12 +7,11 @@
 using namespace std;
 
 class Model;
-class View;
 class Controller;
 
 class Card;
 
-ComputerPlayer::ComputerPlayer(Model* model, View* view, Controller* controller, int number) : Player(model, view, controller, number){}
+ComputerPlayer::ComputerPlayer(Model* model, Controller* controller, int number) : Player(model, controller, number){}
 
 ComputerPlayer::ComputerPlayer(const HumanPlayer& humanPlayer): Player(humanPlayer) {}
 

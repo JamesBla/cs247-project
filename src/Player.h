@@ -4,14 +4,13 @@
 #include <vector>
 
 class Model;
-class View;
 class Controller;
 
 class Card;
 
 class Player{
 public:
-	Player(Model*, View*, Controller*, int);
+	Player(Model*, Controller*, int);
 	virtual ~Player();
 	Player(const Player&);
 	virtual bool playTurn(Card*, bool (&cardMap)[4][13]) = 0;
@@ -30,7 +29,6 @@ public:
 	std::vector<Card*> getDiscarded() const;
 	int getDiscardedCount() const;
 protected:
-	View* getView() const;
 	bool playable(Card*, bool (&cardMap)[4][13]) const;
 	std::vector<Card*> getLegalPlays(bool (&cardMap)[4][13]) const;
 	Controller* getController() const;
@@ -40,7 +38,6 @@ private:
 	int _score;
 	int _roundScore;
 	int _oldScore;
-	View* _view;
 	int _playerNumber;
 	Model* _model;
 	Controller* _controller;

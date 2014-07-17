@@ -27,9 +27,9 @@ const Card* Model::sevenOfSpades(){
 	return &SEVEN_OF_SPADES;
 }
 
-void Model::setView(View* view){
-	this->_view = view;
-}
+// void Model::setView(View* view){
+// 	this->_view = view;
+// }
 
 std::vector<Card*> Model::getDeck() const{
 	return _deck;
@@ -77,10 +77,10 @@ void Model::initializePlayers(char playerTypes[]){
 		assert(playerTypes[i] == 'h' || playerTypes[i] == 'c' || playerTypes[i] == 'H' || playerTypes[i] == 'C');
 		
 		if ((playerTypes[i] == 'h' || playerTypes[i] == 'H') ){
-			_players.push_back(new HumanPlayer(this, _view, _controller, i+1));
+			_players.push_back(new HumanPlayer(this, _controller, i+1));
 		}
 		else{
-			_players.push_back(new ComputerPlayer(this, _view, _controller, i+1));
+			_players.push_back(new ComputerPlayer(this, _controller, i+1));
 		}
 	}
 }
@@ -147,7 +147,7 @@ bool Model::beenPlayed(int rank, int suit) const{
 
 void Model::playRound() {
 
-	_view->notify();
+	notify();
 	cout << "about to clear shuffle deal\n";
 	clearCardsOnTable();
 	shuffle();
@@ -162,7 +162,7 @@ void Model::playRound() {
 
 	startOfNewRound = true;
 	roundInProgress = true;
-	_view->notify();
+	notify();
 	startOfNewRound = false;
 	cout << "first playturn" << endl;
 
@@ -176,12 +176,6 @@ void Model::playRound() {
 void Model::playATurn(Card* card){
 	//need to check if hand is empty, then end round
 	if (_players.at(_curPlayer)->getHandSize() == 0) {
-		cout << "hand size is zero";
-		roundEnded = true;
-		roundInProgress = false;
-		_view->notify();
-		roundEnded = false;
-
 		bool doneGame = false;
 
 		for (int i = 0; i < 4; i++) {
@@ -191,6 +185,15 @@ void Model::playATurn(Card* card){
 				doneGame = true;
 			}
 		}
+
+
+		cout << "hand size is zero";
+		roundEnded = true;
+		roundInProgress = false;
+		notify();
+		roundEnded = false;
+
+	
 		if (!doneGame) playRound();
 
 		return;
@@ -207,7 +210,7 @@ void Model::playATurn(Card* card){
 		playATurn(NULL);
 	}
 
-	_view->notify();
+	notify();
 }
 
 vector<Player*> Model::getWinners() const{
@@ -230,6 +233,8 @@ vector<Player*> Model::getWinners() const{
 }
 
 void Model::cleanUp(){
+	clearCardsOnTable();
+
 	for (vector<Card*>::iterator it = _deck.begin(); it != _deck.end(); it++){
 		delete *it;
 	}
@@ -240,6 +245,7 @@ void Model::cleanUp(){
 
 	_deck.clear();
 	_players.clear();
+	notify();
 }
 
 Card* Model::findCard(Card* target) const {

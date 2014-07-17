@@ -47,51 +47,7 @@ Model* Controller::getModel(){
 }
 
 void Controller::requestCommand(HumanPlayer* player, vector<Card*>& legalPlays, vector<Card*>& hand){
-	
-	Command command;
-	bool cardPlayLegal = false;
-	while(true) {
-		_view->printPrompt();
-		cin >> command;
 
-		Card* c = &(command.card);
-		if (command.type == PLAY) {
-
-			for (vector<Card*>::iterator it = legalPlays.begin(); it != legalPlays.end(); it++){
-				if (*(*it) == command.card){
-					cardPlayLegal = true;
-					break;
-				}
-			}
-
-			if (cardPlayLegal){
-				player->playCard(c);
-				break;
-			} else {
-				_view->printIllegalPlay();
-			}
-
-		} else if (command.type == DISCARD) {
-			if (legalPlays.size() == 0) {
-				player->discard(_model->findCard(c));
-				break;
-			}
-			else{
-				_view->printMayNotDiscard();
-			}	
-		} else if (command.type == DECK) {
-			std::vector<Card*> deck = this->_model->getDeck();
-			_view->printDeck(deck);
-		} else if (command.type == QUIT){
-			_model->cleanUp();
-			exit(0);
-		} else if (command.type == RAGEQUIT){
-			_view->printRagequit(player);
-			_model->computerizePlayer(player);
-			break;
-
-		}
-	}
 }
 
 

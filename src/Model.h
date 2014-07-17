@@ -3,6 +3,8 @@
 
 #include <vector>
 
+#include "subject.h"
+
 class View;
 class Controller;
 
@@ -10,10 +12,10 @@ class Player;
 class HumanPlayer;
 class Card;
 
-class Model{
+class Model : public Subject{
 public:
 	~Model();
-	void setView(View*);
+	// void setView(View*);
 	void setController(Controller*);
 	static int getPlayerCount();
 	void initializePlayers(char[]);
@@ -51,7 +53,6 @@ private:
 	std::vector<Card*> _deck;
 	int _firstPlayer;
 	int _curPlayer;
-	View* _view;
 	bool _playedCards[4][13];
 	void playRound();
 	bool startOfNewRound;
