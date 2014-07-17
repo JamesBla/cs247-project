@@ -24,11 +24,11 @@ using namespace std;
 
 // TODO: implement observer pattern (list of observers)
 void View::notify() {
-
 	if (_model->isStartOfNewRound()) {
-		int Number = _model->getFirstPlayer()->getNumber();       // number to be converted to a string
+		cout << "start" << endl;
+		int number = _model->getFirstPlayer()->getNumber();       // number to be converted to a string
 
-		string numberString = static_cast<ostringstream*>( &(ostringstream() << Number) )->str();
+		string numberString = intToString(number);
 		string message = "A new round begins. It's player " + numberString + "'s turn to play.";
 
 		Gtk::MessageDialog dialog(*this, "");
@@ -39,12 +39,13 @@ void View::notify() {
 
 	if (_model->isRoundFinished()) {
 		// TODO: display correct message
+		cout << "round is finished" << endl;
 		string message = "";
 		for (int i = 0; i < 4; i++) {
+			Player* player = _model->getPlayer(i);
 			vector<Card*> discards = _model->getDiscardedCards(i);
-			ostringstream ostr;
-			ostr << (i+1);
-			message += "Player " + ostr.str() + "'s discards: ";
+			string playerNumber = intToString(i+1);
+			message += "Player " + playerNumber + "'s discards: ";
 			for (unsigned int i = 0; i < discards.size(); i++) {
 				message += discards.at(i)->toString();
 				if (i != discards.size() - 1){
@@ -52,6 +53,8 @@ void View::notify() {
 				}
 			}
 			message += "\n";
+			message += "Player " + playerNumber + "'s score: " + intToString(player->getOldScore()) + 
+			" + " + intToString(player->getRoundScore()) + " = " + intToString(player->getScore()) + "\n";
 		}
 
 		cout << message << endl;
@@ -63,38 +66,40 @@ void View::notify() {
 	}
 
 	cout << "ron" << endl;
-	
-	if (_model->getCurrentPlayer()->isHuman()){
-		
-		int playerNum = _model->getCurrentPlayer()->getNumber();
-		string numberString = static_cast<ostringstream*>( &(ostringstream() << playerNum) )->str();
-		set_title("Straights UI - Player " + numberString + "'s Turn");
-		vector<Card*> curHand = _model->getCurrentPlayer()->getHand();
 
-		for (unsigned int i = 0; i < curHand.size(); i++ ) {
-			cardButtonViews[i]->setCard(curHand[i]);
-		}
-		
-		for (unsigned int i = curHand.size(); i < 13; i++){
-			cardButtonViews[i]->setCard(NULL);
-		}
-		
-	}
+	if (_model->isRoundInProgress()) {
+		if (_model->getCurrentPlayer()->isHuman()){
+			
+			int playerNum = _model->getCurrentPlayer()->getNumber();
+			string numberString = static_cast<ostringstream*>( &(ostringstream() << playerNum) )->str();
+			set_title("Straights UI - Player " + numberString + "'s Turn");
+			vector<Card*> curHand = _model->getCurrentPlayer()->getHand();
 
-	const Glib::RefPtr<Gdk::Pixbuf> nullCardPixbuf = deck.getNullCardImage();
-
-	for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 13; j++) {
-			const Glib::RefPtr<Gdk::Pixbuf> cardPixbuf = deck.getCardImage(static_cast<Rank>(j), static_cast<Suit>(i));
-			if (_model->beenPlayed(i,j)){
-				cout << "played" << endl;
+			for (unsigned int i = 0; i < curHand.size(); i++ ) {
+				cardButtonViews[i]->setCard(curHand[i]);
 			}
-			cardsPlayed[i][j]->set( _model->beenPlayed(i,j) ? cardPixbuf : nullCardPixbuf);
+			
+			for (unsigned int i = curHand.size(); i < 13; i++){
+				cardButtonViews[i]->setCard(NULL);
+			}
+			
 		}
-	}
 
-	for (int i = 0; i < 4; i++) {
-		playerViews[i]->update();
+		const Glib::RefPtr<Gdk::Pixbuf> nullCardPixbuf = deck.getNullCardImage();
+
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 13; j++) {
+				const Glib::RefPtr<Gdk::Pixbuf> cardPixbuf = deck.getCardImage(static_cast<Rank>(j), static_cast<Suit>(i));
+				if (_model->beenPlayed(i,j)){
+					cout << "played" << endl;
+				}
+				cardsPlayed[i][j]->set( _model->beenPlayed(i,j) ? cardPixbuf : nullCardPixbuf);
+			}
+		}
+
+		for (int i = 0; i < 4; i++) {
+			playerViews[i]->update();
+		}
 	}
 }
 
@@ -330,4 +335,10 @@ Glib::RefPtr<Gdk::Pixbuf> View::getNullCardImage() const {
 
 Glib::RefPtr<Gdk::Pixbuf> View::getCardImage(Rank r, Suit s) const {
 	return deck.getCardImage(r, s);
+}
+
+string View::intToString(int n) {
+	ostringstream ostr;
+	ostr << n;
+	return ostr.str();
 }

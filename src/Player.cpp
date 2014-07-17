@@ -14,6 +14,7 @@ Player::Player(Model* model, View* view, Controller* controller, int number){
 	_controller = controller;
 	_score = 0;
 	_roundScore = 0;
+	_oldScore = 0;
 }
 
 Player::Player(const Player& player){
@@ -21,6 +22,7 @@ Player::Player(const Player& player){
 	_discards = player._discards;
 	_score = player._score;
 	_roundScore = player._roundScore;
+	_oldScore = player._oldScore;
 	_view = player._view;
 	_playerNumber = player._playerNumber;
 	_model = player._model;
@@ -31,6 +33,14 @@ Player::~Player() {};
 
 int Player::getScore() const{
 	return _score;
+}
+
+int Player::getRoundScore() const{
+	return _roundScore;
+}
+
+int Player::getOldScore() const{
+	return _oldScore;
 }
 
 int Player::getHandSize() const{
@@ -83,10 +93,8 @@ void Player::updateScore(){
 		_roundScore += (_discards[i]->getRank() + 1);
 	}
 
-	int newScore = _score + _roundScore;
-
-	_view->printNewScore(_discards, _score, _roundScore, newScore, this);
-	_score = newScore;
+	_oldScore = _score;
+	_score = _oldScore + _roundScore;
 }
 
 void Player::prepForNewRound(){

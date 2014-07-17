@@ -17,6 +17,8 @@ public:
 	virtual bool playTurn(Card*, bool (&cardMap)[4][13]) = 0;
 	virtual bool isHuman() const = 0;
 	int getScore() const;
+	int getRoundScore() const;
+	int getOldScore() const;
 	int getHandSize() const;
 	void addCard(Card*);
 	void playCard(Card*);
@@ -37,6 +39,7 @@ private:
 	std::vector<Card*> _discards;
 	int _score;
 	int _roundScore;
+	int _oldScore;
 	View* _view;
 	int _playerNumber;
 	Model* _model;

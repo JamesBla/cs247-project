@@ -111,6 +111,9 @@ void Model::putCardOnTable(Card* card){
 }
 
 void Model::playGame(){
+	startOfNewRound = false;
+	roundEnded = false;
+	roundInProgress = false;
 	// each loop iteration is a round
 	// bool doneGame = 0;
 	
@@ -143,17 +146,17 @@ bool Model::beenPlayed(int rank, int suit) const{
 }
 
 void Model::playRound() {
-	for (int i = 0; i < 4; i++){
+	for (int i = 0; i < 4; i++) {
 		_players[i]->updateScore();
 		if (_players[i]->getScore() >= 80){
 			return;
 		}
 	}
+	_view->notify();
 	clearCardsOnTable();
 	shuffle();
 	deal();
 	roundEnded = false;
-
 	for (int i = 0; i < PLAYER_COUNT; i++){
 		_players[i]->prepForNewRound();
 	}
@@ -162,8 +165,10 @@ void Model::playRound() {
 	_curPlayer = _firstPlayer;
 
 	startOfNewRound = true;
+	roundInProgress = true;
 	_view->notify();
 	startOfNewRound = false;
+	cout << "first playturn" << endl;
 
 	if (!_players[_curPlayer]->isHuman()){
 		playATurn(NULL);
@@ -173,15 +178,19 @@ void Model::playRound() {
 void Model::playATurn(Card* card){
 	//need to check if hand is empty, then end round
 	if (_players.at(_curPlayer)->getHandSize() == 0) {
+		cout << "hand size is zero";
 		roundEnded = true;
+		roundInProgress = false;
 		_view->notify();
-		playRound();
+		return;
 	}
 
+	cout << "hi" << endl;
 	//increment player if good play
 	if (_players[_curPlayer]->playTurn(card, _playedCards)){
 		_curPlayer = (_curPlayer + 1) % 4;
 	}
+	cout << "bye" << endl;
 
 	if (!_players[_curPlayer]->isHuman()){
 		playATurn(NULL);
@@ -232,12 +241,20 @@ Player* Model::getFirstPlayer() const {
 	return _players.at(_firstPlayer);
 }
 
+Player* Model::getPlayer(int index) const {
+	return _players.at(index);
+}
+
 bool Model::isStartOfNewRound() const {
 	return startOfNewRound;
 }
 
 bool Model::isRoundFinished() const {
 	return roundEnded;
+}
+
+bool Model::isRoundInProgress() const {
+	return roundInProgress;
 }
 
 Player* Model::getCurrentPlayer() const{

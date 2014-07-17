@@ -54,6 +54,7 @@ private:
 	 //Signal handlers:
   	virtual void onNewGame();
   	virtual void onEndGame();
+  	std::string intToString(int);
 
 	DeckGUI                         deck;             // Knows all of the card pixel buffers.
 	
