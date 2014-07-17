@@ -24,6 +24,14 @@ using namespace std;
 
 // TODO: implement observer pattern (list of observers)
 void View::update() {
+	cout << "hello" << endl;
+	if (!_model->isStartOfNewRound() && !_model->isRoundFinished() && !_model->isStartOfNewRound()){
+		for (unsigned int i = 0; i < 13; i++){
+			cardButtonViews[i]->setCard(NULL);
+		}
+	}
+	cout << "farewell" << endl;
+
 	if (_model->isStartOfNewRound()) {
 		cout << "start" << endl;
 		int number = _model->getFirstPlayer()->getNumber();       // number to be converted to a string
@@ -40,8 +48,6 @@ void View::update() {
 	if (_model->isRoundFinished()) {
 		// TODO: display correct message
 		cout << "round is finished" << endl;
-
-
 
 		string message = "";
 		for (int i = 0; i < 4; i++) {
@@ -104,6 +110,8 @@ void View::update() {
 			playerViews[i]->update();
 		}
 	}
+
+	
 }
 
 void View::printNewScore(std::vector<Card*>& discards, int oldScore, int gainedScore, int newScore, Player* player) const{

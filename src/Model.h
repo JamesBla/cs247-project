@@ -17,7 +17,6 @@ public:
 	~Model();
 	// void setView(View*);
 	void setController(Controller*);
-	static int getPlayerCount();
 	void initializePlayers(char[]);
 	void playGame();
 	void initializeDeck();

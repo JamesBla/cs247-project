@@ -60,10 +60,6 @@ Model::~Model(){
 	cleanUp();
 }
 
-int Model::getPlayerCount(){
-	return Model::PLAYER_COUNT;
-}
-
 void Model::computerizePlayer(HumanPlayer* humanPlayer){
 	int playerIndex = humanPlayer->getNumber() - 1;
 	ComputerPlayer* computerPlayer = new ComputerPlayer(*humanPlayer);
@@ -175,6 +171,7 @@ void Model::playRound() {
 
 void Model::playATurn(Card* card){
 	//need to check if hand is empty, then end round
+	if (_players.size() == 0) return;
 	if (_players.at(_curPlayer)->getHandSize() == 0) {
 		bool doneGame = false;
 
@@ -245,6 +242,7 @@ void Model::cleanUp(){
 
 	_deck.clear();
 	_players.clear();
+	startOfNewRound = roundEnded = roundInProgress = false;
 	notify();
 }
 
@@ -257,13 +255,19 @@ Card* Model::findCard(Card* target) const {
 	return NULL;
 }
 
-Player* Model::getFirstPlayer() const {
-	return _players.at(_firstPlayer);
-}
-
 Player* Model::getPlayer(int index) const {
+	cout << "in get player" << endl;
+	cout << _players.size() << endl;
+
+	if (_players.size() == 0 || 0 < index || index >= _players.size()) return NULL;
+
 	return _players.at(index);
 }
+
+Player* Model::getFirstPlayer() const {
+	return getPlayer(_firstPlayer);
+}
+
 
 bool Model::isStartOfNewRound() const {
 	return startOfNewRound;
