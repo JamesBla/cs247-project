@@ -149,10 +149,12 @@ void Model::playRound() {
 	for (int i = 0; i < 4; i++) {
 		_players[i]->updateScore();
 		if (_players[i]->getScore() >= 80){
+			cout << "Score exceeded 80\n";
 			return;
 		}
 	}
 	_view->notify();
+	cout << "about to clear shuffle deal\n";
 	clearCardsOnTable();
 	shuffle();
 	deal();
@@ -173,6 +175,8 @@ void Model::playRound() {
 	if (!_players[_curPlayer]->isHuman()){
 		playATurn(NULL);
 	}
+
+	playRound();
 }
 
 void Model::playATurn(Card* card){
@@ -182,6 +186,7 @@ void Model::playATurn(Card* card){
 		roundEnded = true;
 		roundInProgress = false;
 		_view->notify();
+		roundEnded = false;
 		return;
 	}
 
