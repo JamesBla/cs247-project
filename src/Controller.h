@@ -16,6 +16,7 @@ public:
 	void initializeModel();
 	void setView(View* view);
 	void requestCommand(HumanPlayer*, std::vector<Card*>&, std::vector<Card*>&);
+	Model* getModel();
 private:
 	Model* _model;
 	View* _view;

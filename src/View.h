@@ -27,9 +27,9 @@ class View : public Gtk::Window {
 public:
 	View(Controller*, Model*);
 	virtual ~View();
-	void notify() const;
+	void notify();
 
-	void announceNewRound(Player*) const;
+	void announceNewRound(Player*);
 	void printCardsOnTable(const bool (&cardMap)[4][13]) const;
 	void printCardsInHand(const std::vector<Card*>&) const;
 	void printDiscard(Player*, Card*) const;

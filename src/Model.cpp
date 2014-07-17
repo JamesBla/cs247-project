@@ -112,10 +112,10 @@ void Model::putCardOnTable(Card* card){
 
 void Model::playGame(){
 	// each loop iteration is a round
-	bool doneGame = 0;
+	// bool doneGame = 0;
 	
-	// this loop is the whole game
-	do{
+	// // this loop is the whole game
+	// do{
 		clearCardsOnTable();
 		shuffle();
 		deal();
@@ -125,31 +125,57 @@ void Model::playGame(){
 		}
 
 		//_view->announceNewRound(_players[_firstPlayer]);
-		startOfNewRound = true;
-		_view->notify();
-		startOfNewRound = false;
-
 		_curPlayer = _firstPlayer;
 
+		startOfNewRound = true;
+		cout << "here" << endl;
+
+		_view->notify();
+		cout << "there" << endl;
+		startOfNewRound = false;
+
+		if (!_players[_curPlayer]->isHuman()){
+			playATurn(NULL);
+		}
+		
+
 		// this loop is a round
-		do {
-			_players[_curPlayer]->playTurn(_playedCards);
-			_curPlayer = (_curPlayer + 1) % 4;
-		}
-		while(_players[_curPlayer]->getHandSize() > 0);
+		// do {
+		// 	_players[_curPlayer]->playTurn(_playedCards);
+		// 	_curPlayer = (_curPlayer + 1) % 4;
+		// }
+		// while(_players[_curPlayer]->getHandSize() > 0);
 
-		// round is over. now we update scores
-		for (int i = 0; i < PLAYER_COUNT; i++){
-			_players[i]->updateScore();
-			if (_players[i]->getScore() >= 80){
-				doneGame = true;
-			}
-		}
+		// // round is over. now we update scores
+		// for (int i = 0; i < PLAYER_COUNT; i++){
+		// 	_players[i]->updateScore();
+		// 	if (_players[i]->getScore() >= 80){
+		// 		doneGame = true;
+		// 	}
+		// }
 
-	} while(!doneGame);
+	// } while(!doneGame);
 
-	
-	_view->announceWinners(getWinners());
+	// _view->announceWinners(getWinners());
+}
+
+bool Model::beenPlayed(int rank, int suit) const{
+	return _playedCards[rank][suit];
+}
+
+void Model::playATurn(Card* card){
+	//need to check if hand is empty, then end round
+
+	//increment player if good play
+	if (_players[_curPlayer]->playTurn(card, _playedCards)){ 
+		_curPlayer = (_curPlayer + 1) % 4;
+	}
+
+	if (!_players[_curPlayer]->isHuman()){
+		playATurn(NULL);
+	}
+
+	_view->notify();
 }
 
 vector<Player*> Model::getWinners() const{

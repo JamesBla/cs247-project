@@ -11,7 +11,7 @@ class HumanPlayer: public Player{
 public:
 	HumanPlayer(Model* model, View* view, Controller* controller, int playerNumber);
 	virtual bool isHuman() const;
-	void playTurn(bool (&cardMap)[4][13]);
+	bool playTurn(Card*, bool (&cardMap)[4][13]);
 };
 
 #endif

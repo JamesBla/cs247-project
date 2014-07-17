@@ -53,7 +53,7 @@ vector<Card*> Player::getHand() const{
 	return _hand;
 }
 
-void Player::playCard(Card* card){
+void Player::playCard(Card* card){ //play card by value
 	for (vector<Card*>::iterator it = _hand.begin(); it != _hand.end(); it++){
 		if (*(*it) == *(card)){
 			_hand.erase(it);

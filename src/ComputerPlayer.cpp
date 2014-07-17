@@ -16,7 +16,7 @@ ComputerPlayer::ComputerPlayer(Model* model, View* view, Controller* controller,
 
 ComputerPlayer::ComputerPlayer(const HumanPlayer& humanPlayer): Player(humanPlayer) {}
 
-void ComputerPlayer::playTurn(bool (&cardMap)[4][13]){
+bool ComputerPlayer::playTurn(Card* card, bool (&cardMap)[4][13]){
 	vector<Card*> legalCards = getLegalPlays(cardMap);
 	if (legalCards.size() > 0){
 		playCard(legalCards.at(0));
@@ -24,6 +24,7 @@ void ComputerPlayer::playTurn(bool (&cardMap)[4][13]){
 	else{
 		discard(getHand().at(0));
 	}
+	return true;
 }
 
 bool ComputerPlayer::isHuman() const{

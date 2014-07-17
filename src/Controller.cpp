@@ -22,10 +22,11 @@ void Controller::setView(View* view){
 }
 
 void Controller::initializeModel(){
-	char playerTypes[Model::getPlayerCount()];
+	_model->cleanUp();
+	char playerTypes[4];
 
 	char playerType;
-	for (int i = 0; i < Model::getPlayerCount(); i++){
+	for (int i = 0; i < 4; i++){
 
 		playerType = (_view->requestPlayerType(i))? 'h' : 'c';
 
@@ -39,6 +40,10 @@ void Controller::initializeModel(){
 void Controller::run(){
 	initializeModel();
 	_model->playGame();
+}
+
+Model* Controller::getModel(){
+	return _model;
 }
 
 void Controller::requestCommand(HumanPlayer* player, vector<Card*>& legalPlays, vector<Card*>& hand){

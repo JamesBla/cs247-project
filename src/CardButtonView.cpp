@@ -2,6 +2,7 @@
 #include "Controller.h"
 #include "Card.h"
 #include "DeckGUI.h"
+#include "Model.h"
 
 #include <gtkmm/button.h>
 #include <gtkmm/image.h>
@@ -9,9 +10,14 @@
 #include <iterator>
 #include <string>
 
+#include <iostream>
+
 using namespace std;
 
-void CardButtonView::cardButtonClicked() {}
+void CardButtonView::cardButtonClicked() {
+	
+	_controller->getModel()->playATurn(currentCard);
+}
 
 CardButtonView::CardButtonView(Controller* controller, bool nothing, Rank r, Suit s) {
 	_controller = controller;
@@ -27,4 +33,21 @@ CardButtonView::CardButtonView(Controller* controller, bool nothing, Rank r, Sui
 
 CardButtonView::~CardButtonView() {
 	delete image;
+}
+
+void CardButtonView::setCard(Card* card){
+
+	currentCard = card;
+
+	const Glib::RefPtr<Gdk::Pixbuf> cardPixbuf = (card == NULL) ? deck.getNullCardImage() : deck.getCardImage(card->getRank(), card->getSuit());
+	
+
+	
+	delete image;
+	image = new Gtk::Image(cardPixbuf);
+	set_image(*image);
+
+
+
+	// cout << "hello" << endl;
 }

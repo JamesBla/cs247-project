@@ -18,12 +18,14 @@ class Controller;
 class CardButtonView : public Gtk::Button {
 public:
 	CardButtonView(Controller*, bool, Rank r = ACE, Suit s = CLUB);
+	void setCard(Card*);
 	virtual ~CardButtonView();
 private:
 	void cardButtonClicked();
 	Controller* _controller;
 	Gtk::Image* image;
 	DeckGUI deck;
+	Card* currentCard;
 };
 
 #endif

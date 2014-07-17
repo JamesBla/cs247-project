@@ -20,20 +20,76 @@
 
 using namespace std;
 
-void View::notify() const {
+void View::notify() {
 	//foreach (state in Model.States){
 		//if (state.changed)
 			//view.updateWindow(state)
 	//}
 
 	if (_model->isStartOfNewRound()) {
-		cout << "A new round begins. It's player " << _model->getFirstPlayer()->getNumber() << "'s turn to play." << endl;
+		// cout << "A new round begins. It's player " << _model->getFirstPlayer()->getNumber() << "'s turn to play." << endl;
+		int Number = _model->getFirstPlayer()->getNumber();       // number to be converted to a string
+
+		string numberString = static_cast<ostringstream*>( &(ostringstream() << Number) )->str();
+		string message = "A new round begins. It's player " + numberString + "'s turn to play.";
+
+		Gtk::MessageDialog dialog(*this, "");
+  		dialog.set_secondary_text(message);
+
+  		dialog.run();
 	}
 
+	cout << "ron" << endl;
+	
 	if (_model->getCurrentPlayer()->isHuman()){
+		
+		int playerNum = _model->getCurrentPlayer()->getNumber();
+		string numberString = static_cast<ostringstream*>( &(ostringstream() << playerNum) )->str();
+		set_title("Straights UI - Player " + numberString + "'s Turn");
 		vector<Card*> curHand = _model->getCurrentPlayer()->getHand();
 
+		for (int i = 0; i < curHand.size(); i++ ) {
+			cardButtonViews[i]->setCard(curHand[i]);
+		} // for
+		
+		for (int i = curHand.size(); i < 13; i++){
+			cardButtonViews[i]->setCard(NULL);
+		}
+		
 	}
+
+
+	const Glib::RefPtr<Gdk::Pixbuf> nullCardPixbuf = deck.getNullCardImage();
+	
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 13; j++) {
+			
+			const Glib::RefPtr<Gdk::Pixbuf> cardPixbuf = deck.getCardImage(static_cast<Rank>(j), static_cast<Suit>(i));
+			if (_model->beenPlayed(i,j)){
+				cout << "played" << endl;
+			}
+			cardsPlayed[i][j]->set( _model->beenPlayed(i,j) ? cardPixbuf : nullCardPixbuf);
+		}
+	}
+	
+
+	// for (int i = 0; i < 4; i++) {
+	// 	for (int j = 0; j < 13; j++) {
+			
+	// 		delete cardsPlayed[i][j];
+
+	// 		const Glib::RefPtr<Gdk::Pixbuf> nullCardPixbuf = deck.getNullCardImage();
+	// 		const Glib::RefPtr<Gdk::Pixbuf> cardPixbuf = deck.getCardImage(static_cast<Rank>(j), static_cast<Suit>(i));
+
+	// 		cout << "hello" << endl;
+	// 		cardsPlayed[i][j] = new Gtk::Image( _model->beenPlayed(i,j) ? cardPixbuf : nullCardPixbuf);
+	// 		cout << "bye" << endl;
+	// 		cardsOnTable.attach(*cardsPlayed[i][j], j, j+1, i, i+1);
+	// 	}
+	// }
+
+
+
 
 
 }
@@ -54,8 +110,10 @@ bool View::requestPlayerType(int playerNumber) const{
 	return playerViews[playerNumber]->isHuman();
 }
 
-void View::announceNewRound(Player* firstPlayer) const{
-	cout << "A new round begins. It's player " << firstPlayer->getNumber() << "'s turn to play." << endl;
+void View::announceNewRound(Player* firstPlayer){
+	
+
+	// cout << "A new round begins. It's player " << firstPlayer->getNumber() << "'s turn to play." << endl;
 }
 
 void View::printCardsOnTable(const bool (&cardMap)[4][13]) const{
@@ -214,6 +272,8 @@ cardsOnTable(4, 13, true) {
 			cardsOnTable.attach(*cardsPlayed[i][j], j, j+1, i, i+1);
 		}
 	}
+
+
 	cardsOnTableFrame.add(cardsOnTable);
 
 	for (int i = 0; i < 4; i++) {

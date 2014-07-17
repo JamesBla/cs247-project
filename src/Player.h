@@ -14,7 +14,7 @@ public:
 	Player(Model*, View*, Controller*, int);
 	virtual ~Player();
 	Player(const Player&);
-	virtual void playTurn(bool (&cardMap)[4][13]) = 0;
+	virtual bool playTurn(Card*, bool (&cardMap)[4][13]) = 0;
 	virtual bool isHuman() const = 0;
 	int getScore() const;
 	int getHandSize() const;
