@@ -65,7 +65,7 @@ void View::notify() {
   		dialog.run();
 	}
 
-	cout << "ron" << endl;
+	// cout << "ron" << endl;
 
 	if (_model->isRoundInProgress()) {
 		if (_model->getCurrentPlayer()->isHuman()){

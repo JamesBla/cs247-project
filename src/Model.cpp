@@ -146,13 +146,7 @@ bool Model::beenPlayed(int rank, int suit) const{
 }
 
 void Model::playRound() {
-	for (int i = 0; i < 4; i++) {
-		_players[i]->updateScore();
-		if (_players[i]->getScore() >= 80){
-			cout << "Score exceeded 80\n";
-			return;
-		}
-	}
+
 	_view->notify();
 	cout << "about to clear shuffle deal\n";
 	clearCardsOnTable();
@@ -176,7 +170,7 @@ void Model::playRound() {
 		playATurn(NULL);
 	}
 
-	playRound();
+	// playRound();
 }
 
 void Model::playATurn(Card* card){
@@ -187,15 +181,27 @@ void Model::playATurn(Card* card){
 		roundInProgress = false;
 		_view->notify();
 		roundEnded = false;
+
+		bool doneGame = false;
+
+		for (int i = 0; i < 4; i++) {
+			_players[i]->updateScore();
+			if (_players[i]->getScore() >= 80){
+				cout << "Score exceeded 80\n";
+				doneGame = true;
+			}
+		}
+		if (!doneGame) playRound();
+
 		return;
 	}
 
-	cout << "hi" << endl;
+	
 	//increment player if good play
 	if (_players[_curPlayer]->playTurn(card, _playedCards)){
 		_curPlayer = (_curPlayer + 1) % 4;
 	}
-	cout << "bye" << endl;
+	
 
 	if (!_players[_curPlayer]->isHuman()){
 		playATurn(NULL);
@@ -231,6 +237,9 @@ void Model::cleanUp(){
 	for (vector<Player*>::iterator it = _players.begin(); it != _players.end(); it++){
 		delete *it;
 	}
+
+	_deck.clear();
+	_players.clear();
 }
 
 Card* Model::findCard(Card* target) const {
