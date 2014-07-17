@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "subject.h"
+#include "Subject.h"
 
 class View;
 class Controller;
