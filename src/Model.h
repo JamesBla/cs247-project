@@ -30,6 +30,7 @@ public:
 	std::vector<Player*> getWinners() const;
 	static const Card* sevenOfSpades();
 	bool isStartOfNewRound() const;
+	bool isRoundFinished() const;
 	Player* getFirstPlayer() const;
 	Player* getCurrentPlayer() const;
 	int getPlayerScore(int) const;
@@ -49,8 +50,9 @@ private:
 	int _curPlayer;
 	View* _view;
 	bool _playedCards[4][13];
+	void playRound();
 	bool startOfNewRound;
-
+	bool roundEnded;
 };
 
 #endif

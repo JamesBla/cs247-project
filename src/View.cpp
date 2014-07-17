@@ -35,6 +35,16 @@ void View::notify() {
   		dialog.run();
 	}
 
+	if (_model->isRoundFinished()) {
+		// TODO: display correct message
+		string message = "lalala TODO display score and discards here!";
+
+		Gtk::MessageDialog dialog(*this, "");
+  		dialog.set_secondary_text(message);
+
+  		dialog.run();
+	}
+
 	cout << "ron" << endl;
 	
 	if (_model->getCurrentPlayer()->isHuman()){
