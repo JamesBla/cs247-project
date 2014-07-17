@@ -60,12 +60,13 @@ Model::~Model(){
 	cleanUp();
 }
 
-void Model::computerizePlayer(HumanPlayer* humanPlayer){
-	int playerIndex = humanPlayer->getNumber() - 1;
-	ComputerPlayer* computerPlayer = new ComputerPlayer(*humanPlayer);
-	delete humanPlayer;
+void Model::computerizePlayer(Player* player){
+	int playerIndex = player->getNumber() - 1;
+	ComputerPlayer* computerPlayer = new ComputerPlayer(*player);
+	delete player;
 	_players[playerIndex] = computerPlayer;
 	_curPlayer = (_curPlayer - 1) % 4;
+	playATurn(NULL);
 }
 
 void Model::initializePlayers(char playerTypes[]){
@@ -107,9 +108,10 @@ void Model::putCardOnTable(Card* card){
 }
 
 void Model::playGame(){
-	startOfNewRound = false;
-	roundEnded = false;
-	roundInProgress = false;
+	_startOfNewRound = false;
+	_roundEnded = false;
+	_roundInProgress = false;
+	_resetView = false;
 	// each loop iteration is a round
 	// bool doneGame = 0;
 	
@@ -148,7 +150,7 @@ void Model::playRound() {
 	clearCardsOnTable();
 	shuffle();
 	deal();
-	roundEnded = false;
+	_roundEnded = false;
 	for (int i = 0; i < PLAYER_COUNT; i++){
 		_players[i]->prepForNewRound();
 	}
@@ -156,11 +158,11 @@ void Model::playRound() {
 	//_view->announceNewRound(_players[_firstPlayer]);
 	_curPlayer = _firstPlayer;
 
-	startOfNewRound = true;
-	roundInProgress = true;
+	_startOfNewRound = true;
+	_roundInProgress = true;
 	notify();
-	startOfNewRound = false;
-	cout << "first playturn" << endl;
+	_startOfNewRound = false;
+	
 
 	if (!_players[_curPlayer]->isHuman()){
 		playATurn(NULL);
@@ -185,10 +187,10 @@ void Model::playATurn(Card* card){
 
 
 		cout << "hand size is zero";
-		roundEnded = true;
-		roundInProgress = false;
+		_roundEnded = true;
+		_roundInProgress = false;
 		notify();
-		roundEnded = false;
+		_roundEnded = false;
 
 	
 		if (!doneGame) playRound();
@@ -242,8 +244,14 @@ void Model::cleanUp(){
 
 	_deck.clear();
 	_players.clear();
-	startOfNewRound = roundEnded = roundInProgress = false;
+	_startOfNewRound = _roundEnded = _roundInProgress = false;
+	_resetView = true;
 	notify();
+	_resetView = false;
+}
+
+bool Model::resetView() const{
+	return _resetView;
 }
 
 Card* Model::findCard(Card* target) const {
@@ -256,10 +264,10 @@ Card* Model::findCard(Card* target) const {
 }
 
 Player* Model::getPlayer(int index) const {
-	cout << "in get player" << endl;
-	cout << _players.size() << endl;
+	// cout << "in get player" << endl;
+	// cout << _players.size() << endl;
 
-	if (_players.size() == 0 || 0 < index || index >= _players.size()) return NULL;
+	// if (_players.size() == 0 || 0 < index || index >= _players.size()) return NULL;
 
 	return _players.at(index);
 }
@@ -270,15 +278,15 @@ Player* Model::getFirstPlayer() const {
 
 
 bool Model::isStartOfNewRound() const {
-	return startOfNewRound;
+	return _startOfNewRound;
 }
 
 bool Model::isRoundFinished() const {
-	return roundEnded;
+	return _roundEnded;
 }
 
 bool Model::isRoundInProgress() const {
-	return roundInProgress;
+	return _roundInProgress;
 }
 
 Player* Model::getCurrentPlayer() const{
@@ -286,10 +294,14 @@ Player* Model::getCurrentPlayer() const{
 }
 
 int Model::getPlayerScore(int playerIndex) const{
+	if (_players.empty()) return 0;
+
 	return _players.at(playerIndex)->getScore();
 }
 
 int Model::getPlayerDiscardedCount(int playerIndex) const{
+	if (_players.empty()) return 0;
+
 	return _players.at(playerIndex)->getDiscardedCount();
 }
 

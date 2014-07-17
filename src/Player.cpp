@@ -63,7 +63,6 @@ void Player::playCard(Card* card){ //play card by value
 	for (vector<Card*>::iterator it = _hand.begin(); it != _hand.end(); it++){
 		if (*(*it) == *(card)){
 			_hand.erase(it);
-			Player* p = this;
 			// _view->printLegalPlay(p, card);
 			_model->putCardOnTable(card);
 			break;
@@ -75,7 +74,6 @@ void Player::discard(Card* card){
 	for (vector<Card*>::iterator it = _hand.begin(); it != _hand.end(); it++){
 		if (*(*it) == *(card)){
 			_hand.erase(it);
-			Player* p = this;
 			// _view->printDiscard(p, card);
 			
 			_discards.push_back(card);

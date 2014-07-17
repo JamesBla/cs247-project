@@ -1,12 +1,21 @@
 #include "PlayerView.h"
 #include "Model.h"
+#include "HumanPlayer.h"
 
 #include <gtkmm/box.h>
 #include <gtkmm/frame.h>
 #include <sstream>
 #include <string>
 
+#include <iostream>
+
 using namespace std;
+
+void PlayerView::setButton(bool sensitive, std::string text){
+	cout << "set to " << sensitive <<", " << text << endl;
+	togglePlayer.set_sensitive(sensitive);
+	togglePlayer.set_label(text);
+}
 
 PlayerView::PlayerView(int playerNumber, Model* model) : playerIndex(playerNumber-1), _model(model), togglePlayer("Human"), points("0 points"), discards("0 discards") {
 	// required because ustring cannot append int directly
@@ -18,15 +27,20 @@ PlayerView::PlayerView(int playerNumber, Model* model) : playerIndex(playerNumbe
 	container.pack_end(discards);
 	add(container);
 
-	togglePlayer.signal_clicked().connect( sigc::mem_fun( *this, &PlayerView::onTypeChange ) );
+	togglePlayer.signal_clicked().connect( sigc::mem_fun( *this, &PlayerView::onClick ) );
 }
 
 PlayerView::~PlayerView() {
 
 }
 
-void PlayerView::onTypeChange(){
-	togglePlayer.set_label( (togglePlayer.get_label() == "Human") ? "Computer" : "Human" );
+void PlayerView::onClick(){
+	if (togglePlayer.get_label() == "Rage!"){
+		_model->computerizePlayer(_model->getCurrentPlayer());
+	}
+	else {
+		togglePlayer.set_label( (togglePlayer.get_label() == "Human") ? "Computer" : "Human" );
+	}
 }
 
 bool PlayerView::isHuman() const{

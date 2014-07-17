@@ -27,6 +27,7 @@ private:
 	View* _view;
 	Gtk::Image* image;
 	Card* currentCard;
+	
 };
 
 #endif

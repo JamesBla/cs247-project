@@ -37,6 +37,7 @@ void CardButtonView::setCard(Card* card) {
 	currentCard = card;
 
 	const Glib::RefPtr<Gdk::Pixbuf> cardPixbuf = (card == NULL) ? _view->getNullCardImage() : _view->getCardImage(card->getRank(), card->getSuit());
+	
 	delete image;
 	image = new Gtk::Image(cardPixbuf);
 	set_image(*image);

@@ -25,7 +25,7 @@ public:
 	void putCardOnTable(Card*);
 	std::vector<Card*> getDeck() const;
 	void cleanUp();
-	void computerizePlayer(HumanPlayer*);
+	void computerizePlayer(Player*);
 	void clearCardsOnTable();
 	Card* findCard(Card*) const;
 	std::vector<Player*> getWinners() const;
@@ -43,6 +43,8 @@ public:
 	void playATurn(Card* card);
 	bool beenPlayed(int rank, int suit) const;
 
+	bool resetView() const;
+
 private:
 	static const int PLAYER_COUNT;
 	static const int CARD_COUNT;
@@ -54,9 +56,10 @@ private:
 	int _curPlayer;
 	bool _playedCards[4][13];
 	void playRound();
-	bool startOfNewRound;
-	bool roundInProgress;
-	bool roundEnded;
+	bool _startOfNewRound;
+	bool _roundInProgress;
+	bool _roundEnded;
+	bool _resetView;
 };
 
 #endif

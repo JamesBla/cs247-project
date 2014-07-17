@@ -13,7 +13,7 @@ class Card;
 
 ComputerPlayer::ComputerPlayer(Model* model, Controller* controller, int number) : Player(model, controller, number){}
 
-ComputerPlayer::ComputerPlayer(const HumanPlayer& humanPlayer): Player(humanPlayer) {}
+ComputerPlayer::ComputerPlayer(const Player& player): Player(player) {}
 
 bool ComputerPlayer::playTurn(Card* card, bool (&cardMap)[4][13]){
 	vector<Card*> legalCards = getLegalPlays(cardMap);

@@ -10,7 +10,7 @@ class Controller;
 class ComputerPlayer: public Player{
 public:
 	ComputerPlayer(Model* model, Controller* controller, int playerNumber);
-	ComputerPlayer(const HumanPlayer&);
+	ComputerPlayer(const Player&);
 	virtual bool isHuman() const;
 	bool playTurn(Card*, bool (&cardMap)[4][13]);
 };

@@ -52,12 +52,15 @@ public:
 private:
 	Model* _model;
 	Controller* _controller;
+
+
 	 //Signal handlers:
   	virtual void onNewGame();
   	virtual void onEndGame();
   	std::string intToString(int);
 
 	DeckGUI                         deck;             // Knows all of the card pixel buffers.
+	Glib::RefPtr<Gdk::Pixbuf> nullCardPixbuf;
 	
 	// Member widgets:
 	Gtk::Image                    * card[13];          // Images to display.

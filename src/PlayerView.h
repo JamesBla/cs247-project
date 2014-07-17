@@ -6,12 +6,15 @@
 #include <gtkmm/frame.h>
 #include <gtkmm/label.h>
 
+#include <string>
+
 class Model;
 
 class PlayerView : public Gtk::Frame {
 public:
 	PlayerView(int, Model*);
 	virtual ~PlayerView();
+	void setButton(bool sensitive, std::string text);
 	bool isHuman() const;
 	void update();
 private:
@@ -22,7 +25,7 @@ private:
 	Gtk::Label points;
 	Gtk::Label discards;
 
-	void onTypeChange();
+	void onClick();
 	Glib::ustring intToString(int);
 };
 

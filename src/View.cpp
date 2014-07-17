@@ -25,14 +25,28 @@ using namespace std;
 // TODO: implement observer pattern (list of observers)
 void View::update() {
 	cout << "hello" << endl;
-	if (!_model->isStartOfNewRound() && !_model->isRoundFinished() && !_model->isStartOfNewRound()){
+	if (_model->resetView()){
 		for (unsigned int i = 0; i < 13; i++){
 			cardButtonViews[i]->setCard(NULL);
+		}
+
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 13; j++) {
+				cardsPlayed[i][j]->set(nullCardPixbuf);
+			}
+		}
+
+		for (int i = 0; i < 4; i++){
+			playerViews[i]->update();
 		}
 	}
 	cout << "farewell" << endl;
 
 	if (_model->isStartOfNewRound()) {
+		for (int i = 0; i < 4; i++){
+			playerViews[i]->setButton(false, "Rage!");
+		}
+
 		cout << "start" << endl;
 		int number = _model->getFirstPlayer()->getNumber();       // number to be converted to a string
 
@@ -43,11 +57,20 @@ void View::update() {
   		dialog.set_secondary_text(message);
 
   		dialog.run();
+
+
 	}
 
 	if (_model->isRoundFinished()) {
 		// TODO: display correct message
 		cout << "round is finished" << endl;
+
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 13; j++) {
+				const Glib::RefPtr<Gdk::Pixbuf> cardPixbuf = deck.getCardImage(static_cast<Rank>(j), static_cast<Suit>(i));
+				cardsPlayed[i][j]->set( _model->beenPlayed(i,j) ? cardPixbuf : nullCardPixbuf);
+			}
+		}
 
 		string message = "";
 		for (int i = 0; i < 4; i++) {
@@ -68,7 +91,7 @@ void View::update() {
 
 		cout << message << endl;
 
-		Gtk::MessageDialog dialog(*this, "");
+		Gtk::MessageDialog dialog(*this, "End of Round");
   		dialog.set_secondary_text(message);
 
   		dialog.run();
@@ -80,6 +103,9 @@ void View::update() {
 		if (_model->getCurrentPlayer()->isHuman()){
 			
 			int playerNum = _model->getCurrentPlayer()->getNumber();
+			cout << "asdfasdf" << playerNum << endl;
+			playerViews[playerNum-1]->setButton(true, "Rage!");
+
 			string numberString = static_cast<ostringstream*>( &(ostringstream() << playerNum) )->str();
 			set_title("Straights UI - Player " + numberString + "'s Turn");
 			vector<Card*> curHand = _model->getCurrentPlayer()->getHand();
@@ -94,14 +120,10 @@ void View::update() {
 			
 		}
 
-		const Glib::RefPtr<Gdk::Pixbuf> nullCardPixbuf = deck.getNullCardImage();
-
+	
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 13; j++) {
 				const Glib::RefPtr<Gdk::Pixbuf> cardPixbuf = deck.getCardImage(static_cast<Rank>(j), static_cast<Suit>(i));
-				if (_model->beenPlayed(i,j)){
-					cout << "played" << endl;
-				}
 				cardsPlayed[i][j]->set( _model->beenPlayed(i,j) ? cardPixbuf : nullCardPixbuf);
 			}
 		}
@@ -247,7 +269,10 @@ void View::printRagequit(HumanPlayer* player) const {
 
 void View::onNewGame(){
 	srand48( atoi(static_cast<string>(seedEntry.get_text()).c_str()) );
+
 	_controller->run();
+
+	
 }
 
 void View::onEndGame(){
@@ -262,6 +287,8 @@ cardsOnTable(4, 13, true) {
 	model->subscribe(this);
 	_model = model;
 	_controller = controller;
+
+	nullCardPixbuf = deck.getNullCardImage();
 
 	set_title("Straights UI");
 	// Sets the border width of the window.
@@ -280,8 +307,6 @@ cardsOnTable(4, 13, true) {
 	seedEntry.set_text("0");
 	seedEntry.set_alignment(0.5);
 	endGameButton.signal_clicked().connect( sigc::mem_fun( *this, &View::onEndGame ) );
-
-	const Glib::RefPtr<Gdk::Pixbuf> nullCardPixbuf = deck.getNullCardImage();
 
 	cardsOnTableFrame.set_label("Cards on the table");
 	cardsOnTable.set_row_spacings(5);
