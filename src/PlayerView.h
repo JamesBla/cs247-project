@@ -16,6 +16,7 @@ public:
 	PlayerView(int, Model*, View*);
 	virtual ~PlayerView();
 	void setButton(bool sensitive, std::string text);
+	void resetLabels();
 	bool isHuman() const;
 	void update();
 private:

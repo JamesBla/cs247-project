@@ -22,7 +22,7 @@ void Controller::setView(View* view){
 }
 
 void Controller::initializeModel(){
-	
+	_model->cleanUp();
 	char playerTypes[4];
 
 	char playerType;

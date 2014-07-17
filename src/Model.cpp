@@ -232,6 +232,7 @@ vector<Player*> Model::getWinners() const{
 }
 
 void Model::cleanUp(){
+
 	_resetView = true;
 	notify();
 	_resetView = false;

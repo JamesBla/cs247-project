@@ -18,6 +18,11 @@ void PlayerView::setButton(bool sensitive, std::string text){
 	togglePlayer.set_label(text);
 }
 
+void PlayerView::resetLabels(){
+	points.set_label("0 points");
+	discards.set_label("0 discards");
+}
+
 PlayerView::PlayerView(int playerNumber, Model* model, View* view) : playerIndex(playerNumber-1), _model(model), _view(view), togglePlayer("Human"), points("0 points"), discards("0 discards") {
 	// required because ustring cannot append int directly
 	Glib::ustring playerNumberStr = intToString(playerNumber);

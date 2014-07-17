@@ -35,7 +35,7 @@ void View::update() {
 		}
 
 		for (int i = 0; i < 4; i++){
-			playerViews[i]->update();
+			playerViews[i]->resetLabels();
 		}
 
 		for (int i = 0; i < 4; i++) {
@@ -68,7 +68,9 @@ void View::update() {
 	if (_model->isRoundFinished()) {
 		// TODO: display correct message
 		cout << "round is finished" << endl;
-
+		for (int i = 0; i < 4; i++) {
+			playerViews[i]->update();
+		}
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 13; j++) {
 				const Glib::RefPtr<Gdk::Pixbuf> cardPixbuf = deck.getCardImage(static_cast<Rank>(j), static_cast<Suit>(i));
@@ -108,13 +110,16 @@ void View::update() {
 			
 			int playerNum = _model->getCurrentPlayer()->getNumber();
 			cout << "asdfasdf" << playerNum << endl;
-			playerViews[playerNum-1]->setButton(true, "Rage!");
+			for (int i = 0; i < 4; i++){
+				playerViews[i]->setButton(i == playerNum-1, "Rage!");
+			}
 
 			string numberString = static_cast<ostringstream*>( &(ostringstream() << playerNum) )->str();
 			set_title("Straights UI - Player " + numberString + "'s Turn");
 			vector<Card*> curHand = _model->getCurrentPlayer()->getHand();
 
 			setHandView(&curHand);
+
 			
 		}
 
@@ -126,9 +131,7 @@ void View::update() {
 			}
 		}
 
-		for (int i = 0; i < 4; i++) {
-			playerViews[i]->update();
-		}
+		
 	}
 
 	
@@ -136,7 +139,7 @@ void View::update() {
 
 void View::setHandView(vector<Card*> * hand){
 	for (unsigned int i = 0; i < 13; i++){
-		cardButtonViews[i]->setCard((!hand && i < (*hand).size())? (*hand)[i] : NULL);
+		cardButtonViews[i]->setCard((hand && i < (*hand).size())? (*hand)[i] : NULL);
 	}
 }
 
