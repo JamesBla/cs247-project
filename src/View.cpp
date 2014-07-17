@@ -1,4 +1,6 @@
 #include <iostream>
+#include <cstdlib>
+#include <sstream>
 #include <string>
 #include <vector>
 #include <gtkmm/window.h>
@@ -37,7 +39,22 @@ void View::notify() {
 
 	if (_model->isRoundFinished()) {
 		// TODO: display correct message
-		string message = "lalala TODO display score and discards here!";
+		string message = "";
+		for (int i = 0; i < 4; i++) {
+			vector<Card*> discards = _model->getDiscardedCards(i);
+			ostringstream ostr;
+			ostr << (i+1);
+			message += "Player " + ostr.str() + "'s discards: ";
+			for (unsigned int i = 0; i < discards.size(); i++) {
+				message += discards.at(i)->toString();
+				if (i != discards.size() - 1){
+					message += " ";
+				}
+			}
+			message += "\n";
+		}
+
+		cout << message << endl;
 
 		Gtk::MessageDialog dialog(*this, "");
   		dialog.set_secondary_text(message);

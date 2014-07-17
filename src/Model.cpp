@@ -143,6 +143,12 @@ bool Model::beenPlayed(int rank, int suit) const{
 }
 
 void Model::playRound() {
+	for (int i = 0; i < 4; i++){
+		_players[i]->updateScore();
+		if (_players[i]->getScore() >= 80){
+			return;
+		}
+	}
 	clearCardsOnTable();
 	shuffle();
 	deal();
@@ -244,4 +250,8 @@ int Model::getPlayerScore(int playerIndex) const{
 
 int Model::getPlayerDiscardedCount(int playerIndex) const{
 	return _players.at(playerIndex)->getDiscardedCount();
+}
+
+vector<Card*> Model::getDiscardedCards(int playerIndex) const{
+	return _players.at(playerIndex)->getDiscarded();
 }

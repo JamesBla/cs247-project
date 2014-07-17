@@ -35,6 +35,7 @@ public:
 	Player* getCurrentPlayer() const;
 	int getPlayerScore(int) const;
 	int getPlayerDiscardedCount(int) const;
+	std::vector<Card*> getDiscardedCards(int) const;
 	
 	void playATurn(Card* card);
 	bool beenPlayed(int rank, int suit) const;

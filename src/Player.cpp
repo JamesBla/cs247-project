@@ -127,4 +127,8 @@ Controller* Player::getController() const{
 
 int Player::getDiscardedCount() const{
 	return _discards.size();
-};
+}
+
+vector<Card*> Player::getDiscarded() const{
+	return _discards;
+}
