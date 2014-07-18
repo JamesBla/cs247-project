@@ -18,7 +18,7 @@ public:
 	Rank getRank() const;
 	std::string toString() const;
 private:
-	bool nothing;
+	// bool nothing;
 	Suit suit_;
 	Rank rank_;
 };

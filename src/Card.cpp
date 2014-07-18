@@ -1,5 +1,6 @@
 #include <string>
 #include <cassert>
+#include <sstream>
 
 #include "Card.h"
 
@@ -22,14 +23,6 @@ bool operator==(const Card &a, const Card &b){
 	return a.getSuit() == b.getSuit() && a.getRank() == b.getRank();
 }
 
-string Card::toString() const{
-	string suits[SUIT_COUNT] = {"C", "D", "H", "S"};
-	string ranks[RANK_COUNT] = {"A", "2", "3", "4", "5", "6",
-		"7", "8", "9", "10", "J", "Q", "K"};
-
-	return ranks[getRank()] + suits[getSuit()];
-}
-
 ostream &operator<<(ostream &out, const Card &c){
 	string suits[SUIT_COUNT] = {"C", "D", "H", "S"};
 	string ranks[RANK_COUNT] = {"A", "2", "3", "4", "5", "6",
@@ -38,6 +31,12 @@ ostream &operator<<(ostream &out, const Card &c){
 	out << ranks[c.getRank()] << suits[c.getSuit()];
 	
 	return out;
+}
+
+string Card::toString() const{
+	std::ostringstream oss;
+	oss << *this;
+	return oss.str();
 }
 
 istream &operator>>(istream &in, Card &c){
