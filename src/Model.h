@@ -15,7 +15,6 @@ class Card;
 class Model : public Subject{
 public:
 	~Model();
-	// void setView(View*);
 	void setController(Controller*);
 	void initializePlayers(char[]);
 	void playGame();
@@ -39,7 +38,7 @@ public:
 	int getPlayerScore(int) const;
 	int getPlayerDiscardedCount(int) const;
 	std::vector<Card*> getDiscardedCards(int) const;
-	
+
 	void playATurn(Card* card);
 	bool beenPlayed(int rank, int suit) const;
 
@@ -50,8 +49,6 @@ public:
 	std::vector<Card*> getLegalPlays(Player*);
 
 private:
-	static const int PLAYER_COUNT;
-	static const int CARD_COUNT;
 	static const Card SEVEN_OF_SPADES;
 	Controller* _controller;
 	std::vector<Player*> _players;
