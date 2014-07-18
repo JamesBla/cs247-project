@@ -2,7 +2,6 @@
 #define _COMPUTERPLAYER_
 
 #include "Player.h"
-#include "HumanPlayer.h"
 
 class Model;
 class Controller;

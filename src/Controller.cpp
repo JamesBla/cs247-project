@@ -1,14 +1,6 @@
-#include <cstdlib>
-#include <iostream>
-
 #include "Model.h"
 #include "View.h"
 #include "Controller.h"
-
-#include "Command.h"
-#include "Player.h"
-#include "HumanPlayer.h"
-#include "Card.h"
 
 using namespace std;
 
@@ -28,7 +20,7 @@ void Controller::initializeModel(){
 	char playerType;
 	for (int i = 0; i < 4; i++){
 
-		playerType = (_view->getPlayerType(i))? 'h' : 'c';
+		playerType = (_view->getPlayerType(i)) ? 'h' : 'c';
 
 		playerTypes[i] = playerType;
 	}
@@ -39,17 +31,11 @@ void Controller::initializeModel(){
 
 void Controller::run(){
 	initializeModel();
-
 	_model->playGame();
-	
 }
 
 Model* Controller::getModel(){
 	return _model;
-}
-
-void Controller::requestCommand(HumanPlayer* player, vector<Card*>& legalPlays, vector<Card*>& hand){
-
 }
 
 

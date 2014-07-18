@@ -66,10 +66,8 @@ void Model::computerizePlayer(Player* player){
 }
 
 void Model::initializePlayers(char playerTypes[]){
-	for (int i = 0; i < PLAYER_COUNT; i++){
-		assert(playerTypes[i] == 'h' || playerTypes[i] == 'c' || playerTypes[i] == 'H' || playerTypes[i] == 'C');
-		
-		if ((playerTypes[i] == 'h' || playerTypes[i] == 'H') ){
+	for (int i = 0; i < PLAYER_COUNT; i++){		
+		if (playerTypes[i] == 'h'){
 			_players.push_back(new HumanPlayer(this, _controller, i+1));
 		}
 		else{
@@ -180,20 +178,18 @@ void Model::playATurn(Card* card){
 
 		return;
 	}
-	
+
 	// if the play is good, go to next player
 	if (_players[_curPlayer]->playTurn(card, _playedCards)){
 		_curPlayer = (_curPlayer + 1) % 4;
 	}
-	
+
 	notify();
 	
 	// if the next player is computer or hand is empty, invoke the play
 	if (!_players[_curPlayer]->isHuman() || _players.at(_curPlayer)->getHandSize() == 0){
 		playATurn(NULL);
 	}
-
-	
 }
 
 vector<Card*> Model::getLegalPlays(Player* player){

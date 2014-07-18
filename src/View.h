@@ -3,7 +3,6 @@
 
 #include <string>
 #include <vector>
-#include <gtkmm.h>
 #include <gtkmm/window.h>
 #include <gtkmm/image.h>
 #include <gtkmm/box.h>
@@ -40,16 +39,15 @@ public:
 	void showDialogue(std::string, std::string);
 	void setHandView(std::vector<Card*> *, std::vector<Card*> *);
 	void setPlayedCardsView(bool clear);
+	std::string intToString(int);
 	
 private:
 	Model* _model;
 	Controller* _controller;
 
-
 	 //Signal handlers:
   	virtual void onNewGame();
   	virtual void onEndGame();
-  	std::string intToString(int);
 
 	DeckGUI                         deck;             // Knows all of the card pixel buffers.
 	Glib::RefPtr<Gdk::Pixbuf> nullCardPixbuf;

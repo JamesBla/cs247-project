@@ -1,9 +1,8 @@
-#include <iostream>
-#include <cstdlib>
 #include <sstream>
 #include <string>
 #include <vector>
 #include <gtkmm/window.h>
+#include <gtkmm/messagedialog.h>
 #include <gtkmm/image.h>
 #include <gtkmm/box.h>
 #include <gtkmm/button.h>
@@ -16,13 +15,11 @@
 #include "Controller.h"
 
 #include "Player.h"
-#include "HumanPlayer.h"
 #include "Card.h"
 #include "CardButtonView.h"
 
 using namespace std;
 
-// TODO: implement observer pattern (list of observers)
 void View::update() {
 	
 	if (_model->resetView()){
@@ -92,7 +89,7 @@ void View::update() {
 	if (_model->doneGame()){
 		vector<Player*> winners = _model->getWinners();
 		string message = "";
-		for (int i = 0; i < winners.size(); i++){
+		for (unsigned int i = 0; i < winners.size(); i++){
 			message += ("Player " + intToString(winners[i]->getNumber()) + " wins!\n");
 		}
 		showDialogue("End of Game", message);
@@ -143,7 +140,7 @@ void View::setHandView(vector<Card*> * hand, vector<Card*> * legalPlays){
 			else{
 				frame.set_label( "Cards in your hand:" );
 			}
-			for (int j = 0; j < (*legalPlays).size(); j++){
+			for (unsigned int j = 0; j < (*legalPlays).size(); j++){
 				if (*((*legalPlays)[j]) == *((*hand)[i])){
 					enableButton = true;
 				}
@@ -170,10 +167,7 @@ bool View::getPlayerType(int playerNumber) const{
 
 void View::onNewGame(){
 	srand48( atoi(static_cast<string>(seedEntry.get_text()).c_str()) );
-
 	_controller->run();
-
-	
 }
 
 void View::onEndGame(){
@@ -234,9 +228,8 @@ cardsOnTable(4, 13, true) {
 	// Add the horizontal box for laying out the images to the frame.	
 	frame.add( hbox );
 	
-	
 	for (int i = 0; i < 13; i++ ) {
-		cardButtonViews[i] = new CardButtonView(_controller, this);
+		cardButtonViews[i] = new CardButtonView(_model, this);
 		hbox.add( *cardButtonViews[i] );
 	} // for
 	setHandView(NULL, NULL);

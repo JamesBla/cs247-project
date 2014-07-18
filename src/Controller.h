@@ -1,13 +1,8 @@
 #ifndef _CONTROLLER_
 #define _CONTROLLER_
 
-#include <vector>
-
 class Model;
 class View;
-
-class HumanPlayer;
-class Card;
 
 class Controller{
 public:
@@ -15,7 +10,6 @@ public:
 	void run();
 	void initializeModel();
 	void setView(View* view);
-	void requestCommand(HumanPlayer*, std::vector<Card*>&, std::vector<Card*>&);
 	Model* getModel();
 private:
 	Model* _model;

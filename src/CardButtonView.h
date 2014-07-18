@@ -3,7 +3,6 @@
 
 #include <gtkmm/button.h>
 #include <gtkmm/image.h>
-#include <gdkmm/pixbuf.h>
 #include <vector>
 #include <string>
 
@@ -12,13 +11,12 @@
 using std::vector;
 using std::string;
 
-class Controller;
 class View;
 class Card;
 
 class CardButtonView : public Gtk::Button {
 public:
-	CardButtonView(Controller*, View*);
+	CardButtonView(Model*, View*);
 	void setCard(Card*, bool);
 	virtual ~CardButtonView();
 
@@ -26,14 +24,10 @@ private:
 	void mouseEnter();
 	void mouseLeave();
 	void cardButtonClicked();
-	Controller* _controller;
+	Model* _model;
 	View* _view;
 	Gtk::Image* _image;
 	Card* _currentCard;
-
-
-
-	
 };
 
 #endif
