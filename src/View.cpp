@@ -93,7 +93,7 @@ void View::update() {
 		vector<Player*> winners = _model->getWinners();
 		string message = "";
 		for (int i = 0; i < winners.size(); i++){
-			message += ("Player " + intToString(winners[i]->getNumber()) + " wins!");
+			message += ("Player " + intToString(winners[i]->getNumber()) + " wins!\n");
 		}
 		showDialogue("End of Game", message);
   		return;
@@ -245,7 +245,8 @@ cardsOnTable(4, 13, true) {
 
 View::~View() {
 	for (int i = 0; i < 13; i++ ) {
-		delete card[i];
+		if (!card[i])
+			delete card[i];
 		delete cardButtonViews[i];
 	}
 

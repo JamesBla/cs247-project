@@ -43,6 +43,7 @@ public:
 	void playATurn(Card* card);
 	bool beenPlayed(int rank, int suit) const;
 
+	void clear();
 	bool resetView() const;
 	bool doneGame() const;
 

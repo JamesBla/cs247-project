@@ -29,7 +29,7 @@ const char * image_names[] = {
 // Loads the image from the specified file name into a pixel buffer.
 Glib::RefPtr<Gdk::Pixbuf> createPixbuf(const string & name) {
 	return Gdk::Pixbuf::create_from_file( name );
-} // createPixbuf
+}
 
 DeckGUI::DeckGUI()  {
 	// Images can only be loaded once the main window has been initialized, so cannot be done as a static
@@ -37,28 +37,30 @@ DeckGUI::DeckGUI()  {
 	// element in the array of image names, starting with first and ending with the last. New elements are
 	// added to the back of deck.
 	transform( &image_names[0], &image_names[G_N_ELEMENTS(image_names)], 
-			   std::back_inserter(deck), &createPixbuf );
-} // DeckGUI::DeckGUI
+			   std::back_inserter(_deck), &createPixbuf );
+}
 
 DeckGUI::~DeckGUI() {
-} // DeckGUI::~DeckGUI
+}
 
 // Returns the image for the specified card.
 Glib::RefPtr<Gdk::Pixbuf> DeckGUI::getCardImage( Rank r, Suit s ) const {
 	int index = ((int) s)*13 + ((int) r );
-	return deck[ index ];
-} // DeckGUI::getCardImage 
+	return _deck[ index ];
+}
 
 // Returns the image to use for the placeholder.
 Glib::RefPtr<Gdk::Pixbuf> DeckGUI::getNullCardImage() const {
-	int size = deck.size();
-	return deck[ size-3 ];
-} // DeckGUI::getNullCardImage
+	int size = _deck.size();
+	return _deck[ size-3 ];
+}
+
 Glib::RefPtr<Gdk::Pixbuf> DeckGUI::getPlayOverlay() const {
-	int size = deck.size();
-	return deck[ size-2 ];
-} // DeckGUI::getNullCardImage
+	int size = _deck.size();
+	return _deck[ size-2 ];
+}
+
 Glib::RefPtr<Gdk::Pixbuf> DeckGUI::getDiscardOverlay() const {
-	int size = deck.size();
-	return deck[ size-1 ];
+	int size = _deck.size();
+	return _deck[ size-1 ];
 } 

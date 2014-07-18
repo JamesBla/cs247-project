@@ -53,7 +53,7 @@ void Model::clearCardsOnTable(){
 }
 
 Model::~Model(){
-	cleanUp();
+	clear();
 }
 
 void Model::computerizePlayer(Player* player){
@@ -219,13 +219,7 @@ vector<Player*> Model::getWinners() const{
 	return winners;
 }
 
-void Model::cleanUp(){
-	_resetView = true;
-	notify();
-	_resetView = false;
-
-	clearCardsOnTable();
-	
+void Model::clear() {
 	for (vector<Card*>::iterator it = _deck.begin(); it != _deck.end(); it++){
 		delete *it;
 	}
@@ -233,6 +227,16 @@ void Model::cleanUp(){
 	for (vector<Player*>::iterator it = _players.begin(); it != _players.end(); it++){
 		delete *it;
 	}
+}
+
+void Model::cleanUp(){
+	_resetView = true;
+	notify();
+	_resetView = false;
+
+	clearCardsOnTable();
+	
+	clear();
 
 	_deck.clear();
 	_players.clear();

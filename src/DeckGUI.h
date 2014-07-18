@@ -27,7 +27,7 @@ public:
 	Glib::RefPtr<Gdk::Pixbuf> getPlayOverlay() const;
 	Glib::RefPtr<Gdk::Pixbuf> getDiscardOverlay() const;
 private:
-	vector< Glib::RefPtr< Gdk::Pixbuf > > deck;                   // Contains the pixel buffer images.
-}; // DeckGUI
+	vector< Glib::RefPtr< Gdk::Pixbuf > > _deck;                   // Contains the pixel buffer images.
+};
 
 #endif
