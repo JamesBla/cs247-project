@@ -24,8 +24,9 @@ using namespace std;
 
 // TODO: implement observer pattern (list of observers)
 void View::update() {
-	cout << "hello" << endl;
+	
 	if (_model->resetView()){
+		cout << "hello1" << endl;
 		setHandView(NULL);
 
 		for (int i = 0; i < 4; i++) {
@@ -33,25 +34,28 @@ void View::update() {
 				cardsPlayed[i][j]->set(nullCardPixbuf);
 			}
 		}
-
+		cout << "hello1.25" << endl;
 		for (int i = 0; i < 4; i++){
 			playerViews[i]->resetLabels();
 		}
 
-		for (int i = 0; i < 4; i++) {
-			playerViews[i]->setButton(true, (_model->getPlayer(i)->isHuman()) ? "Human" : "Computer");
+		if (_model->getDeck().size() > 0){
+			for (int i = 0; i < 4; i++) {
+				playerViews[i]->setButton(true, (_model->getPlayer(i)->isHuman()) ? "Human" : "Computer");
+			}
 		}
-
+		cout << "hello1.5" << endl;
 		return;
 	}
-	cout << "farewell" << endl;
-
+	
+	
 	if (_model->isStartOfNewRound()) {
+		cout << "hello2" << endl;
 		for (int i = 0; i < 4; i++){
 			playerViews[i]->setButton(false, "Rage!");
 		}
 
-		cout << "start" << endl;
+
 		int number = _model->getFirstPlayer()->getNumber();       // number to be converted to a string
 
 		string numberString = intToString(number);
@@ -65,7 +69,21 @@ void View::update() {
 
 	}
 
+	if (_model->doneGame()){
+		vector<Player*> winners = _model->getWinners();
+		string message = "";
+		for (int i = 0; i < winners.size(); i++){
+			message += ("Player " + intToString(winners[i]->getNumber()) + " wins!");
+		}
+		Gtk::MessageDialog dialog(*this, "End of Game");
+  		dialog.set_secondary_text(message);
+
+  		dialog.run();
+  		return;
+	}
+
 	if (_model->isRoundFinished()) {
+		cout << "hello3" << endl;
 		// TODO: display correct message
 		cout << "round is finished" << endl;
 		for (int i = 0; i < 4; i++) {
@@ -106,8 +124,13 @@ void View::update() {
 	// cout << "ron" << endl;
 
 	if (_model->isRoundInProgress()) {
+		cout << "hello4" << endl;
 		if (_model->getCurrentPlayer()->isHuman()){
-			
+			vector<Card*> curHand = _model->getCurrentPlayer()->getHand();
+			cout << curHand.size() << endl;
+			cout <<  "cur hand == null is " << (curHand[0] == NULL) << endl;
+			setHandView(&curHand);
+
 			int playerNum = _model->getCurrentPlayer()->getNumber();
 			cout << "asdfasdf" << playerNum << endl;
 			for (int i = 0; i < 4; i++){
@@ -116,14 +139,11 @@ void View::update() {
 
 			string numberString = static_cast<ostringstream*>( &(ostringstream() << playerNum) )->str();
 			set_title("Straights UI - Player " + numberString + "'s Turn");
-			vector<Card*> curHand = _model->getCurrentPlayer()->getHand();
-
-			setHandView(&curHand);
-
+			cout << endl;
 			
 		}
 
-	
+		
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 13; j++) {
 				const Glib::RefPtr<Gdk::Pixbuf> cardPixbuf = deck.getCardImage(static_cast<Rank>(j), static_cast<Suit>(i));
@@ -345,7 +365,7 @@ cardsOnTable(4, 13, true) {
 		cardButtonViews[i] = new CardButtonView(_controller, this);
 		hbox.add( *cardButtonViews[i] );
 	} // for
-
+	setHandView(NULL);
 	// // Initialize the 5th card and place the image into the button.
 	// card[4] = new Gtk::Image( cardPixbuf );	
 	// button.set_image( *card[4] );	

@@ -42,9 +42,13 @@ PlayerView::~PlayerView() {
 
 void PlayerView::onClick(){
 	if (togglePlayer.get_label() == "Rage!"){
-		_model->computerizePlayer(_model->getCurrentPlayer());
+		//tricky business
+		
 		setButton(false,"Rage!");
 		_view->setHandView(NULL);
+
+		_model->computerizePlayer(_model->getCurrentPlayer());
+		
 	}
 	else {
 		togglePlayer.set_label( (togglePlayer.get_label() == "Human") ? "Computer" : "Human" );

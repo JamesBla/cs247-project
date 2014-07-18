@@ -107,7 +107,12 @@ void Model::putCardOnTable(Card* card){
 	_playedCards[card->getSuit()][card->getRank()] = true;
 }
 
+bool Model::doneGame() const{
+	return _doneGame;
+}
+
 void Model::playGame(){
+	_doneGame = false;
 	_startOfNewRound = false;
 	_roundEnded = false;
 	_roundInProgress = false;
@@ -144,8 +149,9 @@ bool Model::beenPlayed(int rank, int suit) const{
 }
 
 void Model::playRound() {
-
+	
 	notify();
+
 	cout << "about to clear shuffle deal\n";
 	clearCardsOnTable();
 	shuffle();
@@ -175,26 +181,28 @@ void Model::playATurn(Card* card){
 	//need to check if hand is empty, then end round
 	if (_players.size() == 0) return;
 	if (_players.at(_curPlayer)->getHandSize() == 0) {
-		bool doneGame = false;
+		_doneGame = false;
 
 		for (int i = 0; i < 4; i++) {
 			_players[i]->updateScore();
 			if (_players[i]->getScore() >= 80){
 				cout << "Score exceeded 80\n";
-				doneGame = true;
+				_doneGame = true;
 			}
 		}
 
 
-		cout << "hand size is zero";
+		
 		_roundEnded = true;
 		_roundInProgress = false;
 		notify();
 		_roundEnded = false;
 
 	
-		if (!doneGame) playRound();
-
+		if (!_doneGame) playRound();
+		else {
+			cleanUp();
+		}
 		return;
 	}
 	
@@ -248,7 +256,7 @@ void Model::cleanUp(){
 
 	_deck.clear();
 	_players.clear();
-	_startOfNewRound = _roundEnded = _roundInProgress = false;
+	_doneGame = _startOfNewRound = _roundEnded = _roundInProgress = false;
 }
 
 bool Model::resetView() const{

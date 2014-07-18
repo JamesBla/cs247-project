@@ -44,6 +44,7 @@ public:
 	bool beenPlayed(int rank, int suit) const;
 
 	bool resetView() const;
+	bool doneGame() const;
 
 private:
 	static const int PLAYER_COUNT;
@@ -60,6 +61,7 @@ private:
 	bool _roundInProgress;
 	bool _roundEnded;
 	bool _resetView;
+	bool _doneGame;
 };
 
 #endif

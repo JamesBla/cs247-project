@@ -39,7 +39,9 @@ void Controller::initializeModel(){
 
 void Controller::run(){
 	initializeModel();
+
 	_model->playGame();
+	
 }
 
 Model* Controller::getModel(){
