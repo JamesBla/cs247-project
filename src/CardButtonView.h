@@ -19,14 +19,20 @@ class Card;
 class CardButtonView : public Gtk::Button {
 public:
 	CardButtonView(Controller*, View*);
-	void setCard(Card*);
+	void setCard(Card*, bool);
 	virtual ~CardButtonView();
+
 private:
+	void mouseEnter();
+	void mouseLeave();
 	void cardButtonClicked();
 	Controller* _controller;
 	View* _view;
-	Gtk::Image* image;
-	Card* currentCard;
+	Gtk::Image* _image;
+	Card* _currentCard;
+
+
+
 	
 };
 

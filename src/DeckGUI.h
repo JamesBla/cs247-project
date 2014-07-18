@@ -24,7 +24,8 @@ public:
 	virtual ~DeckGUI();
 	Glib::RefPtr<Gdk::Pixbuf> getCardImage( Rank r, Suit s ) const;   // Returns the image for the specified card.
 	Glib::RefPtr<Gdk::Pixbuf> getNullCardImage() const;                 // Returns the image to use for the placeholder.
-
+	Glib::RefPtr<Gdk::Pixbuf> getPlayOverlay() const;
+	Glib::RefPtr<Gdk::Pixbuf> getDiscardOverlay() const;
 private:
 	vector< Glib::RefPtr< Gdk::Pixbuf > > deck;                   // Contains the pixel buffer images.
 }; // DeckGUI

@@ -27,10 +27,6 @@ const Card* Model::sevenOfSpades(){
 	return &SEVEN_OF_SPADES;
 }
 
-// void Model::setView(View* view){
-// 	this->_view = view;
-// }
-
 std::vector<Card*> Model::getDeck() const{
 	return _deck;
 }
@@ -117,31 +113,8 @@ void Model::playGame(){
 	_roundEnded = false;
 	_roundInProgress = false;
 	_resetView = false;
-	// each loop iteration is a round
-	// bool doneGame = 0;
-	
-	// // this loop is the whole game
-	// do{
-		
-		playRound();
-		// this loop is a round
-		// do {
-		// 	_players[_curPlayer]->playTurn(_playedCards);
-		// 	_curPlayer = (_curPlayer + 1) % 4;
-		// }
-		// while(_players[_curPlayer]->getHandSize() > 0);
 
-		// // round is over. now we update scores
-		// for (int i = 0; i < PLAYER_COUNT; i++){
-		// 	_players[i]->updateScore();
-		// 	if (_players[i]->getScore() >= 80){
-		// 		doneGame = true;
-		// 	}
-		// }
-
-	// } while(!doneGame);
-
-	// _view->announceWinners(getWinners());
+	playRound();
 }
 
 bool Model::beenPlayed(int rank, int suit) const{
@@ -152,72 +125,79 @@ void Model::playRound() {
 	
 	notify();
 
-	cout << "about to clear shuffle deal\n";
 	clearCardsOnTable();
 	shuffle();
 	deal();
-	_roundEnded = false;
+
 	for (int i = 0; i < PLAYER_COUNT; i++){
 		_players[i]->prepForNewRound();
 	}
 
-	//_view->announceNewRound(_players[_firstPlayer]);
 	_curPlayer = _firstPlayer;
 
+	_roundEnded = false;
 	_startOfNewRound = true;
 	_roundInProgress = true;
+
 	notify();
+
 	_startOfNewRound = false;
 	
-
 	if (!_players[_curPlayer]->isHuman()){
 		playATurn(NULL);
 	}
-
-	// playRound();
 }
 
 void Model::playATurn(Card* card){
-	//need to check if hand is empty, then end round
-	if (_players.size() == 0) return;
-	if (_players.at(_curPlayer)->getHandSize() == 0) {
-		_doneGame = false;
+	// not sure why we needed this before
+	// if (_players.size() == 0) return;
 
+	// current player has no more cards. round is done.
+	if (_players.at(_curPlayer)->getHandSize() == 0) {
+
+		_doneGame = false;
+		
 		for (int i = 0; i < 4; i++) {
 			_players[i]->updateScore();
 			if (_players[i]->getScore() >= 80){
-				cout << "Score exceeded 80\n";
 				_doneGame = true;
 			}
 		}
 
-
-		
 		_roundEnded = true;
 		_roundInProgress = false;
-		notify();
-		_roundEnded = false;
 
+		notify();
+
+		_roundEnded = false;
 	
-		if (!_doneGame) playRound();
+		if (!_doneGame) {
+			playRound();
+		}
 		else {
 			cleanUp();
 		}
+
 		return;
 	}
 	
-	//increment player if good play
+	// if the play is good, go to next player
 	if (_players[_curPlayer]->playTurn(card, _playedCards)){
 		_curPlayer = (_curPlayer + 1) % 4;
 	}
 	
-	if (!_players[_curPlayer]->isHuman()){
+	notify();
+	
+	// if the next player is computer or hand is empty, invoke the play
+	if (!_players[_curPlayer]->isHuman() || _players.at(_curPlayer)->getHandSize() == 0){
 		playATurn(NULL);
 	}
 
 	
+}
 
-	notify();
+vector<Card*> Model::getLegalPlays(Player* player){
+	return player->getLegalPlays(_playedCards);
 }
 
 vector<Player*> Model::getWinners() const{
@@ -240,12 +220,12 @@ vector<Player*> Model::getWinners() const{
 }
 
 void Model::cleanUp(){
-
 	_resetView = true;
 	notify();
 	_resetView = false;
-	clearCardsOnTable();
 
+	clearCardsOnTable();
+	
 	for (vector<Card*>::iterator it = _deck.begin(); it != _deck.end(); it++){
 		delete *it;
 	}
@@ -273,11 +253,6 @@ Card* Model::findCard(Card* target) const {
 }
 
 Player* Model::getPlayer(int index) const {
-	// cout << "in get player" << endl;
-	// cout << _players.size() << endl;
-
-	// if (_players.size() == 0 || 0 < index || index >= _players.size()) return NULL;
-
 	return _players.at(index);
 }
 

@@ -46,6 +46,8 @@ public:
 	bool resetView() const;
 	bool doneGame() const;
 
+	std::vector<Card*> getLegalPlays(Player*);
+
 private:
 	static const int PLAYER_COUNT;
 	static const int CARD_COUNT;

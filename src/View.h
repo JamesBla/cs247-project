@@ -31,26 +31,16 @@ public:
 	virtual ~View();
 	void update();
 	Glib::RefPtr<Gdk::Pixbuf> getNullCardImage() const;
+	Glib::RefPtr<Gdk::Pixbuf> getPlayOverlay() const;
+	Glib::RefPtr<Gdk::Pixbuf> getDiscardOverlay() const;
 	Glib::RefPtr<Gdk::Pixbuf> getCardImage(Rank r, Suit s) const;
 
-	void announceNewRound(Player*);
-	void printCardsOnTable(const bool (&cardMap)[4][13]) const;
-	void printCardsInHand(const std::vector<Card*>&) const;
-	void printDiscard(Player*, Card*) const;
-	void printNewScore(std::vector<Card*> &, int, int, int, Player*) const;
-	void announceWinners(std::vector<Player*>) const;
-
-	bool requestPlayerType(int) const; // true if human, false if computer
-	void printPrompt() const;
-	void printLegalPlay(Player*, Card*) const;
-	void printIllegalPlay() const;
-	void printMayNotDiscard() const;
-	void printDeck(std::vector<Card*> &) const;
-	void printRagequit(HumanPlayer* player) const;
-
-	void setHandView(std::vector<Card*> *);
-
-	void printLegalPlays(const std::vector<Card*>&) const; // bonus
+	bool getPlayerType(int) const; // true if human, false if computer
+	
+	void showDialogue(std::string, std::string);
+	void setHandView(std::vector<Card*> *, std::vector<Card*> *);
+	void setPlayedCardsView(bool clear);
+	
 private:
 	Model* _model;
 	Controller* _controller;

@@ -28,9 +28,9 @@ public:
 	std::vector<Card*> getHand() const;
 	std::vector<Card*> getDiscarded() const;
 	int getDiscardedCount() const;
+	std::vector<Card*> getLegalPlays(bool (&cardMap)[4][13]) const;
 protected:
 	bool playable(Card*, bool (&cardMap)[4][13]) const;
-	std::vector<Card*> getLegalPlays(bool (&cardMap)[4][13]) const;
 	Controller* getController() const;
 private:
 	std::vector<Card*> _hand;

@@ -14,12 +14,6 @@ HumanPlayer::HumanPlayer(Model* model, Controller* controller, int number) : Pla
 
 bool HumanPlayer::playTurn(Card* card, bool (&cardMap)[4][13]){
 	vector<Card*> hand = getHand();
-
-	// getView()->printCardsOnTable(cardMap);
-
-	// need to update table after each playTurn();
-
-	// populate legal plays
 	
 	vector<Card*> legalPlays = getLegalPlays(cardMap);
 

@@ -23,12 +23,11 @@ const char * image_names[] = {
 	"img/1_0.png", "img/1_1.png", "img/1_2.png", "img/1_3.png", "img/1_4.png", "img/1_5.png", "img/1_6.png", "img/1_7.png", "img/1_8.png", "img/1_9.png", "img/1_j.png", "img/1_q.png", "img/1_k.png", 
 	"img/2_0.png", "img/2_1.png", "img/2_2.png", "img/2_3.png", "img/2_4.png", "img/2_5.png", "img/2_6.png", "img/2_7.png", "img/2_8.png", "img/2_9.png", "img/2_j.png", "img/2_q.png", "img/2_k.png", 
 	"img/3_0.png", "img/3_1.png", "img/3_2.png", "img/3_3.png", "img/3_4.png", "img/3_5.png", "img/3_6.png", "img/3_7.png", "img/3_8.png", "img/3_9.png", "img/3_j.png", "img/3_q.png", "img/3_k.png",
-	"img/nothing.png"
+	"img/nothing.png", "img/P_overlay.png", "img/D_overlay.png"
 }; 
 
 // Loads the image from the specified file name into a pixel buffer.
 Glib::RefPtr<Gdk::Pixbuf> createPixbuf(const string & name) {
-	std::cout << name << std::endl;
 	return Gdk::Pixbuf::create_from_file( name );
 } // createPixbuf
 
@@ -53,5 +52,13 @@ Glib::RefPtr<Gdk::Pixbuf> DeckGUI::getCardImage( Rank r, Suit s ) const {
 // Returns the image to use for the placeholder.
 Glib::RefPtr<Gdk::Pixbuf> DeckGUI::getNullCardImage() const {
 	int size = deck.size();
-	return deck[ size-1 ];
+	return deck[ size-3 ];
 } // DeckGUI::getNullCardImage
+Glib::RefPtr<Gdk::Pixbuf> DeckGUI::getPlayOverlay() const {
+	int size = deck.size();
+	return deck[ size-2 ];
+} // DeckGUI::getNullCardImage
+Glib::RefPtr<Gdk::Pixbuf> DeckGUI::getDiscardOverlay() const {
+	int size = deck.size();
+	return deck[ size-1 ];
+} 

@@ -19,6 +19,9 @@ public:
 	void resetLabels();
 	bool isHuman() const;
 	void update();
+	static std::string humanLabel();
+	static std::string computerLabel();
+	static std::string rageLabel();
 private:
 	int playerIndex;
 	Model* _model;
@@ -27,6 +30,9 @@ private:
 	Gtk::Button togglePlayer;
 	Gtk::Label points;
 	Gtk::Label discards;
+	static const std::string HUMAN_LABEL;
+	static const std::string COMPUTER_LABEL;
+	static const std::string RAGE_LABEL;
 
 	void onClick();
 	Glib::ustring intToString(int);

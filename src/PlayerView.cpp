@@ -12,8 +12,21 @@
 
 using namespace std;
 
+const string PlayerView::HUMAN_LABEL = "Human";
+const string PlayerView::COMPUTER_LABEL = "Computer";
+const string PlayerView::RAGE_LABEL = "Rage!";
+
+string PlayerView::humanLabel(){
+	return HUMAN_LABEL;
+}
+string PlayerView::computerLabel(){
+	return COMPUTER_LABEL;
+}
+string PlayerView::rageLabel(){
+	return RAGE_LABEL;
+}
+
 void PlayerView::setButton(bool sensitive, std::string text){
-	cout << "set to " << sensitive <<", " << text << endl;
 	togglePlayer.set_sensitive(sensitive);
 	togglePlayer.set_label(text);
 }
@@ -33,6 +46,8 @@ PlayerView::PlayerView(int playerNumber, Model* model, View* view) : playerIndex
 	container.pack_end(discards);
 	add(container);
 
+	setButton(true, HUMAN_LABEL);
+
 	togglePlayer.signal_clicked().connect( sigc::mem_fun( *this, &PlayerView::onClick ) );
 }
 
@@ -41,22 +56,22 @@ PlayerView::~PlayerView() {
 }
 
 void PlayerView::onClick(){
-	if (togglePlayer.get_label() == "Rage!"){
+	if (togglePlayer.get_label() == RAGE_LABEL){
 		//tricky business
 		
-		setButton(false,"Rage!");
-		_view->setHandView(NULL);
+		setButton(false, RAGE_LABEL);
+		_view->setHandView(NULL, NULL);
 
 		_model->computerizePlayer(_model->getCurrentPlayer());
 		
 	}
 	else {
-		togglePlayer.set_label( (togglePlayer.get_label() == "Human") ? "Computer" : "Human" );
+		togglePlayer.set_label( (togglePlayer.get_label() == HUMAN_LABEL) ? COMPUTER_LABEL : HUMAN_LABEL );
 	}
 }
 
 bool PlayerView::isHuman() const{
-	return (togglePlayer.get_label() == "Human");
+	return (togglePlayer.get_label() == HUMAN_LABEL);
 }
 
 void PlayerView::update() {
