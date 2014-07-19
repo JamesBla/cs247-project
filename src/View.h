@@ -42,8 +42,8 @@ public:
 	std::string intToString(int);
 	
 private:
-	Model* _model;
 	Controller* _controller;
+	Model* _model;
 
 	 //Signal handlers:
   	virtual void onNewGame();

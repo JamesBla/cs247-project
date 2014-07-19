@@ -2,18 +2,15 @@
 #define _CONTROLLER_
 
 class Model;
-class View;
 
 class Controller{
 public:
 	Controller(Model* model);
-	void run();
-	void initializeModel();
-	void setView(View* view);
-	Model* getModel();
+	void run(int, char[4]);
+	void endGame();
+	void initializeModel(char[4]);
 private:
 	Model* _model;
-	View* _view;
 };
 
 #endif

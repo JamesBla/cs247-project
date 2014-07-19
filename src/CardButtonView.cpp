@@ -43,7 +43,7 @@ void CardButtonView::mouseEnter(){
 			overlay = _view->getDiscardOverlay();
 		}
 
-		int cardWidth = _screenWidth / 23;
+		int cardWidth = _screenWidth / 30;
 		int cardHeight = (int)(cardWidth/0.69);
 
 		overlay->composite(cardPixbuf, 0, 0, cardWidth, cardHeight,

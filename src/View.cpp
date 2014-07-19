@@ -164,21 +164,24 @@ bool View::getPlayerType(int playerNumber) const{
 }
 
 void View::onNewGame(){
-	srand48( atoi(static_cast<string>(seedEntry.get_text()).c_str()) );
-	_controller->run();
+	char playerTypes[4]; // true if human, false if computer
+	for (int i = 0; i < 4; i++) {
+		playerTypes[i] = (playerViews[i]->isHuman()) ? 'h' : 'c';
+	}
+	_controller->run(atoi(static_cast<string>(seedEntry.get_text()).c_str()), playerTypes);
 }
 
 void View::onEndGame(){
-	_model->cleanUp();
+	_controller->endGame();
 }
 
-View::View(Controller* controller, Model* model) : deck(this->get_screen()->get_width()), hbox( true, 10 ), newGameButton("Start new game with seed:"), endGameButton("End current game"), 
+View::View(Controller* controller, Model* model) : _controller(controller), _model(model), 
+deck((get_screen()->get_width() > 1600) ? 1600 : get_screen()->get_width()), hbox( true, 10 ), 
+newGameButton("Start new game with seed:"), endGameButton("End current game"), 
  cardsOnTable(4, 13, true) {
+ 	int screenWidth = (get_screen()->get_width() > 1600) ? 1600 : get_screen()->get_width();
 
-	controller->setView(this);
-	model->subscribe(this);
-	_model = model;
-	_controller = controller;
+	_model->subscribe(this);
 
 	nullCardPixbuf = deck.getNullCardImage();
 
@@ -218,19 +221,19 @@ View::View(Controller* controller, Model* model) : deck(this->get_screen()->get_
 
 	// Set the look of the frame.
 	frame.set_label( "Cards in your hand:" );
-	
+
 	// Add the vbox to the window. Windows can only hold one widget, same for frames.
 	add( topContainer );
-	
+
 	// Add the horizontal box for laying out the images to the frame.	
 	frame.add( hbox );
-	
-	for (int i = 0; i < 13; i++ ) {
 
-		cardButtonViews[i] = new CardButtonView(_model, this, this->get_screen()->get_width());
+	for (int i = 0; i < 13; i++ ) {
+		cardButtonViews[i] = new CardButtonView(_model, this, screenWidth);
 
 		hbox.add( *cardButtonViews[i] );
-	} // for
+	}
+
 	setHandView(NULL, NULL);
 	show_all();
 }

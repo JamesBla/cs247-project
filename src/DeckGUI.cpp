@@ -30,7 +30,7 @@ const char * image_names[] = {
 // Loads the image from the specified file name into a pixel buffer.
 Glib::RefPtr<Gdk::Pixbuf> createPixbuf(const string & name, int screenWidth) {
 	// int screenWidth = gtk_widget_get_screen(this)->get_width();
-	int cardWidth = screenWidth / 23;
+	int cardWidth = screenWidth / 30;
 	return Gdk::Pixbuf::create_from_file( name )->scale_simple(cardWidth, (int)(cardWidth/0.69), Gdk::INTERP_BILINEAR);
 }
 
