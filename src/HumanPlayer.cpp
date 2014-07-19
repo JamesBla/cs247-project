@@ -38,10 +38,6 @@ bool HumanPlayer::playTurn(Card* card, bool (&cardMap)[4][13]){
 		return false;
 	}
 	return true;
-
-	// getView()->printLegalPlays(legalCards);
-	// getController()->requestCommand(this, legalCards, hand); 
-	
 }
 
 bool HumanPlayer::isHuman() const{

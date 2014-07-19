@@ -35,9 +35,13 @@ void CardButtonView::mouseEnter(){
 			overlay = _view->getDiscardOverlay();
 		}
 
-		overlay->composite(cardPixbuf, 0, 0, 48, 70,
+		int cardWidth = _screenWidth / 17.5;
+		int cardHeight = (int)(cardWidth/0.69);
+
+		overlay->composite(cardPixbuf, 0, 0, cardWidth, cardHeight,
 				 0, 0, 1, 1, Gdk::INTERP_BILINEAR, 255);
 
+		delete _image;
 		_image = new Gtk::Image(cardPixbuf);
 		set_image(*_image);
 	}
@@ -53,9 +57,10 @@ void CardButtonView::mouseLeave(){
 	}
 }
 
-CardButtonView::CardButtonView(Controller* controller, View* view) {
+CardButtonView::CardButtonView(Controller* controller, View* view, int width) {
 	_controller = controller;
 	_view = view;
+	_screenWidth = width;
 
 	const Glib::RefPtr<Gdk::Pixbuf> nullCardPixbuf = _view->getNullCardImage();
 

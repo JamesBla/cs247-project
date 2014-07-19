@@ -181,8 +181,9 @@ void View::onEndGame(){
 }
 
 
-View::View(Controller* controller, Model* model) : hbox( true, 10 ), newGameButton("Start new game with seed:"), endGameButton("End current game"), 
-cardsOnTable(4, 13, true) {
+View::View(Controller* controller, Model* model) : deck(this->get_screen()->get_width()), hbox( true, 10 ), newGameButton("Start new game with seed:"), endGameButton("End current game"), 
+ cardsOnTable(4, 13, true) {
+	
 
 	controller->setView(this);
 	model->subscribe(this);
@@ -236,7 +237,7 @@ cardsOnTable(4, 13, true) {
 	
 	
 	for (int i = 0; i < 13; i++ ) {
-		cardButtonViews[i] = new CardButtonView(_controller, this);
+		cardButtonViews[i] = new CardButtonView(_controller, this, this->get_screen()->get_width());
 		hbox.add( *cardButtonViews[i] );
 	} // for
 	setHandView(NULL, NULL);

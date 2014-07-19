@@ -15,6 +15,7 @@
 
 using std::string;
 using std::transform;
+using namespace std;
 
 // Sets up an array of the Portable Network Graphics (PNG) file names that contain the necessary card images.
 // The deck will load the contents into pixel buffers for later use.
@@ -27,17 +28,27 @@ const char * image_names[] = {
 }; 
 
 // Loads the image from the specified file name into a pixel buffer.
-Glib::RefPtr<Gdk::Pixbuf> createPixbuf(const string & name) {
-	return Gdk::Pixbuf::create_from_file( name );
+Glib::RefPtr<Gdk::Pixbuf> createPixbuf(const string & name, int screenWidth) {
+	// int screenWidth = gtk_widget_get_screen(this)->get_width();
+	int cardWidth = screenWidth / (17.5);
+	return Gdk::Pixbuf::create_from_file( name )->scale_simple(cardWidth, (int)(cardWidth/0.69), Gdk::INTERP_BILINEAR);
 }
 
-DeckGUI::DeckGUI()  {
+DeckGUI::DeckGUI(int width)  {
+	_screenWidth = width;
+	// cout << "width is " << width << endl;
 	// Images can only be loaded once the main window has been initialized, so cannot be done as a static
 	// constant array. Instead, use the STL transform algorithm to apply the method createPixbuf to every
 	// element in the array of image names, starting with first and ending with the last. New elements are
 	// added to the back of deck.
-	transform( &image_names[0], &image_names[G_N_ELEMENTS(image_names)], 
-			   std::back_inserter(_deck), &createPixbuf );
+	// transform( &image_names[0], &image_names[G_N_ELEMENTS(image_names)], 
+	// 		   std::back_inserter(_deck), &createPixbuf );
+
+	for (int i = 0; i < G_N_ELEMENTS(image_names); i++){
+		string imgName = std::string(image_names[i]);
+		_deck.push_back(createPixbuf(imgName,_screenWidth));
+	}
+
 }
 
 DeckGUI::~DeckGUI() {

@@ -18,7 +18,7 @@ class Card;
 
 class CardButtonView : public Gtk::Button {
 public:
-	CardButtonView(Controller*, View*);
+	CardButtonView(Controller*, View*, int);
 	void setCard(Card*, bool);
 	virtual ~CardButtonView();
 
@@ -30,6 +30,8 @@ private:
 	View* _view;
 	Gtk::Image* _image;
 	Card* _currentCard;
+
+	int _screenWidth;
 
 
 
