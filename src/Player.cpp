@@ -8,7 +8,6 @@
 using namespace std;
 
 Player::Player(Model* model, Controller* controller, int number){
-	// _view = view;
 	_playerNumber = number;
 	_model = model;
 	_controller = controller;
@@ -54,7 +53,6 @@ void Player::addCard(Card* card){
 	_hand.push_back(card);
 }
 
-
 vector<Card*> Player::getHand() const{
 	return _hand;
 }
@@ -63,7 +61,6 @@ void Player::playCard(Card* card){ //play card by value
 	for (vector<Card*>::iterator it = _hand.begin(); it != _hand.end(); it++){
 		if (*(*it) == *(card)){
 			_hand.erase(it);
-			// _view->printLegalPlay(p, card);
 			_model->putCardOnTable(card);
 			break;
 		}

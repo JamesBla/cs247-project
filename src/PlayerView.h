@@ -35,7 +35,6 @@ private:
 	static const std::string RAGE_LABEL;
 
 	void onClick();
-	Glib::ustring intToString(int);
 };
 
 #endif

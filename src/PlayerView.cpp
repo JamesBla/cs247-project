@@ -1,14 +1,12 @@
 #include "PlayerView.h"
 #include "Model.h"
 #include "View.h"
-#include "HumanPlayer.h"
 
 #include <gtkmm/box.h>
+#include <gtkmm/button.h>
 #include <gtkmm/frame.h>
-#include <sstream>
+#include <gtkmm/label.h>
 #include <string>
-
-#include <iostream>
 
 using namespace std;
 
@@ -38,7 +36,7 @@ void PlayerView::resetLabels(){
 
 PlayerView::PlayerView(int playerNumber, Model* model, View* view) : playerIndex(playerNumber-1), _model(model), _view(view), togglePlayer("Human"), points("0 points"), discards("0 discards") {
 	// required because ustring cannot append int directly
-	Glib::ustring playerNumberStr = intToString(playerNumber);
+	Glib::ustring playerNumberStr = _view->intToString(playerNumber);
 
 	set_label("Player " + playerNumberStr);
 	container.pack_start(togglePlayer);
@@ -77,12 +75,6 @@ bool PlayerView::isHuman() const{
 void PlayerView::update() {
 	int newScore = _model->getPlayerScore(playerIndex);
 	int newDiscardsCount = _model->getPlayerDiscardedCount(playerIndex);
-	points.set_label(intToString(newScore) + " points");
-	discards.set_label(intToString(newDiscardsCount) + " discards");
-}
-
-Glib::ustring PlayerView::intToString(int n) {
-	ostringstream ostr;
-	ostr << n;
-	return ostr.str();
+	points.set_label(_view->intToString(newScore) + " points");
+	discards.set_label(_view->intToString(newDiscardsCount) + " discards");
 }

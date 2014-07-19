@@ -2,7 +2,6 @@
 
 #include "Player.h"
 #include "ComputerPlayer.h"
-#include "HumanPlayer.h"
 
 using namespace std;
 

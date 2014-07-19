@@ -1,27 +1,35 @@
-#include "CardButtonView.h"
-#include "Controller.h"
-#include "Card.h"
-#include "Model.h"
-
 #include <gtkmm/button.h>
 #include <gtkmm/image.h>
-#include <gtkmm.h>
 #include <algorithm>
 #include <iterator>
 #include <string>
 
-#include <iostream>
+#include "CardButtonView.h"
+#include "Card.h"
+#include "Model.h"
 
 using namespace std;
 
+CardButtonView::CardButtonView(Model* model, View* view, int width) : _model(model), _view(view),
+_screenWidth(width) {
+	const Glib::RefPtr<Gdk::Pixbuf> nullCardPixbuf = _view->getNullCardImage();
+
+	signal_clicked().connect( sigc::mem_fun( *this, &CardButtonView::cardButtonClicked ) );
+	signal_enter().connect( sigc::mem_fun( *this, &CardButtonView::mouseEnter ) );
+	signal_leave().connect( sigc::mem_fun( *this, &CardButtonView::mouseLeave ) );
+
+	_image = new Gtk::Image(nullCardPixbuf);
+	set_image(*_image);
+}
+
 void CardButtonView::cardButtonClicked() {
-	_controller->getModel()->playATurn(_currentCard);
+	_model->playATurn(_currentCard);
 }
 
 void CardButtonView::mouseEnter(){
 	if (get_sensitive()){
 		// violates Demeter?
-		bool isPlay = _controller->getModel()->getLegalPlays(_controller->getModel()->getCurrentPlayer()).size() > 0;
+		bool isPlay = _model->getLegalPlays(_model->getCurrentPlayer()).size() > 0;
 			
 		Glib::RefPtr<Gdk::Pixbuf> cardPixbuf = 
 				_view->getCardImage(_currentCard->getRank(), _currentCard->getSuit())->copy();
@@ -29,7 +37,7 @@ void CardButtonView::mouseEnter(){
 		Glib::RefPtr<Gdk::Pixbuf> overlay;
 
 		if (isPlay){
-			overlay = _view->getPlayOverlay(); 	
+			overlay = _view->getPlayOverlay(); 
 		}
 		else{
 			overlay = _view->getDiscardOverlay();
@@ -57,20 +65,6 @@ void CardButtonView::mouseLeave(){
 	}
 }
 
-CardButtonView::CardButtonView(Controller* controller, View* view, int width) {
-	_controller = controller;
-	_view = view;
-	_screenWidth = width;
-
-	const Glib::RefPtr<Gdk::Pixbuf> nullCardPixbuf = _view->getNullCardImage();
-
-	signal_clicked().connect( sigc::mem_fun( *this, &CardButtonView::cardButtonClicked ) );
-	signal_enter().connect( sigc::mem_fun( *this, &CardButtonView::mouseEnter ) );
-	signal_leave().connect( sigc::mem_fun( *this, &CardButtonView::mouseLeave ) );
-
-	_image = new Gtk::Image(nullCardPixbuf);
-	set_image(*_image);
-}
 
 CardButtonView::~CardButtonView() {
 	delete _image;

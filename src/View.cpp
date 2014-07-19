@@ -1,9 +1,8 @@
-#include <iostream>
-#include <cstdlib>
 #include <sstream>
 #include <string>
 #include <vector>
 #include <gtkmm/window.h>
+#include <gtkmm/messagedialog.h>
 #include <gtkmm/image.h>
 #include <gtkmm/box.h>
 #include <gtkmm/button.h>
@@ -16,22 +15,19 @@
 #include "Controller.h"
 
 #include "Player.h"
-#include "HumanPlayer.h"
 #include "Card.h"
 #include "CardButtonView.h"
 
 using namespace std;
 
-// TODO: implement observer pattern (list of observers)
 void View::update() {
-	
 	if (_model->resetView()){
 		frame.set_label( "Cards in your hand:" );
 		set_title("Straights UI");
 		setHandView(NULL, NULL);
 
 		setPlayedCardsView(true);
-		
+
 		for (int i = 0; i < 4; i++){
 			playerViews[i]->resetLabels();
 		}
@@ -42,12 +38,12 @@ void View::update() {
 				playerViews[i]->setButton(true, (_model->getPlayer(i)->isHuman()) ? PlayerView::humanLabel() : PlayerView::computerLabel());
 			}
 		}
-		
+
 		return;
 	}
-		
+
 	if (_model->isStartOfNewRound()) {
-		
+
 		for (int i = 0; i < 4; i++){
 			playerViews[i]->setButton(false, PlayerView::rageLabel());
 		}
@@ -92,7 +88,7 @@ void View::update() {
 	if (_model->doneGame()){
 		vector<Player*> winners = _model->getWinners();
 		string message = "";
-		for (int i = 0; i < winners.size(); i++){
+		for (unsigned int i = 0; i < winners.size(); i++){
 			message += ("Player " + intToString(winners[i]->getNumber()) + " wins!\n");
 		}
 		showDialogue("End of Game", message);
@@ -119,7 +115,7 @@ void View::update() {
 		else{
 			set_title("Straights UI");
 		}
-		
+
 		setPlayedCardsView(false);	
 	}	
 }
@@ -132,18 +128,18 @@ void View::showDialogue(string title, string message){
 
 void View::setHandView(vector<Card*> * hand, vector<Card*> * legalPlays){
 	for (unsigned int i = 0; i < 13; i++){
-		bool cardExists = hand && i < (*hand).size();
+		bool cardExists = hand && i < hand->size();
 		bool enableButton = false;
 
 		if (legalPlays && cardExists){
-			if ((*legalPlays).size() == 0){
+			if (legalPlays->empty()){
 				enableButton = true;
 				frame.set_label( "Cards in your hand: (must discard)" );
 			}
 			else{
 				frame.set_label( "Cards in your hand:" );
 			}
-			for (int j = 0; j < (*legalPlays).size(); j++){
+			for (unsigned int j = 0; j < legalPlays->size(); j++){
 				if (*((*legalPlays)[j]) == *((*hand)[i])){
 					enableButton = true;
 				}
@@ -167,13 +163,9 @@ bool View::getPlayerType(int playerNumber) const{
 	return playerViews[playerNumber]->isHuman();
 }
 
-
 void View::onNewGame(){
 	srand48( atoi(static_cast<string>(seedEntry.get_text()).c_str()) );
-
 	_controller->run();
-
-	
 }
 
 void View::onEndGame(){
@@ -181,9 +173,10 @@ void View::onEndGame(){
 }
 
 
+
 View::View(Controller* controller, Model* model) : deck(this->get_screen()->get_width()), hbox( true, 10 ), newGameButton("Start new game with seed:"), endGameButton("End current game"), 
  cardsOnTable(4, 13, true) {
-	
+
 
 	controller->setView(this);
 	model->subscribe(this);
@@ -235,9 +228,10 @@ View::View(Controller* controller, Model* model) : deck(this->get_screen()->get_
 	// Add the horizontal box for laying out the images to the frame.	
 	frame.add( hbox );
 	
-	
 	for (int i = 0; i < 13; i++ ) {
-		cardButtonViews[i] = new CardButtonView(_controller, this, this->get_screen()->get_width());
+
+		cardButtonViews[i] = new CardButtonView(_model, this, this->get_screen()->get_width());
+
 		hbox.add( *cardButtonViews[i] );
 	} // for
 	setHandView(NULL, NULL);

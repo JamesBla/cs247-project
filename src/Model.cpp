@@ -1,6 +1,7 @@
 #include <cassert>
 #include <cstdlib>
 #include <iostream>
+#include <vector>
 
 #include "Model.h"
 #include "View.h"
@@ -13,9 +14,6 @@
 #include "ComputerPlayer.h"
 
 using namespace std;
-
-const int Model::PLAYER_COUNT = 4;
-const int Model::CARD_COUNT = 52;
 
 Card initSevenOfSpades(){
 	Card c(SPADE, SEVEN);
@@ -66,10 +64,8 @@ void Model::computerizePlayer(Player* player){
 }
 
 void Model::initializePlayers(char playerTypes[]){
-	for (int i = 0; i < PLAYER_COUNT; i++){
-		assert(playerTypes[i] == 'h' || playerTypes[i] == 'c' || playerTypes[i] == 'H' || playerTypes[i] == 'C');
-		
-		if ((playerTypes[i] == 'h' || playerTypes[i] == 'H') ){
+	for (int i = 0; i < 4; i++){		
+		if (playerTypes[i] == 'h'){
 			_players.push_back(new HumanPlayer(this, _controller, i+1));
 		}
 		else{
@@ -79,7 +75,7 @@ void Model::initializePlayers(char playerTypes[]){
 }
 
 void Model::shuffle(){
-	int n = CARD_COUNT;
+	int n = 52;
 
 	while ( n > 1 ) {
 		int k = (int) (lrand48() % n);
@@ -91,10 +87,10 @@ void Model::shuffle(){
 }
 
 void Model::deal(){
-	for (int i = 0; i < CARD_COUNT; i++){
-		_players[i/(CARD_COUNT/PLAYER_COUNT)]->addCard(_deck.at(i));
+	for (int i = 0; i < 52; i++){
+		_players[i/13]->addCard(_deck.at(i));
 		if (*_deck[i] == SEVEN_OF_SPADES){
-			_firstPlayer = i/(CARD_COUNT/PLAYER_COUNT);
+			_firstPlayer = i/13;
 		}
 	}
 }
@@ -122,14 +118,13 @@ bool Model::beenPlayed(int rank, int suit) const{
 }
 
 void Model::playRound() {
-	
 	notify();
 
 	clearCardsOnTable();
 	shuffle();
 	deal();
 
-	for (int i = 0; i < PLAYER_COUNT; i++){
+	for (int i = 0; i < 4; i++){
 		_players[i]->prepForNewRound();
 	}
 
@@ -170,7 +165,7 @@ void Model::playATurn(Card* card){
 		notify();
 
 		_roundEnded = false;
-	
+
 		if (!_doneGame) {
 			playRound();
 		}
@@ -180,20 +175,18 @@ void Model::playATurn(Card* card){
 
 		return;
 	}
-	
+
 	// if the play is good, go to next player
 	if (_players[_curPlayer]->playTurn(card, _playedCards)){
 		_curPlayer = (_curPlayer + 1) % 4;
 	}
-	
+
 	notify();
-	
+
 	// if the next player is computer or hand is empty, invoke the play
 	if (!_players[_curPlayer]->isHuman() || _players.at(_curPlayer)->getHandSize() == 0){
 		playATurn(NULL);
 	}
-
-	
 }
 
 vector<Card*> Model::getLegalPlays(Player* player){
@@ -264,7 +257,6 @@ Player* Model::getFirstPlayer() const {
 	return getPlayer(_firstPlayer);
 }
 
-
 bool Model::isStartOfNewRound() const {
 	return _startOfNewRound;
 }
@@ -283,13 +275,11 @@ Player* Model::getCurrentPlayer() const{
 
 int Model::getPlayerScore(int playerIndex) const{
 	if (_players.empty()) return 0;
-
 	return _players.at(playerIndex)->getScore();
 }
 
 int Model::getPlayerDiscardedCount(int playerIndex) const{
 	if (_players.empty()) return 0;
-
 	return _players.at(playerIndex)->getDiscardedCount();
 }
 
