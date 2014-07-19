@@ -6,11 +6,9 @@
 using namespace std;
 
 class Model;
-class Controller;
-
 class Card;
 
-ComputerPlayer::ComputerPlayer(Model* model, Controller* controller, int number) : Player(model, controller, number){}
+ComputerPlayer::ComputerPlayer(Model* model, int number) : Player(model, number){}
 
 ComputerPlayer::ComputerPlayer(const Player& player): Player(player) {}
 

@@ -2,13 +2,12 @@
 
 #include "Player.h"
 #include "HumanPlayer.h"
-#include "Controller.h"
 #include "Model.h"
 #include "Card.h"
 
 using namespace std;
 
-HumanPlayer::HumanPlayer(Model* model, Controller* controller, int number) : Player(model, controller, number){}
+HumanPlayer::HumanPlayer(Model* model, int number) : Player(model, number){}
 
 bool HumanPlayer::playTurn(Card* card, bool (&cardMap)[4][13]){
 	vector<Card*> hand = getHand();

@@ -6,7 +6,6 @@ using namespace std;
 
 Controller::Controller(Model* model){
 	this->_model = model;
-	model->setController(this);
 }
 
 void Controller::setView(View* view){

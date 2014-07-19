@@ -6,7 +6,6 @@
 #include "Subject.h"
 
 class View;
-class Controller;
 
 class Player;
 class HumanPlayer;
@@ -15,7 +14,7 @@ class Card;
 class Model : public Subject{
 public:
 	~Model();
-	void setController(Controller*);
+
 	void initializePlayers(char[]);
 	void playGame();
 	void initializeDeck();
@@ -50,7 +49,7 @@ public:
 
 private:
 	static const Card SEVEN_OF_SPADES;
-	Controller* _controller;
+	
 	std::vector<Player*> _players;
 	std::vector<Card*> _deck;
 	int _firstPlayer;
