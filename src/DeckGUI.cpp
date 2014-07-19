@@ -44,7 +44,7 @@ DeckGUI::DeckGUI(int width)  {
 	// transform( &image_names[0], &image_names[G_N_ELEMENTS(image_names)], 
 	// 		   std::back_inserter(_deck), &createPixbuf );
 
-	for (int i = 0; i < G_N_ELEMENTS(image_names); i++){
+	for (unsigned int i = 0; i < G_N_ELEMENTS(image_names); i++){
 		string imgName = std::string(image_names[i]);
 		_deck.push_back(createPixbuf(imgName,_screenWidth));
 	}

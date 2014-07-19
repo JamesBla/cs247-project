@@ -34,7 +34,6 @@ public:
 	Glib::RefPtr<Gdk::Pixbuf> getDiscardOverlay() const;
 	Glib::RefPtr<Gdk::Pixbuf> getCardImage(Rank r, Suit s) const;
 
-	bool getPlayerType(int) const; // true if human, false if computer
 	void setHandView(std::vector<Card*> *, std::vector<Card*> *);
 	void setPlayedCardsView(bool clear);
 	std::string intToString(int);

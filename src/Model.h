@@ -5,39 +5,21 @@
 
 #include "Subject.h"
 
-class View;
-
 class Player;
-class HumanPlayer;
 class Card;
 
 class Model : public Subject{
 public:
+	Model();
 	virtual ~Model();
 
 	enum State { NONE, ROUND_STARTED, IN_PROGRESS, ROUND_ENDED, GAME_ENDED, RESET_VIEW };
 
-	void initializePlayers(char[]);
-	void initializeDeck();
-	void shuffle();
-	void deal();
-	void putCardOnTable(Card*);
-	std::vector<Card*> getDeck() const;
-	void cleanUp();
-	void computerizePlayer(Player*);
-	void clearCardsOnTable();
-	Card* findCard(Card*) const;
-	std::vector<Player*> getWinners() const;
-	static const Card* sevenOfSpades();
-	bool beenPlayed(int rank, int suit) const;
-
-	void clear();
-	bool resetView() const;
-	bool doneGame() const;
-
-	std::vector<Card*> getLegalPlays(Player*);
-
 	// Accessors
+	static const Card* sevenOfSpades();
+	Card* findCard(Card*) const;
+	bool beenPlayed(int rank, int suit) const;
+	std::vector<Player*> getWinners() const;
 	State getState() const;
 	Player* getFirstPlayer() const;
 	Player* getCurrentPlayer() const;
@@ -45,15 +27,29 @@ public:
 	int getPlayerScore(int) const;
 	int getPlayerCurrentRoundScore(int) const;
 	int getPlayerDiscardedCount(int) const;
+	std::vector<Card*> getDeck() const;
 	std::vector<Card*> getDiscardedCards(int) const;
+	std::vector<Card*> getLegalPlays(Player*);
+	int getSeed() const;
+	char getPlayerType(int) const;
 
 	// Modifiers
-	void setState(State state);
-	void setCurrentPlayer(int);
-
+	void initializePlayers();
+	void initializeDeck();
+	void shuffle();
+	void deal();
+	void putCardOnTable(Card*);
+	void computerizePlayer(int);
 	void updateScoreAndEndGame();
 	bool playTurn(Card*);
 	void advanceCurrentPlayer();
+	void setState(State state);
+	void setCurrentPlayer(int);
+	void setSeed(int);
+	void setPlayerType(int, char);
+	void cleanUp();
+	void clearCardsOnTable();
+	void deleteCardsAndPlayers();
 
 private:
 	static const Card SEVEN_OF_SPADES;
@@ -64,7 +60,8 @@ private:
 	int _curPlayer;
 	bool _playedCards[4][13];
 	State _state;
-	bool _doneGame;
+	int _seed;
+	char _playerTypes[4];
 };
 
 #endif

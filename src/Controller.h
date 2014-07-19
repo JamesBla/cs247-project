@@ -7,12 +7,13 @@ class Card;
 class Controller{
 public:
 	Controller(Model* model);
-	void run(int, char[4]);
+	void run(int);
 	void endGame();
-	void initializeModel(char[4]);
+	void initializeModel();
 	void playRound();
 	void playATurn(Card* card);
-	void computerizePlayer();
+	void computerizePlayer(int);
+	void togglePlayer(int);
 private:
 	Model* _model;
 };

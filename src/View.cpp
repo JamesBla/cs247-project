@@ -22,7 +22,6 @@
 using namespace std;
 
 void View::update() {
-	cout << "State is " << _model->getState() << endl;
 	if (_model->getState() == Model::RESET_VIEW){
 		frame.set_label( "Cards in your hand:" );
 		set_title("Straights UI");
@@ -34,7 +33,6 @@ void View::update() {
 			playerViews[i]->resetLabels();
 		}
 
-		// hack-ish
 		if (_model->getDeck().size() > 0){
 			for (int i = 0; i < 4; i++) {
 				playerViews[i]->setButton(true, (_model->getPlayer(i)->isHuman()) ? PlayerView::humanLabel() : PlayerView::computerLabel());
@@ -43,8 +41,7 @@ void View::update() {
 
 		return;
 	}
-
-	if (_model->getState() == Model::ROUND_STARTED) {
+	else if (_model->getState() == Model::ROUND_STARTED) {
 
 		for (int i = 0; i < 4; i++){
 			playerViews[i]->setButton(false, PlayerView::rageLabel());
@@ -56,8 +53,7 @@ void View::update() {
 
 		showDialogue("", message);
 	}
-
-	if (_model->getState() == Model::ROUND_ENDED) {
+	else if (_model->getState() == Model::ROUND_ENDED) {
 
 		for (int i = 0; i < 4; i++) {
 			playerViews[i]->update();
@@ -87,8 +83,7 @@ void View::update() {
 
 		showDialogue("End of Round", message);
 	}
-
-	if (_model->getState() == Model::GAME_ENDED){
+	else if (_model->getState() == Model::GAME_ENDED){
 		vector<Player*> winners = _model->getWinners();
 		string message = "";
 		for (unsigned int i = 0; i < winners.size(); i++){
@@ -97,8 +92,7 @@ void View::update() {
 		showDialogue("End of Game", message);
   		return;
 	}	
-
-	if (_model->getState() == Model::IN_PROGRESS) {
+	else if (_model->getState() == Model::IN_PROGRESS) {
 		int playerNum = _model->getCurrentPlayer()->getNumber();
 
 		for (int i = 0; i < 4; i++){
@@ -166,16 +160,8 @@ void View::setPlayedCardsView(bool clear){
 	}
 }
 
-bool View::getPlayerType(int playerNumber) const{
-	return playerViews[playerNumber]->isHuman();
-}
-
 void View::onNewGame(){
-	char playerTypes[4]; // true if human, false if computer
-	for (int i = 0; i < 4; i++) {
-		playerTypes[i] = (playerViews[i]->isHuman()) ? 'h' : 'c';
-	}
-	_controller->run(atoi(static_cast<string>(seedEntry.get_text()).c_str()), playerTypes);
+	_controller->run(atoi(static_cast<string>(seedEntry.get_text()).c_str()));
 }
 
 void View::onEndGame(){
@@ -206,7 +192,7 @@ newGameButton("Start new game with seed:"), endGameButton("End current game"),
 	toolbar.pack_end(endGameButton);
 
 	newGameButton.signal_clicked().connect( sigc::mem_fun( *this, &View::onNewGame ) );
-	seedEntry.set_text("0");
+	seedEntry.set_text(intToString(_model->getSeed()));
 	seedEntry.set_alignment(0.5);
 	endGameButton.signal_clicked().connect( sigc::mem_fun( *this, &View::onEndGame ) );
 

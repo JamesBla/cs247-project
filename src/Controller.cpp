@@ -13,18 +13,18 @@ Controller::Controller(Model* model) {
 	this->_model = model;
 }
 
-void Controller::initializeModel(char playerTypes[4]) {
-	cout << "initialize model\n";
+void Controller::initializeModel() {
 	_model->cleanUp();
-	_model->initializePlayers(playerTypes);
+	_model->initializePlayers();
 	_model->initializeDeck();
 
 	_model->setState(Model::NONE);
 }
 
-void Controller::run(int seed, char playerTypes[4]) {
+void Controller::run(int seed) {
+	_model->setSeed(seed);
 	srand48(seed);
-	initializeModel(playerTypes);
+	initializeModel();
 	playRound();
 }
 
@@ -68,9 +68,14 @@ void Controller::playATurn(Card* card) {
 	}
 }
 
-void Controller::computerizePlayer() {
-	_model->computerizePlayer(_model->getCurrentPlayer());
+void Controller::computerizePlayer(int playerIndex) {
+	_model->computerizePlayer(playerIndex);
+	_model->setPlayerType(playerIndex, 'c');
 	playATurn(NULL);
+}
+
+void Controller::togglePlayer(int playerIndex) {
+	(_model->getPlayerType(playerIndex) == 'h') ? _model->setPlayerType(playerIndex, 'c') : _model->setPlayerType(playerIndex, 'h');
 }
 
 void Controller::endGame() {

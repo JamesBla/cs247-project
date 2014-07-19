@@ -18,14 +18,16 @@ const string PlayerView::RAGE_LABEL = "Rage!";
 string PlayerView::humanLabel(){
 	return HUMAN_LABEL;
 }
+
 string PlayerView::computerLabel(){
 	return COMPUTER_LABEL;
 }
+
 string PlayerView::rageLabel(){
 	return RAGE_LABEL;
 }
 
-void PlayerView::setButton(bool sensitive, std::string text){
+void PlayerView::setButton(bool sensitive, string text){
 	togglePlayer.set_sensitive(sensitive);
 	togglePlayer.set_label(text);
 }
@@ -46,7 +48,7 @@ PlayerView::PlayerView(int playerNumber, Model* model, View* view, Controller* c
 	container.pack_end(discards);
 	add(container);
 
-	setButton(true, HUMAN_LABEL);
+	(_model->getPlayerType(playerNumber-1) == 'h') ? setButton(true, HUMAN_LABEL) : setButton(true, COMPUTER_LABEL);
 
 	togglePlayer.signal_clicked().connect( sigc::mem_fun( *this, &PlayerView::onClick ) );
 }
@@ -59,15 +61,12 @@ void PlayerView::onClick(){
 	if (togglePlayer.get_label() == RAGE_LABEL){
 		setButton(false, RAGE_LABEL);
 		_view->setHandView(NULL, NULL);
-		_controller->computerizePlayer();
+		_controller->computerizePlayer(playerIndex);
 	}
 	else {
 		togglePlayer.set_label( (togglePlayer.get_label() == HUMAN_LABEL) ? COMPUTER_LABEL : HUMAN_LABEL );
+		_controller->togglePlayer(playerIndex);
 	}
-}
-
-bool PlayerView::isHuman() const{
-	return (togglePlayer.get_label() == HUMAN_LABEL);
 }
 
 void PlayerView::update() {

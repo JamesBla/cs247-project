@@ -18,7 +18,6 @@ public:
 	virtual ~PlayerView();
 	void setButton(bool sensitive, std::string text);
 	void resetLabels();
-	bool isHuman() const;
 	void update();
 	static std::string humanLabel();
 	static std::string computerLabel();
