@@ -1,16 +1,14 @@
 #include "Model.h"
-#include "View.h"
-#include "Controller.h"
 
 #include "Player.h"
 #include "Card.h"
 
 using namespace std;
 
-Player::Player(Model* model, Controller* controller, int number){
+Player::Player(Model* model, int number){
 	_playerNumber = number;
 	_model = model;
-	_controller = controller;
+	
 	_score = 0;
 	_roundScore = 0;
 	_oldScore = 0;
@@ -24,7 +22,6 @@ Player::Player(const Player& player){
 	_oldScore = player._oldScore;
 	_playerNumber = player._playerNumber;
 	_model = player._model;
-	_controller = player._controller;
 }
 
 Player::~Player() {};
@@ -71,7 +68,6 @@ void Player::discard(Card* card){
 	for (vector<Card*>::iterator it = _hand.begin(); it != _hand.end(); it++){
 		if (*(*it) == *(card)){
 			_hand.erase(it);
-			// _view->printDiscard(p, card);
 			
 			_discards.push_back(card);
 			break;
@@ -118,10 +114,6 @@ vector<Card*> Player::getLegalPlays(bool (&cardMap)[4][13]) const{
 		}
 	}
 	return legalCards;
-}
-
-Controller* Player::getController() const{
-	return _controller;
 }
 
 int Player::getDiscardedCount() const{

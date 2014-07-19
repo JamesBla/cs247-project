@@ -5,7 +5,6 @@
 
 #include "Model.h"
 #include "View.h"
-#include "Controller.h"
 
 #include "Card.h"
 
@@ -27,10 +26,6 @@ const Card* Model::sevenOfSpades(){
 
 std::vector<Card*> Model::getDeck() const{
 	return _deck;
-}
-
-void Model::setController(Controller* controller){
-	_controller = controller;
 }
 
 void Model::initializeDeck(){
@@ -66,10 +61,10 @@ void Model::computerizePlayer(Player* player){
 void Model::initializePlayers(char playerTypes[]){
 	for (int i = 0; i < 4; i++){		
 		if (playerTypes[i] == 'h'){
-			_players.push_back(new HumanPlayer(this, _controller, i+1));
+			_players.push_back(new HumanPlayer(this, i+1));
 		}
 		else{
-			_players.push_back(new ComputerPlayer(this, _controller, i+1));
+			_players.push_back(new ComputerPlayer(this, i+1));
 		}
 	}
 }

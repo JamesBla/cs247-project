@@ -172,11 +172,8 @@ void View::onEndGame(){
 	_model->cleanUp();
 }
 
-
-
 View::View(Controller* controller, Model* model) : deck(this->get_screen()->get_width()), hbox( true, 10 ), newGameButton("Start new game with seed:"), endGameButton("End current game"), 
  cardsOnTable(4, 13, true) {
-
 
 	controller->setView(this);
 	model->subscribe(this);
