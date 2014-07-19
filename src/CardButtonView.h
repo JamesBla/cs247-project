@@ -3,21 +3,16 @@
 
 #include <gtkmm/button.h>
 #include <gtkmm/image.h>
-#include <vector>
-#include <string>
 
-#include "View.h"
-
-using std::vector;
-using std::string;
-
+class Model;
 class View;
+class Controller;
 class Card;
 
 class CardButtonView : public Gtk::Button {
 public:
 
-	CardButtonView(Model*, View*, int);
+	CardButtonView(Model*, View*, Controller*, int);
 
 	void setCard(Card*, bool);
 	virtual ~CardButtonView();
@@ -28,9 +23,9 @@ private:
 	void cardButtonClicked();
 	Model* _model;
 	View* _view;
+	Controller* _controller;
 	Gtk::Image* _image;
 	Card* _currentCard;
-
 
 	int _screenWidth;
 

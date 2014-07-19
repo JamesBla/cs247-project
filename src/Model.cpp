@@ -7,7 +7,6 @@
 #include "View.h"
 
 #include "Card.h"
-
 #include "Player.h"
 #include "HumanPlayer.h"
 #include "ComputerPlayer.h"
@@ -54,8 +53,6 @@ void Model::computerizePlayer(Player* player){
 	ComputerPlayer* computerPlayer = new ComputerPlayer(*player);
 	delete player;
 	_players[playerIndex] = computerPlayer;
-	
-	playATurn(NULL);
 }
 
 void Model::initializePlayers(char playerTypes[]){
@@ -98,90 +95,33 @@ bool Model::doneGame() const{
 	return _doneGame;
 }
 
-void Model::playGame(){
-	_doneGame = false;
-	_startOfNewRound = false;
-	_roundEnded = false;
-	_roundInProgress = false;
-	_resetView = false;
-
-	playRound();
-}
-
 bool Model::beenPlayed(int rank, int suit) const{
 	return _playedCards[rank][suit];
 }
 
-void Model::playRound() {
-	notify();
-
-	clearCardsOnTable();
-	shuffle();
-	deal();
-
-	for (int i = 0; i < 4; i++){
-		_players[i]->prepForNewRound();
+void Model::updateScoreAndEndGame() {
+	for (int i = 0; i < 4; i++) {
+		_players[i]->updateScore();
+		if (_players[i]->getScore() >= 80){
+			_doneGame = true;
+		}
 	}
-
-	_curPlayer = _firstPlayer;
-
-	_roundEnded = false;
-	_startOfNewRound = true;
-	_roundInProgress = true;
-
 	notify();
-
-	_startOfNewRound = false;
-	
-	if (!_players[_curPlayer]->isHuman()){
-		playATurn(NULL);
+	_state = ROUND_ENDED;
+	notify();
+	if (_doneGame) {
+		_state = GAME_ENDED;
+		notify();
 	}
 }
 
-void Model::playATurn(Card* card){
-	// not sure why we needed this before
-	// if (_players.size() == 0) return;
+bool Model::playTurn(Card *card) {
+	return _players[_curPlayer]->playTurn(card, _playedCards);
+}
 
-	// current player has no more cards. round is done.
-	if (_players.at(_curPlayer)->getHandSize() == 0) {
-
-		_doneGame = false;
-		
-		for (int i = 0; i < 4; i++) {
-			_players[i]->updateScore();
-			if (_players[i]->getScore() >= 80){
-				_doneGame = true;
-			}
-		}
-
-		_roundEnded = true;
-		_roundInProgress = false;
-
-		notify();
-
-		_roundEnded = false;
-
-		if (!_doneGame) {
-			playRound();
-		}
-		else {
-			cleanUp();
-		}
-
-		return;
-	}
-
-	// if the play is good, go to next player
-	if (_players[_curPlayer]->playTurn(card, _playedCards)){
-		_curPlayer = (_curPlayer + 1) % 4;
-	}
-
+void Model::advanceCurrentPlayer() {
+	_curPlayer = (_curPlayer + 1) % 4;
 	notify();
-
-	// if the next player is computer or hand is empty, invoke the play
-	if (!_players[_curPlayer]->isHuman() || _players.at(_curPlayer)->getHandSize() == 0){
-		playATurn(NULL);
-	}
 }
 
 vector<Card*> Model::getLegalPlays(Player* player){
@@ -218,9 +158,9 @@ void Model::clear() {
 }
 
 void Model::cleanUp(){
-	_resetView = true;
+	_state = RESET_VIEW;
 	notify();
-	_resetView = false;
+	_state = NONE;
 
 	clearCardsOnTable();
 	
@@ -228,11 +168,6 @@ void Model::cleanUp(){
 
 	_deck.clear();
 	_players.clear();
-	_doneGame = _startOfNewRound = _roundEnded = _roundInProgress = false;
-}
-
-bool Model::resetView() const{
-	return _resetView;
 }
 
 Card* Model::findCard(Card* target) const {
@@ -252,16 +187,17 @@ Player* Model::getFirstPlayer() const {
 	return getPlayer(_firstPlayer);
 }
 
-bool Model::isStartOfNewRound() const {
-	return _startOfNewRound;
+Model::State Model::getState() const {
+	return _state;
 }
 
-bool Model::isRoundFinished() const {
-	return _roundEnded;
+void Model::setState(State state) {
+	_state = state;
+	notify();
 }
 
-bool Model::isRoundInProgress() const {
-	return _roundInProgress;
+void Model::setCurrentPlayer(int playerIndex) {
+	_curPlayer = playerIndex;
 }
 
 Player* Model::getCurrentPlayer() const{
@@ -271,6 +207,11 @@ Player* Model::getCurrentPlayer() const{
 int Model::getPlayerScore(int playerIndex) const{
 	if (_players.empty()) return 0;
 	return _players.at(playerIndex)->getScore();
+}
+
+int Model::getPlayerCurrentRoundScore(int playerIndex) const{
+	if (_players.empty()) return 0;
+	return _players.at(playerIndex)->getRoundScore();
 }
 
 int Model::getPlayerDiscardedCount(int playerIndex) const{

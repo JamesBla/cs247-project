@@ -68,18 +68,14 @@ void Player::discard(Card* card){
 	for (vector<Card*>::iterator it = _hand.begin(); it != _hand.end(); it++){
 		if (*(*it) == *(card)){
 			_hand.erase(it);
-			
 			_discards.push_back(card);
+			_roundScore += card->getRank() + 1;
 			break;
 		}
 	}
 }
 
 void Player::updateScore(){
-	for (unsigned int i = 0; i < _discards.size(); i++){
-		_roundScore += (_discards[i]->getRank() + 1);
-	}
-
 	_oldScore = _score;
 	_score = _oldScore + _roundScore;
 }

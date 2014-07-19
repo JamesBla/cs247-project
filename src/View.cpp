@@ -9,6 +9,7 @@
 #include <gtkmm/entry.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/table.h>
+#include <iostream>
 
 #include "Model.h"
 #include "View.h"
@@ -21,7 +22,8 @@
 using namespace std;
 
 void View::update() {
-	if (_model->resetView()){
+	cout << "State is " << _model->getState() << endl;
+	if (_model->getState() == Model::RESET_VIEW){
 		frame.set_label( "Cards in your hand:" );
 		set_title("Straights UI");
 		setHandView(NULL, NULL);
@@ -42,10 +44,11 @@ void View::update() {
 		return;
 	}
 
-	if (_model->isStartOfNewRound()) {
+	if (_model->getState() == Model::ROUND_STARTED) {
 
 		for (int i = 0; i < 4; i++){
 			playerViews[i]->setButton(false, PlayerView::rageLabel());
+			playerViews[i]->update();
 		}
 
 		string playerNumString = intToString(_model->getFirstPlayer()->getNumber());
@@ -54,7 +57,7 @@ void View::update() {
 		showDialogue("", message);
 	}
 
-	if (_model->isRoundFinished()) {
+	if (_model->getState() == Model::ROUND_ENDED) {
 
 		for (int i = 0; i < 4; i++) {
 			playerViews[i]->update();
@@ -85,7 +88,7 @@ void View::update() {
 		showDialogue("End of Round", message);
 	}
 
-	if (_model->doneGame()){
+	if (_model->getState() == Model::GAME_ENDED){
 		vector<Player*> winners = _model->getWinners();
 		string message = "";
 		for (unsigned int i = 0; i < winners.size(); i++){
@@ -95,8 +98,12 @@ void View::update() {
   		return;
 	}	
 
-	if (_model->isRoundInProgress()) {
+	if (_model->getState() == Model::IN_PROGRESS) {
 		int playerNum = _model->getCurrentPlayer()->getNumber();
+
+		for (int i = 0; i < 4; i++){
+			playerViews[i]->update();
+		}
 
 		if (_model->getCurrentPlayer()->isHuman()){
 			vector<Card*> curHand = _model->getCurrentPlayer()->getHand();
@@ -215,7 +222,7 @@ newGameButton("Start new game with seed:"), endGameButton("End current game"),
 	cardsOnTableFrame.add(cardsOnTable);
 
 	for (int i = 0; i < 4; i++) {
-		playerViews[i] = new PlayerView(i+1, _model, this);
+		playerViews[i] = new PlayerView(i+1, _model, this, _controller);
 		playersContainer.pack_start(*playerViews[i]);
 	}
 
@@ -229,7 +236,7 @@ newGameButton("Start new game with seed:"), endGameButton("End current game"),
 	frame.add( hbox );
 
 	for (int i = 0; i < 13; i++ ) {
-		cardButtonViews[i] = new CardButtonView(_model, this, screenWidth);
+		cardButtonViews[i] = new CardButtonView(_model, this, _controller, screenWidth);
 
 		hbox.add( *cardButtonViews[i] );
 	}

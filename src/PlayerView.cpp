@@ -1,6 +1,7 @@
 #include "PlayerView.h"
 #include "Model.h"
 #include "View.h"
+#include "Controller.h"
 
 #include <gtkmm/box.h>
 #include <gtkmm/button.h>
@@ -34,7 +35,8 @@ void PlayerView::resetLabels(){
 	discards.set_label("0 discards");
 }
 
-PlayerView::PlayerView(int playerNumber, Model* model, View* view) : playerIndex(playerNumber-1), _model(model), _view(view), togglePlayer("Human"), points("0 points"), discards("0 discards") {
+PlayerView::PlayerView(int playerNumber, Model* model, View* view, Controller* controller) : playerIndex(playerNumber-1),
+ _model(model), _view(view), _controller(controller), togglePlayer("Human"), points("0 points"), discards("0 discards") {
 	// required because ustring cannot append int directly
 	Glib::ustring playerNumberStr = _view->intToString(playerNumber);
 
@@ -55,13 +57,9 @@ PlayerView::~PlayerView() {
 
 void PlayerView::onClick(){
 	if (togglePlayer.get_label() == RAGE_LABEL){
-		//tricky business
-		
 		setButton(false, RAGE_LABEL);
 		_view->setHandView(NULL, NULL);
-
-		_model->computerizePlayer(_model->getCurrentPlayer());
-		
+		_controller->computerizePlayer();
 	}
 	else {
 		togglePlayer.set_label( (togglePlayer.get_label() == HUMAN_LABEL) ? COMPUTER_LABEL : HUMAN_LABEL );
@@ -73,8 +71,11 @@ bool PlayerView::isHuman() const{
 }
 
 void PlayerView::update() {
-	int newScore = _model->getPlayerScore(playerIndex);
+	int score = _model->getPlayerScore(playerIndex);
+	if (_model->getState() == Model::IN_PROGRESS) {
+		score += _model->getPlayerCurrentRoundScore(playerIndex);
+	}
 	int newDiscardsCount = _model->getPlayerDiscardedCount(playerIndex);
-	points.set_label(_view->intToString(newScore) + " points");
+	points.set_label(_view->intToString(score) + " points");
 	discards.set_label(_view->intToString(newDiscardsCount) + " discards");
 }

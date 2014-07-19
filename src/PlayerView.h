@@ -10,10 +10,11 @@
 
 class Model;
 class View;
+class Controller;
 
 class PlayerView : public Gtk::Frame {
 public:
-	PlayerView(int, Model*, View*);
+	PlayerView(int, Model*, View*, Controller*);
 	virtual ~PlayerView();
 	void setButton(bool sensitive, std::string text);
 	void resetLabels();
@@ -26,6 +27,7 @@ private:
 	int playerIndex;
 	Model* _model;
 	View* _view;
+	Controller* _controller;
 	Gtk::VBox container;
 	Gtk::Button togglePlayer;
 	Gtk::Label points;

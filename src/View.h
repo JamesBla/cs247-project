@@ -35,8 +35,6 @@ public:
 	Glib::RefPtr<Gdk::Pixbuf> getCardImage(Rank r, Suit s) const;
 
 	bool getPlayerType(int) const; // true if human, false if computer
-	
-	void showDialogue(std::string, std::string);
 	void setHandView(std::vector<Card*> *, std::vector<Card*> *);
 	void setPlayedCardsView(bool clear);
 	std::string intToString(int);
@@ -48,6 +46,8 @@ private:
 	 //Signal handlers:
   	virtual void onNewGame();
   	virtual void onEndGame();
+
+  	void showDialogue(std::string, std::string);
 
 	DeckGUI                         deck;             // Knows all of the card pixel buffers.
 	Glib::RefPtr<Gdk::Pixbuf> nullCardPixbuf;

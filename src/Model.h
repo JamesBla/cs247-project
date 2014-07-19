@@ -13,10 +13,11 @@ class Card;
 
 class Model : public Subject{
 public:
-	~Model();
+	virtual ~Model();
+
+	enum State { NONE, ROUND_STARTED, IN_PROGRESS, ROUND_ENDED, GAME_ENDED, RESET_VIEW };
 
 	void initializePlayers(char[]);
-	void playGame();
 	void initializeDeck();
 	void shuffle();
 	void deal();
@@ -28,17 +29,6 @@ public:
 	Card* findCard(Card*) const;
 	std::vector<Player*> getWinners() const;
 	static const Card* sevenOfSpades();
-	bool isStartOfNewRound() const;
-	bool isRoundInProgress() const;
-	bool isRoundFinished() const;
-	Player* getFirstPlayer() const;
-	Player* getCurrentPlayer() const;
-	Player* getPlayer(int) const;
-	int getPlayerScore(int) const;
-	int getPlayerDiscardedCount(int) const;
-	std::vector<Card*> getDiscardedCards(int) const;
-
-	void playATurn(Card* card);
 	bool beenPlayed(int rank, int suit) const;
 
 	void clear();
@@ -46,6 +36,24 @@ public:
 	bool doneGame() const;
 
 	std::vector<Card*> getLegalPlays(Player*);
+
+	// Accessors
+	State getState() const;
+	Player* getFirstPlayer() const;
+	Player* getCurrentPlayer() const;
+	Player* getPlayer(int) const;
+	int getPlayerScore(int) const;
+	int getPlayerCurrentRoundScore(int) const;
+	int getPlayerDiscardedCount(int) const;
+	std::vector<Card*> getDiscardedCards(int) const;
+
+	// Modifiers
+	void setState(State state);
+	void setCurrentPlayer(int);
+
+	void updateScoreAndEndGame();
+	bool playTurn(Card*);
+	void advanceCurrentPlayer();
 
 private:
 	static const Card SEVEN_OF_SPADES;
@@ -55,11 +63,7 @@ private:
 	int _firstPlayer;
 	int _curPlayer;
 	bool _playedCards[4][13];
-	void playRound();
-	bool _startOfNewRound;
-	bool _roundInProgress;
-	bool _roundEnded;
-	bool _resetView;
+	State _state;
 	bool _doneGame;
 };
 

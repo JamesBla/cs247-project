@@ -3,15 +3,18 @@
 #include <algorithm>
 #include <iterator>
 #include <string>
+#include <vector>
 
 #include "CardButtonView.h"
 #include "Card.h"
 #include "Model.h"
+#include "View.h"
+#include "Controller.h"
 
 using namespace std;
 
-CardButtonView::CardButtonView(Model* model, View* view, int width) : _model(model), _view(view),
-_screenWidth(width) {
+CardButtonView::CardButtonView(Model* model, View* view, Controller* controller, int width) : _model(model), _view(view),
+_controller(controller), _screenWidth(width) {
 	const Glib::RefPtr<Gdk::Pixbuf> nullCardPixbuf = _view->getNullCardImage();
 
 	signal_clicked().connect( sigc::mem_fun( *this, &CardButtonView::cardButtonClicked ) );
@@ -23,7 +26,7 @@ _screenWidth(width) {
 }
 
 void CardButtonView::cardButtonClicked() {
-	_model->playATurn(_currentCard);
+	_controller->playATurn(_currentCard);
 }
 
 void CardButtonView::mouseEnter(){
