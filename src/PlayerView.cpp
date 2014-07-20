@@ -27,6 +27,7 @@ string PlayerView::rageLabel(){
 	return RAGE_LABEL;
 }
 
+// set button with label and sensitivity
 void PlayerView::setButton(bool sensitive, string text){
 	togglePlayer.set_sensitive(sensitive);
 	togglePlayer.set_label(text);
@@ -48,8 +49,10 @@ PlayerView::PlayerView(int playerNumber, Model* model, View* view, Controller* c
 	container.pack_end(discards);
 	add(container);
 
+	// sets button label based on player type in model
 	(_model->getPlayerType(playerNumber-1) == 'h') ? setButton(true, HUMAN_LABEL) : setButton(true, COMPUTER_LABEL);
 
+	// connect click event to event handler
 	togglePlayer.signal_clicked().connect( sigc::mem_fun( *this, &PlayerView::onClick ) );
 }
 
@@ -57,19 +60,23 @@ PlayerView::~PlayerView() {
 
 }
 
+// click handler
 void PlayerView::onClick(){
 	if (togglePlayer.get_label() == RAGE_LABEL){
+		// if ragequit is clicked, computerize player
 		setButton(false, RAGE_LABEL);
 		_view->setHandView(NULL, NULL);
 		_controller->computerizePlayer(playerIndex);
 	}
 	else {
+		// otherwise toggles label
 		togglePlayer.set_label( (togglePlayer.get_label() == HUMAN_LABEL) ? COMPUTER_LABEL : HUMAN_LABEL );
 		_controller->togglePlayer(playerIndex);
 	}
 }
 
-void PlayerView::update() {
+// refreshes the view
+void PlayerView::refresh() {
 	int score = _model->getPlayerScore(playerIndex);
 	if (_model->getState() == Model::IN_PROGRESS) {
 		score += _model->getPlayerCurrentRoundScore(playerIndex);

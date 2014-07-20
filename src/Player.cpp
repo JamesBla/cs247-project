@@ -9,8 +9,9 @@
 
 using namespace std;
 
+// constructor used for making player from gamesave
 Player::Player(Model* model, int score, int roundScore, int oldScore, int number, 
-		std::vector<Card*> hand, std::vector<Card*> discards){
+		vector<Card*> hand, std::vector<Card*> discards){
 	_playerNumber = number;
 	_model = model;
 	_score = score;
@@ -20,6 +21,7 @@ Player::Player(Model* model, int score, int roundScore, int oldScore, int number
 	_discards = discards;
 }
 
+// constructor for making a fresh player
 Player::Player(Model* model, int number){
 	_playerNumber = number;
 	_model = model;
@@ -28,6 +30,7 @@ Player::Player(Model* model, int number){
 	_oldScore = 0;
 }
 
+// copy-constructor
 Player::Player(const Player& player){
 	_hand = player._hand;
 	_discards = player._discards;
@@ -60,6 +63,7 @@ int Player::getNumber() const{
 	return _playerNumber;
 }
 
+// adds card to hand
 void Player::addCard(Card* card){
 	_hand.push_back(card);
 }
@@ -68,7 +72,8 @@ vector<Card*> Player::getHand() const{
 	return _hand;
 }
 
-void Player::playCard(Card* card){ //play card by value
+// plays the card passed in
+void Player::playCard(Card* card){
 	for (vector<Card*>::iterator it = _hand.begin(); it != _hand.end(); it++){
 		if (*(*it) == *(card)){
 			_hand.erase(it);
@@ -78,6 +83,7 @@ void Player::playCard(Card* card){ //play card by value
 	}
 }
 
+// discards the card passed in from the hand
 void Player::discard(Card* card){
 	for (vector<Card*>::iterator it = _hand.begin(); it != _hand.end(); it++){
 		if (*(*it) == *(card)){
@@ -89,16 +95,19 @@ void Player::discard(Card* card){
 	}
 }
 
+// updates the score
 void Player::updateScore(){
 	_oldScore = _score;
 	_score = _oldScore + _roundScore;
 }
 
+// cleans deck and score for new round
 void Player::prepForNewRound(){
 	_discards.clear();
 	_roundScore = 0;
 }
 
+// returns TRUE if card can be played
 bool Player::playable(Card* card, bool (&cardMap)[4][13]) const{
 	int rank = card->getRank();
 	int suit = card->getSuit();
@@ -110,8 +119,8 @@ bool Player::playable(Card* card, bool (&cardMap)[4][13]) const{
 	return false;
 }
 
+// populate legal plays
 vector<Card*> Player::getLegalPlays(bool (&cardMap)[4][13]) const{
-	// populate legal plays
 	vector<Card*> legalCards;
 	for (unsigned int i = 0; i < _hand.size(); i++){
 		if (playable(_hand[i], cardMap)){
@@ -134,6 +143,7 @@ vector<Card*> Player::getDiscarded() const{
 	return _discards;
 }
 
+// streaming operator for exporting player to gamesave
 ostream &operator<<(ostream &out, const Player &p){
 	out << p.getScore() << endl;
 	out << p.getRoundScore() << endl;

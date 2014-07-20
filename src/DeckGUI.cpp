@@ -29,21 +29,16 @@ const char * image_names[] = {
 
 // Loads the image from the specified file name into a pixel buffer.
 Glib::RefPtr<Gdk::Pixbuf> createPixbuf(const string & name, int screenWidth) {
-	// int screenWidth = gtk_widget_get_screen(this)->get_width();
+	// dynamically size cards according to screen width
 	int cardWidth = screenWidth / 30;
 	return Gdk::Pixbuf::create_from_file( name )->scale_simple(cardWidth, (int)(cardWidth/0.69), Gdk::INTERP_BILINEAR);
 }
 
 DeckGUI::DeckGUI(int width)  {
+	
 	_screenWidth = width;
-	// cout << "width is " << width << endl;
-	// Images can only be loaded once the main window has been initialized, so cannot be done as a static
-	// constant array. Instead, use the STL transform algorithm to apply the method createPixbuf to every
-	// element in the array of image names, starting with first and ending with the last. New elements are
-	// added to the back of deck.
-	// transform( &image_names[0], &image_names[G_N_ELEMENTS(image_names)], 
-	// 		   std::back_inserter(_deck), &createPixbuf );
 
+	// we create a pixbuf from each png file and add it to our deck
 	for (unsigned int i = 0; i < G_N_ELEMENTS(image_names); i++){
 		string imgName = std::string(image_names[i]);
 		_deck.push_back(createPixbuf(imgName,_screenWidth));
@@ -66,11 +61,13 @@ Glib::RefPtr<Gdk::Pixbuf> DeckGUI::getNullCardImage() const {
 	return _deck[ size-3 ];
 }
 
+// overlay for a play
 Glib::RefPtr<Gdk::Pixbuf> DeckGUI::getPlayOverlay() const {
 	int size = _deck.size();
 	return _deck[ size-2 ];
 }
 
+// overlay for a discard
 Glib::RefPtr<Gdk::Pixbuf> DeckGUI::getDiscardOverlay() const {
 	int size = _deck.size();
 	return _deck[ size-1 ];

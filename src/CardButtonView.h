@@ -14,13 +14,13 @@ public:
 
 	CardButtonView(Model*, View*, Controller*, int);
 
-	void setCard(Card*, bool);
+	void setCard(Card*, bool);		// sets the card represented by this view
 	virtual ~CardButtonView();
 
 private:
-	void mouseEnter();
+	void mouseEnter();				// handlers for mouseover effect
 	void mouseLeave();
-	void cardButtonClicked();
+	void cardButtonClicked();   	// click handler
 	Model* _model;
 	View* _view;
 	Controller* _controller;

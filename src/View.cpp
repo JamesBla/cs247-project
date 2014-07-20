@@ -1,14 +1,6 @@
 #include <sstream>
 #include <string>
 #include <vector>
-#include <gtkmm/window.h>
-#include <gtkmm/messagedialog.h>
-#include <gtkmm/image.h>
-#include <gtkmm/box.h>
-#include <gtkmm/button.h>
-#include <gtkmm/entry.h>
-#include <gtkmm/frame.h>
-#include <gtkmm/table.h>
 #include <gtkmm.h>
 #include <iostream>
 
@@ -26,6 +18,7 @@ View::View(Controller* controller, Model* model) : _controller(controller), _mod
 deck((get_screen()->get_width() > 1600) ? 1600 : get_screen()->get_width()), hbox( true, 10 ), 
 newGameButton("Start new game with seed:"), endGameButton("End current game"), 
  cardsOnTable(4, 13, true) {
+ 	// dual monitor hack
  	int screenWidth = (get_screen()->get_width() > 1600) ? 1600 : get_screen()->get_width();
 
 	_model->subscribe(this);
@@ -33,9 +26,11 @@ newGameButton("Start new game with seed:"), endGameButton("End current game"),
 	nullCardPixbuf = deck.getNullCardImage();
 
 	set_title("Straights UI");
+
 	// Sets the border width of the window.
 	set_border_width( 10 );
 
+	// creates menu
 	Glib::RefPtr<Gtk::ActionGroup> m_refActionGroup = Gtk::ActionGroup::create();
 	m_refActionGroup->add( Gtk::Action::create("MenuFile", "_File") );
 	m_refActionGroup->add( Gtk::Action::create("Open", Gtk::Stock::OPEN),
@@ -48,7 +43,7 @@ newGameButton("Start new game with seed:"), endGameButton("End current game"),
 	m_refActionGroup->add( Gtk::Action::create("About", Gtk::Stock::ABOUT),
 	  sigc::mem_fun(*this, &View::onActionHelpAbout) );
 
-  	//Define how the actions are presented in the menus and toolbars:
+  	// Define how the actions are presented in the menus and toolbars:
  	Glib::RefPtr<Gtk::UIManager> m_refUIManager = Gtk::UIManager::create();
  	m_refUIManager->insert_action_group(m_refActionGroup);
   	add_accel_group(m_refUIManager->get_accel_group());
@@ -69,8 +64,8 @@ newGameButton("Start new game with seed:"), endGameButton("End current game"),
 
 	m_refUIManager->add_ui_from_string(ui_info);
 	Gtk::Widget* pMenubar = m_refUIManager->get_widget("/MenuBar");
-	//pBox->add(*pMenuBar, Gtk::PACK_SHRINK);
 
+	// orders containers in main window
 	topContainer.pack_start(*pMenubar);
 	topContainer.pack_start(toolbar);
 	topContainer.pack_start(cardsOnTableFrame);
@@ -81,6 +76,7 @@ newGameButton("Start new game with seed:"), endGameButton("End current game"),
 	toolbar.pack_start(seedEntry);
 	toolbar.pack_end(endGameButton);
 
+	// builds UI for new game, seed entry, and end game
 	newGameButton.signal_clicked().connect( sigc::mem_fun( *this, &View::onNewGame ) );
 	seedEntry.set_text(intToString(_model->getSeed()));
 	
@@ -89,6 +85,7 @@ newGameButton("Start new game with seed:"), endGameButton("End current game"),
 	
 	endGameButton.signal_clicked().connect( sigc::mem_fun( *this, &View::onEndGame ) );
 
+	// builds UI for cards on table
 	cardsOnTableFrame.set_label("Cards on the table");
 	cardsOnTable.set_row_spacings(5);
 	for (int i = 0; i < 4; i++) {
@@ -100,6 +97,7 @@ newGameButton("Start new game with seed:"), endGameButton("End current game"),
 
 	cardsOnTableFrame.add(cardsOnTable);
 
+	// builds UI for player views
 	for (int i = 0; i < 4; i++) {
 		playerViews[i] = new PlayerView(i+1, _model, this, _controller);
 		playersContainer.pack_start(*playerViews[i]);
@@ -124,6 +122,7 @@ newGameButton("Start new game with seed:"), endGameButton("End current game"),
 	show_all();
 }
 
+// updates the views based on which state the model is in
 void View::update() {
 	if (_model->getState() == Model::BAD_SAVEFILE){
 		showDialogue("Error", "Invalid savefile");
@@ -151,7 +150,7 @@ void View::update() {
 
 		for (int i = 0; i < 4; i++){
 			playerViews[i]->setButton(false, PlayerView::rageLabel());
-			playerViews[i]->update();
+			playerViews[i]->refresh();
 		}
 
 		string playerNumString = intToString(_model->getFirstPlayer()->getNumber());
@@ -162,7 +161,7 @@ void View::update() {
 	else if (_model->getState() == Model::ROUND_ENDED) {
 
 		for (int i = 0; i < 4; i++) {
-			playerViews[i]->update();
+			playerViews[i]->refresh();
 		}
 
 		setPlayedCardsView(false);
@@ -202,7 +201,7 @@ void View::update() {
 		int playerNum = _model->getCurrentPlayer()->getNumber();
 
 		for (int i = 0; i < 4; i++){
-			playerViews[i]->update();
+			playerViews[i]->refresh();
 		}
 
 		if (_model->getCurrentPlayer()->isHuman()){
@@ -227,12 +226,14 @@ void View::update() {
 	}	
 }
 
+// show dialog
 void View::showDialogue(string title, string message){
 	Gtk::MessageDialog dialogue(*this, title);
   	dialogue.set_secondary_text(message);
   	dialogue.run();
 }
 
+// sets the view of the hand
 void View::setHandView(vector<Card*> * hand, vector<Card*> * legalPlays){
 	for (unsigned int i = 0; i < 13; i++){
 		bool cardExists = hand && i < hand->size();
@@ -257,6 +258,7 @@ void View::setHandView(vector<Card*> * hand, vector<Card*> * legalPlays){
 	}
 }
 
+// sets the player views
 void View::setPlayedCardsView(bool clear){
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 13; j++) {
@@ -268,6 +270,8 @@ void View::setPlayedCardsView(bool clear){
 	}
 }
 
+// bind seed model with the seed in the entry box so whenever the seed is changed it gets
+// updated in the model
 void View::onSeedInput(){
 	_controller->setSeed(atoi(static_cast<string>(seedEntry.get_text()).c_str()));
 }
@@ -280,6 +284,7 @@ void View::onEndGame(){
 	_controller->endGame();
 }
 
+// destructor for the view
 View::~View() {
 	for (int i = 0; i < 13; i++ ) {
 		if (!card[i])
@@ -312,12 +317,14 @@ Glib::RefPtr<Gdk::Pixbuf> View::getCardImage(Rank r, Suit s) const {
 	return deck.getCardImage(r, s);
 }
 
+// helper method for converting integer to string
 string View::intToString(int n) {
 	ostringstream ostr;
 	ostr << n;
 	return ostr.str();
 }
 
+// opens the file chooser dialog
 int View::showFileChooser(Gtk::FileChooserDialog& dialog, Gtk::BuiltinStockID stockId) {
 	dialog.set_transient_for(*this);
 	//Add response buttons the the dialog:
@@ -340,10 +347,12 @@ int View::showFileChooser(Gtk::FileChooserDialog& dialog, Gtk::BuiltinStockID st
 	return dialog.run();
 }
 
+// handler for quit
 void View::onActionFileQuit() {
 	hide();
 }
 
+// handler for opening a gamesave file
 void View::onActionFileOpen() {
 	Gtk::FileChooserDialog dialog("Please choose a file", Gtk::FILE_CHOOSER_ACTION_OPEN);
 
@@ -364,6 +373,7 @@ void View::onActionFileOpen() {
 	}
 }
 
+// handler for saving a gamesave file
 void View::onActionFileSave() {
 	if (_model->getState() != Model::NONE && _model->getState() != Model::GAME_ENDED && _model->getState() != Model::RESET_VIEW) {
 		Gtk::FileChooserDialog dialog("Please choose a file", Gtk::FILE_CHOOSER_ACTION_SAVE);
@@ -385,6 +395,7 @@ void View::onActionFileSave() {
 	}
 }
 
+// show dialog for about dialog
 void View::onActionHelpAbout() {
 	string mainMsg = "About";
 	string secondaryMsg = "Ron Meng and Michael Tu\nCopyright \u00A9 2014\n";

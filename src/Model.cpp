@@ -32,7 +32,7 @@ Model::Model() : _seed(0) {
 	}
 }
 
-// initializes players using playersTypes
+// initializes players using playerTypes
 void Model::initializePlayers() {
 	
 	for (int i = 0; i < 4; i++){
@@ -127,8 +127,9 @@ void Model::advanceCurrentPlayer() {
 	// go to next player
 	_curPlayer = (_curPlayer + 1) % 4;
 
-	// notifies the view so as to possible update HandViews et. al.
-	notify();
+	// notifies the view for HumanPlayer so as to possible update HandViews et. al.
+	if (_playerTypes[_curPlayer] == 'h')
+		notify();
 }
 
 void Model::setState(State state) {
@@ -149,14 +150,20 @@ void Model::setPlayerType(int playerIndex, char type) {
 }
 
 void Model::cleanUp(){
+
+	// puts the model in the cleanup state
 	_state = RESET_VIEW;
 	notify();
 	_state = NONE;
 
+	// remove cards from table
 	clearCardsOnTable();
 
+	// deallocate cards and players
 	deleteCardsAndPlayers();
 
+	// clear our deck and player vectors to make
+	// room for new pointers
 	_deck.clear();
 	_players.clear();
 }
@@ -183,6 +190,8 @@ Model::~Model(){
 	deleteCardsAndPlayers();
 }
 
+// returns pointers to the card in the deck equal
+// to the target
 Card* Model::getCard(Card* target) const {
 	for (unsigned int i = 0; i < _deck.size(); i++) {
 		if (*target == *(_deck[i])){
@@ -192,10 +201,12 @@ Card* Model::getCard(Card* target) const {
 	return NULL;
 }
 
+// returns true iff card is on the table
 bool Model::beenPlayed(Card* c) const{
 	return _playedCards[c->getSuit()][c->getRank()];
 }
 
+// gets all players with minimum score
 vector<Player*> Model::getWinners() const{
 	int minScore = 1337;
 	vector<Player*> winners;
@@ -215,6 +226,7 @@ vector<Player*> Model::getWinners() const{
 	return winners;
 }
 
+// get current legal plays for a player
 vector<Card*> Model::getLegalPlays(Player* player){
 	return player->getLegalPlays(_playedCards);
 }
@@ -267,17 +279,24 @@ char Model::getPlayerType(int playerIndex) const{
 }
 
 const string Model::_key = "MICHAELTU_RONMENG";
+
+// used to verify gamesave file format
 const string Model::_fileFormatSignature = "StraightsFormat";
 
+// returns hashed string, also dehashes string.
+// since this function is its own inverse
 string Model::MichaelRonHash(string input){
 	for (int i = 0; i < input.length(); i++){
-		input[i] ^= ~(_key[ i% (_key.length()) ]); // crappy XOR "encryption"
+		input[i] ^= ~(_key[ i% (_key.length()) ]);
 	}
 	return input;
 }
 
+// saves all data in model to a file (hashed output)
 void Model::exportModel(ofstream& file) {
 	ostringstream oss;
+
+	// append output with file format signature
 	oss << _fileFormatSignature << endl;
 	oss << _seed << endl;
 	oss << _state << endl;
@@ -298,24 +317,31 @@ void Model::exportModel(ofstream& file) {
 		oss << "player\n";
 		oss << *(_players[i]);
 	}
+	// hash the string
 	file << MichaelRonHash(oss.str());
 }
 
+// imports model from hashed file
 void Model::importModel(ifstream& file) {
 	std::string str((std::istreambuf_iterator<char>(file)),
                  std::istreambuf_iterator<char>());
 
 	istringstream iss;
-	
+
+	// un-hash the string
 	iss.str(MichaelRonHash(str));
 
 	string signatureCheck;
 
 	iss >> signatureCheck;
+
+	// if the first token is not our signature,
+	// then the savefile is invalid
 	if (signatureCheck != _fileFormatSignature){
 		setState(Model::BAD_SAVEFILE);
 		return;
 	}
+	
 	iss >> _seed;
 	
 	int state;

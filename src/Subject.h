@@ -7,11 +7,11 @@ class Observer;
 
 class Subject{
 public:
-	void subscribe(Observer*);
-	void unsubscribe(Observer*);
+	void subscribe(Observer*);			// subscribes an observer
+	void unsubscribe(Observer*);		// unsubscribes an observer
 
 protected:
-	void notify();
+	void notify();						// notify observers that model changed
 
 private:
 	std::set<Observer*> _observers;

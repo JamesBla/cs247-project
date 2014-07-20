@@ -13,6 +13,7 @@ HumanPlayer::HumanPlayer(Model* model, int score, int roundScore, int oldScore, 
 
 HumanPlayer::HumanPlayer(Model* model, int number) : Player(model, number){}
 
+// plays card if card is a legal play, discards card selected if there are no legal plays
 bool HumanPlayer::playTurn(Card* card, bool (&cardMap)[4][13]){
 	vector<Card*> hand = getHand();
 	vector<Card*> legalPlays = getLegalPlays(cardMap);

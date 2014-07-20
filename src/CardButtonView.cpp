@@ -17,6 +17,7 @@ CardButtonView::CardButtonView(Model* model, View* view, Controller* controller,
 _controller(controller), _screenWidth(width) {
 	const Glib::RefPtr<Gdk::Pixbuf> nullCardPixbuf = _view->getNullCardImage();
 
+	// connect events with event handlers
 	signal_clicked().connect( sigc::mem_fun( *this, &CardButtonView::cardButtonClicked ) );
 	signal_enter().connect( sigc::mem_fun( *this, &CardButtonView::mouseEnter ) );
 	signal_leave().connect( sigc::mem_fun( *this, &CardButtonView::mouseLeave ) );
@@ -31,14 +32,16 @@ void CardButtonView::cardButtonClicked() {
 
 void CardButtonView::mouseEnter(){
 	if (get_sensitive()){
-		// violates Demeter?
+		// determines if card should be played or discarded
 		bool isPlay = _model->getLegalPlays(_model->getCurrentPlayer()).size() > 0;
-			
+
+		// create copy of pixbuf in deck to work with
 		Glib::RefPtr<Gdk::Pixbuf> cardPixbuf = 
 				_view->getCardImage(_currentCard->getRank(), _currentCard->getSuit())->copy();
 
 		Glib::RefPtr<Gdk::Pixbuf> overlay;
 
+		// determines the overlay
 		if (isPlay){
 			overlay = _view->getPlayOverlay(); 
 		}
@@ -49,6 +52,7 @@ void CardButtonView::mouseEnter(){
 		int cardWidth = _screenWidth / 30;
 		int cardHeight = (int)(cardWidth/0.69);
 
+		// create and display overlay
 		overlay->composite(cardPixbuf, 0, 0, cardWidth, cardHeight,
 				 0, 0, 1, 1, Gdk::INTERP_BILINEAR, 255);
 
@@ -58,6 +62,7 @@ void CardButtonView::mouseEnter(){
 	}
 }
 
+// restores card image on mouse leave event (remove overlay)
 void CardButtonView::mouseLeave(){
 	if (get_sensitive()){
 		const Glib::RefPtr<Gdk::Pixbuf> cardPixbuf = 
@@ -73,6 +78,7 @@ CardButtonView::~CardButtonView() {
 	delete _image;
 }
 
+// sets the card represented by the view and whether it should be enabled
 void CardButtonView::setCard(Card* card, bool enable) {
 	_currentCard = card;
 

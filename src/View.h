@@ -3,13 +3,6 @@
 
 #include <string>
 #include <vector>
-#include <gtkmm/window.h>
-#include <gtkmm/image.h>
-#include <gtkmm/box.h>
-#include <gtkmm/button.h>
-#include <gtkmm/entry.h>
-#include <gtkmm/frame.h>
-#include <gtkmm/table.h>
 #include <gtkmm.h>
 
 #include "Card.h"
@@ -29,40 +22,38 @@ class View : public Gtk::Window, public Observer {
 public:
 	View(Controller*, Model*);
 	virtual ~View();
-	void update();
-	void onActionFileQuit();
+	void update();													// updates view based on model state
+	void onActionFileQuit();										// event handlers
 	void onActionFileSave();
 	void onActionFileOpen();
 	void onActionHelpAbout();
-	Glib::RefPtr<Gdk::Pixbuf> getNullCardImage() const;
+	Glib::RefPtr<Gdk::Pixbuf> getNullCardImage() const;				// pixbufs for card images and overlays
 	Glib::RefPtr<Gdk::Pixbuf> getPlayOverlay() const;
 	Glib::RefPtr<Gdk::Pixbuf> getDiscardOverlay() const;
 	Glib::RefPtr<Gdk::Pixbuf> getCardImage(Rank r, Suit s) const;
 
-	void setHandView(std::vector<Card*> *, std::vector<Card*> *);
-	void setPlayedCardsView(bool clear);
-	std::string intToString(int);
+	void setHandView(std::vector<Card*> *, std::vector<Card*> *);	// sets the view of the hand
+	void setPlayedCardsView(bool clear);							// sets the view of cards that are played
+	std::string intToString(int);									// method for converting int to string
 
 private:
 	Controller* _controller;
 	Model* _model;
 
-	 //Signal handlers:
-  	virtual void onNewGame();
+  	virtual void onNewGame();										// signal handlers
   	virtual void onEndGame();
   	virtual void onSeedInput();
 
-  	void showDialogue(std::string, std::string);
-  	int showFileChooser(Gtk::FileChooserDialog&, Gtk::BuiltinStockID);
+  	void showDialogue(std::string, std::string);						// show dialog
+  	int showFileChooser(Gtk::FileChooserDialog&, Gtk::BuiltinStockID);	// show file chooser
 
-	DeckGUI                         deck;             // Knows all of the card pixel buffers.
+	DeckGUI deck;             										// Knows all of the card pixel buffers.
 	Glib::RefPtr<Gdk::Pixbuf> nullCardPixbuf;
 	
-	// Member widgets:
-	Gtk::Image                    * card[13];          // Images to display.
-	Gtk::Button                     button;           // Button that will hold an image.
-	Gtk::HBox                       hbox;             // Horizontal box for aligning widgets in the window.
-	Gtk::Frame                      frame;            // Create a nice framed border for the box.
+	Gtk::Image * card[13];       								    // Images to display.
+	Gtk::Button button;     								        // Button that will hold an image.
+	Gtk::HBox hbox;       									        // Horizontal box for aligning widgets in the window.
+	Gtk::Frame frame;       								        // Create a nice framed border for the box.
 
 	Gtk::VBox topContainer;
 

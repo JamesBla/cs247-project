@@ -16,9 +16,9 @@ class PlayerView : public Gtk::Frame {
 public:
 	PlayerView(int, Model*, View*, Controller*);
 	virtual ~PlayerView();
-	void setButton(bool sensitive, std::string text);
-	void resetLabels();
-	void update();
+	void setButton(bool sensitive, std::string text);	// sets button in this view
+	void resetLabels();									// reset labels
+	void refresh();										// update this view
 	static std::string humanLabel();
 	static std::string computerLabel();
 	static std::string rageLabel();
@@ -35,7 +35,7 @@ private:
 	static const std::string COMPUTER_LABEL;
 	static const std::string RAGE_LABEL;
 
-	void onClick();
+	void onClick();										// click handler for button
 };
 
 #endif

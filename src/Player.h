@@ -11,14 +11,15 @@ class Card;
 
 class Player{
 public:
-	Player(Model*, int);
+	Player(Model*, int);										// Standard constructor
 	virtual ~Player();
-	Player(const Player&);
+	Player(const Player&);										// Copy-constructor
 
-	Player(Model*, int score, int roundScore, int oldScore, int number, 
+	Player(Model*, int score, int roundScore, 					// Constructor used for importing from gamesave
+		int oldScore, int number, 
 		std::vector<Card*> hand, std::vector<Card*> discards);
 
-	virtual bool playTurn(Card*, bool (&cardMap)[4][13]) = 0;
+	virtual bool playTurn(Card*, bool (&cardMap)[4][13]) = 0;	// plays a turn
 	virtual bool isHuman() const = 0;
 
 	int getScore() const;
@@ -26,13 +27,13 @@ public:
 	int getOldScore() const;
 	int getHandSize() const;
 
-	void addCard(Card*);
-	void playCard(Card*);
-	void discard(Card*);
+	void addCard(Card*);										// adds card to hand
+	void playCard(Card*);										// plays card and puts it on table
+	void discard(Card*);										// discards card
 
 	int getNumber() const;
-	void updateScore();
-	void prepForNewRound();
+	void updateScore();											// updates score
+	void prepForNewRound();										// resets player for new round
 	std::vector<Card*> getHand() const;
 	std::vector<Card*> getDiscarded() const;
 	int getDiscardedCount() const;
@@ -51,7 +52,6 @@ private:
 	Model* _model;
 };
 
-// For persisting player in saved game
-std::ostream &operator<<(std::ostream &, const Player &);
-std::istream &operator>>(std::istream &, Player &);
+std::ostream &operator<<(std::ostream &, const Player &);		// streaming operator for persisting player in saved game
+
 #endif

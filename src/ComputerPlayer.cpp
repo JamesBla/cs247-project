@@ -16,6 +16,7 @@ ComputerPlayer::ComputerPlayer(Model* model, int number) : Player(model, number)
 
 ComputerPlayer::ComputerPlayer(const Player& player): Player(player) {}
 
+// plays or discards first valid card
 bool ComputerPlayer::playTurn(Card* card, bool (&cardMap)[4][13]){
 	vector<Card*> legalCards = getLegalPlays(cardMap);
 	if (legalCards.size() > 0){
