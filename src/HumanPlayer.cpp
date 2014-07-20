@@ -7,6 +7,10 @@
 
 using namespace std;
 
+HumanPlayer::HumanPlayer(Model* model, int score, int roundScore, int oldScore, int number, 
+			std::vector<Card*> hand, std::vector<Card*> discards) :
+		Player(model, score, roundScore, oldScore, number, hand, discards){}
+
 HumanPlayer::HumanPlayer(Model* model, int number) : Player(model, number){}
 
 bool HumanPlayer::playTurn(Card* card, bool (&cardMap)[4][13]){

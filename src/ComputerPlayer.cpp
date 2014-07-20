@@ -8,6 +8,10 @@ using namespace std;
 class Model;
 class Card;
 
+ComputerPlayer::ComputerPlayer(Model* model, int score, int roundScore, int oldScore, int number, 
+		std::vector<Card*> hand, std::vector<Card*> discards) :
+	Player(model, score, roundScore, oldScore, number, hand, discards){}
+
 ComputerPlayer::ComputerPlayer(Model* model, int number) : Player(model, number){}
 
 ComputerPlayer::ComputerPlayer(const Player& player): Player(player) {}

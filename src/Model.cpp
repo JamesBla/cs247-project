@@ -266,7 +266,7 @@ void Model::exportModel(ofstream& file) {
 	}
 }
 
-void Model::reconstructModel(ifstream& file) {
+void Model::importModel(ifstream& file) {
 	file >> _seed;
 	int state;
 	file >> state;
@@ -285,6 +285,50 @@ void Model::reconstructModel(ifstream& file) {
 		file >> *newCard;
 		_deck.push_back(newCard);
 	}
-	// TODO read players from text file, recreate them
+
+	string temp;
+	file >> temp; // hack to skip the first "player" tag
+	Card* curCard = new Card(static_cast<Suit>(0), static_cast<Rank>(0));
+	for (int i = 0; i < 4; i++){
+
+		int score, roundScore, oldScore, number;
+		std::vector<Card*> hand, discards;
+		
+		file >> score >> roundScore >> oldScore >> number >> temp;
+		
+		string sections[] = {"discards", "player"};
+		for (int k = 0; k < 2; k++){
+
+			file >> temp; //first card or "discards"
+
+			while(temp != sections[k] && !file.eof()){ // while in hand section
+				istringstream iss;
+				iss.str(temp);
+				iss >> *curCard;
+
+				for (int i = 0; i < _deck.size(); i++){
+					if (*(_deck[i]) == *curCard){
+						hand.push_back(_deck[i]);
+						break;
+					}
+				}
+				file >> temp;
+			}
+		}
+		
+		if (_playerTypes[i] == 'h'){
+			_players.push_back(new HumanPlayer(this, score, roundScore, oldScore,
+					number, hand, discards));
+		}
+		else{
+			_players.push_back(new ComputerPlayer(this, score, roundScore, oldScore,
+					number, hand, discards));
+		}
+
+	}
+	delete curCard;
+
+
+
 	notify();
 }

@@ -3,9 +3,22 @@
 
 #include "Model.h"
 #include "Player.h"
+#include "ComputerPlayer.h"
+#include "HumanPlayer.h"
 #include "Card.h"
 
 using namespace std;
+
+Player::Player(Model* model, int score, int roundScore, int oldScore, int number, 
+		std::vector<Card*> hand, std::vector<Card*> discards){
+	_playerNumber = number;
+	_model = model;
+	_score = score;
+	_roundScore = roundScore;
+	_oldScore = oldScore;
+	_hand = hand;
+	_discards = discards;
+}
 
 Player::Player(Model* model, int number){
 	_playerNumber = number;

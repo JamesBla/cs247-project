@@ -98,7 +98,7 @@ void Controller::loadSavedFile(string filename) {
 	_model->cleanUp();
 	ifstream file(filename.c_str());
 	if (file.is_open()) {
-		_model->reconstructModel(file);
+		_model->importModel(file);
 		file.close();
 	}
 }

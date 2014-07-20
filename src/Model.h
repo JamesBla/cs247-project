@@ -52,7 +52,7 @@ public:
 	void clearCardsOnTable();
 	void deleteCardsAndPlayers();
 	void exportModel(std::ofstream&);
-	void reconstructModel(std::ifstream&);
+	void importModel(std::ifstream&);
 
 private:
 	static const Card SEVEN_OF_SPADES;
