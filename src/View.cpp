@@ -23,6 +23,7 @@ using namespace std;
 
 void View::update() {
 	if (_model->getState() == Model::RESET_VIEW){
+		seedEntry.set_text(intToString(_model->getSeed()));
 		frame.set_label( "Cards in your hand:" );
 		set_title("Straights UI");
 		setHandView(NULL, NULL);
@@ -38,8 +39,6 @@ void View::update() {
 				playerViews[i]->setButton(true, (_model->getPlayer(i)->isHuman()) ? PlayerView::humanLabel() : PlayerView::computerLabel());
 			}
 		}
-
-		return;
 	}
 	else if (_model->getState() == Model::ROUND_STARTED) {
 
@@ -160,8 +159,12 @@ void View::setPlayedCardsView(bool clear){
 	}
 }
 
+void View::onSeedInput(){
+	_controller->setSeed(atoi(static_cast<string>(seedEntry.get_text()).c_str()));
+}
+
 void View::onNewGame(){
-	_controller->run(atoi(static_cast<string>(seedEntry.get_text()).c_str()));
+	_controller->run();
 }
 
 void View::onEndGame(){
@@ -193,7 +196,10 @@ newGameButton("Start new game with seed:"), endGameButton("End current game"),
 
 	newGameButton.signal_clicked().connect( sigc::mem_fun( *this, &View::onNewGame ) );
 	seedEntry.set_text(intToString(_model->getSeed()));
+	
 	seedEntry.set_alignment(0.5);
+	seedEntry.signal_changed().connect( sigc::mem_fun( *this, &View::onSeedInput ) );
+	
 	endGameButton.signal_clicked().connect( sigc::mem_fun( *this, &View::onEndGame ) );
 
 	cardsOnTableFrame.set_label("Cards on the table");

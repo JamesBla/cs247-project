@@ -21,9 +21,8 @@ void Controller::initializeModel() {
 	_model->setState(Model::NONE);
 }
 
-void Controller::run(int seed) {
-	_model->setSeed(seed);
-	srand48(seed);
+void Controller::run() {
+	srand48(_model->getSeed());
 	initializeModel();
 	playRound();
 }
@@ -76,6 +75,10 @@ void Controller::computerizePlayer(int playerIndex) {
 
 void Controller::togglePlayer(int playerIndex) {
 	(_model->getPlayerType(playerIndex) == 'h') ? _model->setPlayerType(playerIndex, 'c') : _model->setPlayerType(playerIndex, 'h');
+}
+
+void Controller::setSeed(int seed){
+	_model->setSeed(seed);
 }
 
 void Controller::endGame() {

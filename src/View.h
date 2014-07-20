@@ -45,6 +45,7 @@ private:
 	 //Signal handlers:
   	virtual void onNewGame();
   	virtual void onEndGame();
+  	virtual void onSeedInput();
 
   	void showDialogue(std::string, std::string);
 
