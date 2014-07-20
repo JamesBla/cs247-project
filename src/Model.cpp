@@ -25,13 +25,16 @@ const Card* Model::sevenOfSpades(){
 	return &SEVEN_OF_SPADES;
 }
 
+// initializes playerTypes to all human
 Model::Model() : _seed(0) {
 	for (int i = 0; i < 4; i++) {
 		_playerTypes[i] = 'h';
 	}
 }
 
+// initializes players using playersTypes
 void Model::initializePlayers() {
+	
 	for (int i = 0; i < 4; i++){
 		if (_playerTypes[i] == 'h'){
 			_players.push_back(new HumanPlayer(this, i+1));
@@ -42,6 +45,7 @@ void Model::initializePlayers() {
 	}
 }
 
+// initializes unshuffled deck
 void Model::initializeDeck(){
 	for (int suit = 0; suit < SUIT_COUNT; suit++){
 		for (int rank = 0; rank < RANK_COUNT; rank++){
@@ -63,9 +67,12 @@ void Model::shuffle(){
 	}
 }
 
+// doles out cards to player
 void Model::deal(){
 	for (int i = 0; i < 52; i++){
 		_players[i/13]->addCard(_deck.at(i));
+
+		// possession of seven of spades determine first player
 		if (*_deck[i] == SEVEN_OF_SPADES){
 			_firstPlayer = i/13;
 		}
@@ -84,6 +91,9 @@ void Model::computerizePlayer(int playerIndex){
 }
 
 void Model::updateScoreAndEndGame() {
+
+	// update the score for each player, keeping note
+	// of whether a score is >= 80
 	int doneGame = false;
 	for (int i = 0; i < 4; i++) {
 		_players[i]->updateScore();
@@ -91,11 +101,19 @@ void Model::updateScoreAndEndGame() {
 			doneGame = true;
 		}
 	}
+
+	// update scores in view
 	notify();
+
 	_state = ROUND_ENDED;
+
+	// display end of round
 	notify();
+
 	if (doneGame) {
 		_state = GAME_ENDED;
+
+		// if the game is done, notify the view
 		notify();
 	}
 }
@@ -105,7 +123,11 @@ bool Model::playTurn(Card *card) {
 }
 
 void Model::advanceCurrentPlayer() {
+
+	// go to next player
 	_curPlayer = (_curPlayer + 1) % 4;
+
+	// notifies the view so as to possible update HandViews et. al.
 	notify();
 }
 
@@ -161,7 +183,7 @@ Model::~Model(){
 	deleteCardsAndPlayers();
 }
 
-Card* Model::findCard(Card* target) const {
+Card* Model::getCard(Card* target) const {
 	for (unsigned int i = 0; i < _deck.size(); i++) {
 		if (*target == *(_deck[i])){
 			return _deck[i];
@@ -170,8 +192,8 @@ Card* Model::findCard(Card* target) const {
 	return NULL;
 }
 
-bool Model::beenPlayed(int rank, int suit) const{
-	return _playedCards[rank][suit];
+bool Model::beenPlayed(Card* c) const{
+	return _playedCards[c->getRank()][c->getSuit()];
 }
 
 vector<Player*> Model::getWinners() const{
@@ -249,7 +271,7 @@ const string Model::_fileFormatSignature = "StraightsFormat";
 
 string Model::MichaelRonHash(string input){
 	for (int i = 0; i < input.length(); i++){
-		input[i] ^= _key[ i% (_key.length()) ]; // crappy XOR "encryption"
+		input[i] ^= ~(_key[ i% (_key.length()) ]); // crappy XOR "encryption"
 	}
 	return input;
 }
@@ -280,7 +302,6 @@ void Model::exportModel(ofstream& file) {
 }
 
 void Model::importModel(ifstream& file) {
-	
 	std::string str((std::istreambuf_iterator<char>(file)),
                  std::istreambuf_iterator<char>());
 
@@ -336,16 +357,13 @@ void Model::importModel(ifstream& file) {
 				tempIss.str(temp);
 				tempIss >> *curCard;
 
-				for (int i = 0; i < _deck.size(); i++){
-					if (*(_deck[i]) == *curCard){
-						if (k == 0){
-							hand.push_back(_deck[i]);
-						}
-						else{
-							discards.push_back(_deck[i]);
-						}
-						break;
-					}
+				Card* card = getCard(curCard);
+
+				if (k == 0){
+					hand.push_back(card);
+				}
+				else{
+					discards.push_back(card);
 				}
 				iss >> temp;
 			}
@@ -362,8 +380,6 @@ void Model::importModel(ifstream& file) {
 
 	}
 	delete curCard;
-
-
 
 	notify();
 }

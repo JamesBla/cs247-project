@@ -261,7 +261,9 @@ void View::setPlayedCardsView(bool clear){
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 13; j++) {
 			const Glib::RefPtr<Gdk::Pixbuf> cardPixbuf = deck.getCardImage(static_cast<Rank>(j), static_cast<Suit>(i));
-			cardsPlayed[i][j]->set( (!clear && _model->beenPlayed(i,j)) ? cardPixbuf : nullCardPixbuf);
+			Card* curCard = new Card(static_cast<Suit>(i), static_cast<Rank>(j));
+			cardsPlayed[i][j]->set( (!clear && _model->beenPlayed(curCard)) ? cardPixbuf : nullCardPixbuf);
+			delete curCard;
 		}
 	}
 }
