@@ -14,8 +14,8 @@ public:
 	Model();
 	virtual ~Model();
 
-	enum State { NONE, ROUND_STARTED, IN_PROGRESS, 		// current state of the game
-	 ROUND_ENDED, GAME_ENDED, RESET_VIEW, BAD_SAVEFILE};
+	enum State { NONE, ROUND_STARTED, IN_PROGRESS, 		
+	ROUND_ENDED, GAME_ENDED, RESET_VIEW, BAD_SAVEFILE}; // current state of the game
 
 														// ACCESORS:
 	static const Card* sevenOfSpades();					// accessor for 7 of Spades

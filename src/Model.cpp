@@ -193,7 +193,7 @@ Card* Model::getCard(Card* target) const {
 }
 
 bool Model::beenPlayed(Card* c) const{
-	return _playedCards[c->getRank()][c->getSuit()];
+	return _playedCards[c->getSuit()][c->getRank()];
 }
 
 vector<Player*> Model::getWinners() const{
