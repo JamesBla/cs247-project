@@ -9,6 +9,7 @@
 #include <gtkmm/entry.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/table.h>
+#include <gtkmm.h>
 #include <iostream>
 
 #include "Model.h"
@@ -20,6 +21,108 @@
 #include "CardButtonView.h"
 
 using namespace std;
+
+View::View(Controller* controller, Model* model) : _controller(controller), _model(model), 
+deck((get_screen()->get_width() > 1600) ? 1600 : get_screen()->get_width()), hbox( true, 10 ), 
+newGameButton("Start new game with seed:"), endGameButton("End current game"), 
+ cardsOnTable(4, 13, true) {
+ 	int screenWidth = (get_screen()->get_width() > 1600) ? 1600 : get_screen()->get_width();
+
+	_model->subscribe(this);
+
+	nullCardPixbuf = deck.getNullCardImage();
+
+	set_title("Straights UI");
+	// Sets the border width of the window.
+	set_border_width( 10 );
+
+	Glib::RefPtr<Gtk::ActionGroup> m_refActionGroup = Gtk::ActionGroup::create();
+	m_refActionGroup->add( Gtk::Action::create("MenuFile", "_File") );
+	m_refActionGroup->add( Gtk::Action::create("Open", Gtk::Stock::OPEN),
+	  sigc::mem_fun(*this, &View::onActionFileOpen) );
+	m_refActionGroup->add( Gtk::Action::create("Save", Gtk::Stock::SAVE),
+	  sigc::mem_fun(*this, &View::onActionFileSave) );
+	m_refActionGroup->add( Gtk::Action::create("Quit", Gtk::Stock::QUIT),
+	  sigc::mem_fun(*this, &View::onActionFileQuit) );
+	m_refActionGroup->add( Gtk::Action::create("MenuHelp", "_Help") );
+	m_refActionGroup->add( Gtk::Action::create("About", Gtk::Stock::ABOUT),
+	  sigc::mem_fun(*this, &View::onActionHelpAbout) );
+
+  	//Define how the actions are presented in the menus and toolbars:
+ 	Glib::RefPtr<Gtk::UIManager> m_refUIManager = Gtk::UIManager::create();
+ 	m_refUIManager->insert_action_group(m_refActionGroup);
+  	add_accel_group(m_refUIManager->get_accel_group());
+	Glib::ustring ui_info =
+	    "<ui>"
+	    "  <menubar name='MenuBar'>"
+	    "    <menu action='MenuFile'>"
+	    "      <menuitem action='Open'/>"
+	    "      <menuitem action='Save'/>"
+	    "      <separator/>"
+	    "      <menuitem action='Quit'/>"
+	    "    </menu>"
+	    "    <menu action='MenuHelp'>"
+	    "      <menuitem action='About'/>"
+	    "    </menu>"
+	    "  </menubar>"
+	    "</ui>";
+
+	m_refUIManager->add_ui_from_string(ui_info);
+	Gtk::Widget* pMenubar = m_refUIManager->get_widget("/MenuBar");
+	//pBox->add(*pMenuBar, Gtk::PACK_SHRINK);
+
+	topContainer.pack_start(*pMenubar);
+	topContainer.pack_start(toolbar);
+	topContainer.pack_start(cardsOnTableFrame);
+	topContainer.pack_start(playersContainer);
+	topContainer.pack_end(frame);
+
+	toolbar.pack_start(newGameButton);
+	toolbar.pack_start(seedEntry);
+	toolbar.pack_end(endGameButton);
+
+	newGameButton.signal_clicked().connect( sigc::mem_fun( *this, &View::onNewGame ) );
+	seedEntry.set_text(intToString(_model->getSeed()));
+	
+	seedEntry.set_alignment(0.5);
+	seedEntry.signal_changed().connect( sigc::mem_fun( *this, &View::onSeedInput ) );
+	
+	endGameButton.signal_clicked().connect( sigc::mem_fun( *this, &View::onEndGame ) );
+
+	cardsOnTableFrame.set_label("Cards on the table");
+	cardsOnTable.set_row_spacings(5);
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 13; j++) {
+			cardsPlayed[i][j] = new Gtk::Image(nullCardPixbuf);
+			cardsOnTable.attach(*cardsPlayed[i][j], j, j+1, i, i+1);
+		}
+	}
+
+	cardsOnTableFrame.add(cardsOnTable);
+
+	for (int i = 0; i < 4; i++) {
+		playerViews[i] = new PlayerView(i+1, _model, this, _controller);
+		playersContainer.pack_start(*playerViews[i]);
+	}
+
+	// Set the look of the frame.
+	frame.set_label( "Cards in your hand:" );
+
+	// Add the vbox to the window. Windows can only hold one widget, same for frames.
+	add( topContainer );
+
+	// Add the horizontal box for laying out the images to the frame.	
+	frame.add( hbox );
+
+	for (int i = 0; i < 13; i++ ) {
+		cardButtonViews[i] = new CardButtonView(_model, this, _controller, screenWidth);
+
+		hbox.add( *cardButtonViews[i] );
+	}
+
+	setHandView(NULL, NULL);
+	show_all();
+}
 
 void View::update() {
 	if (_model->getState() == Model::RESET_VIEW){
@@ -171,72 +274,6 @@ void View::onEndGame(){
 	_controller->endGame();
 }
 
-View::View(Controller* controller, Model* model) : _controller(controller), _model(model), 
-deck((get_screen()->get_width() > 1600) ? 1600 : get_screen()->get_width()), hbox( true, 10 ), 
-newGameButton("Start new game with seed:"), endGameButton("End current game"), 
- cardsOnTable(4, 13, true) {
- 	int screenWidth = (get_screen()->get_width() > 1600) ? 1600 : get_screen()->get_width();
-
-	_model->subscribe(this);
-
-	nullCardPixbuf = deck.getNullCardImage();
-
-	set_title("Straights UI");
-	// Sets the border width of the window.
-	set_border_width( 10 );
-
-	topContainer.pack_start(toolbar);
-	topContainer.pack_start(cardsOnTableFrame);
-	topContainer.pack_start(playersContainer);
-	topContainer.pack_end(frame);
-
-	toolbar.pack_start(newGameButton);
-	toolbar.pack_start(seedEntry);
-	toolbar.pack_end(endGameButton);
-
-	newGameButton.signal_clicked().connect( sigc::mem_fun( *this, &View::onNewGame ) );
-	seedEntry.set_text(intToString(_model->getSeed()));
-	
-	seedEntry.set_alignment(0.5);
-	seedEntry.signal_changed().connect( sigc::mem_fun( *this, &View::onSeedInput ) );
-	
-	endGameButton.signal_clicked().connect( sigc::mem_fun( *this, &View::onEndGame ) );
-
-	cardsOnTableFrame.set_label("Cards on the table");
-	cardsOnTable.set_row_spacings(5);
-	for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 13; j++) {
-			cardsPlayed[i][j] = new Gtk::Image(nullCardPixbuf);
-			cardsOnTable.attach(*cardsPlayed[i][j], j, j+1, i, i+1);
-		}
-	}
-
-	cardsOnTableFrame.add(cardsOnTable);
-
-	for (int i = 0; i < 4; i++) {
-		playerViews[i] = new PlayerView(i+1, _model, this, _controller);
-		playersContainer.pack_start(*playerViews[i]);
-	}
-
-	// Set the look of the frame.
-	frame.set_label( "Cards in your hand:" );
-
-	// Add the vbox to the window. Windows can only hold one widget, same for frames.
-	add( topContainer );
-
-	// Add the horizontal box for laying out the images to the frame.	
-	frame.add( hbox );
-
-	for (int i = 0; i < 13; i++ ) {
-		cardButtonViews[i] = new CardButtonView(_model, this, _controller, screenWidth);
-
-		hbox.add( *cardButtonViews[i] );
-	}
-
-	setHandView(NULL, NULL);
-	show_all();
-}
-
 View::~View() {
 	for (int i = 0; i < 13; i++ ) {
 		if (!card[i])
@@ -273,4 +310,77 @@ string View::intToString(int n) {
 	ostringstream ostr;
 	ostr << n;
 	return ostr.str();
+}
+
+int View::showFileChooser(Gtk::FileChooserDialog& dialog, Gtk::BuiltinStockID stockId) {
+	dialog.set_transient_for(*this);
+	//Add response buttons the the dialog:
+	dialog.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
+	dialog.add_button(stockId, Gtk::RESPONSE_OK);
+
+	//Add filters, so that only certain file types can be selected:
+
+	Gtk::FileFilter filter_text;
+	filter_text.set_name("Straights Game File");
+	filter_text.add_mime_type("text/plain");
+	dialog.add_filter(filter_text);
+
+	Gtk::FileFilter filter_any;
+	filter_any.set_name("Any files");
+	filter_any.add_pattern("*");
+	dialog.add_filter(filter_any);
+
+	//Show the dialog and wait for a user response:
+	return dialog.run();
+}
+
+void View::onActionFileQuit() {
+	hide();
+}
+
+void View::onActionFileOpen() {
+	Gtk::FileChooserDialog dialog("Please choose a file", Gtk::FILE_CHOOSER_ACTION_OPEN);
+
+	int result = showFileChooser(dialog, Gtk::Stock::OPEN);
+	//Handle the response:
+	switch(result)
+	{
+		case(Gtk::RESPONSE_OK):
+		{
+		  string filename = dialog.get_filename();
+		  _controller->loadSavedFile(filename);
+		  break;
+		}
+		default:
+		{
+		  break;
+		}
+	}
+}
+
+void View::onActionFileSave() {
+	if (_model->getState() != Model::NONE && _model->getState() != Model::GAME_ENDED && _model->getState() != Model::RESET_VIEW) {
+		Gtk::FileChooserDialog dialog("Please choose a file", Gtk::FILE_CHOOSER_ACTION_SAVE);
+		int result = showFileChooser(dialog, Gtk::Stock::SAVE);
+		//Handle the response:
+		switch(result)
+		{
+			case(Gtk::RESPONSE_OK):
+			{
+			  string filename = dialog.get_filename();
+			  _controller->saveGame(filename);
+			  break;
+			}
+			default:
+			{
+			  break;
+			}
+		}
+	}
+}
+
+void View::onActionHelpAbout() {
+	string mainMsg = "About";
+	string secondaryMsg = "Ron Meng and Michael Tu\nCopyright \u00A9 2014\n";
+	showDialogue(mainMsg, secondaryMsg);
 }

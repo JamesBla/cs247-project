@@ -2,6 +2,8 @@
 #define _PLAYER_
 
 #include <vector>
+#include <ostream>
+#include <istream>
 
 class Model;
 
@@ -39,5 +41,8 @@ private:
 	int _playerNumber;
 	Model* _model;
 };
+
+// For persisting player in saved game
+std::ostream &operator<<(std::ostream &, const Player &);
 
 #endif

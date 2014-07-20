@@ -2,6 +2,7 @@
 #define _MODEL_
 
 #include <vector>
+#include <fstream>
 
 #include "Subject.h"
 
@@ -50,10 +51,11 @@ public:
 	void cleanUp();
 	void clearCardsOnTable();
 	void deleteCardsAndPlayers();
+	void exportModel(std::ofstream&);
+	void reconstructModel(std::ifstream&);
 
 private:
 	static const Card SEVEN_OF_SPADES;
-	
 	std::vector<Player*> _players;
 	std::vector<Card*> _deck;
 	int _firstPlayer;

@@ -1,5 +1,7 @@
-#include "Model.h"
+#include <ostream>
+#include <istream>
 
+#include "Model.h"
 #include "Player.h"
 #include "Card.h"
 
@@ -8,7 +10,6 @@ using namespace std;
 Player::Player(Model* model, int number){
 	_playerNumber = number;
 	_model = model;
-	
 	_score = 0;
 	_roundScore = 0;
 	_oldScore = 0;
@@ -118,4 +119,21 @@ int Player::getDiscardedCount() const{
 
 vector<Card*> Player::getDiscarded() const{
 	return _discards;
+}
+
+ostream &operator<<(ostream &out, const Player &p){
+	out << p.getScore() << endl;
+	out << p.getRoundScore() << endl;
+	out << p.getOldScore() << endl;
+	out << p.getNumber() << endl;
+	out << "hand\n";
+	for (unsigned int i = 0; i < p.getHand().size(); i++) {
+		out << *(p.getHand().at(i)) << endl;
+	}
+	out << "discards\n";
+	for (unsigned int i = 0; i < p.getDiscarded().size(); i++) {
+		out << *(p.getDiscarded().at(i)) << endl;
+	}
+
+	return out;
 }

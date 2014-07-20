@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include <iostream>
+#include <fstream>
 
 #include "Model.h"
 #include "Controller.h"
@@ -83,4 +84,21 @@ void Controller::setSeed(int seed){
 
 void Controller::endGame() {
 	_model->cleanUp();
+}
+
+void Controller::saveGame(string filename) {
+	ofstream file(filename.c_str());
+	if (file.is_open()) {
+		_model->exportModel(file);
+		file.close();
+	}
+}
+
+void Controller::loadSavedFile(string filename) {
+	_model->cleanUp();
+	ifstream file(filename.c_str());
+	if (file.is_open()) {
+		_model->reconstructModel(file);
+		file.close();
+	}
 }

@@ -45,7 +45,7 @@ istream &operator>>(istream &in, Card &c){
 	string str;
 	in >> str;
 	assert ( !in.fail() );
-	
+
 	//Read in the rank, make sure it's valid
 	c.rank_ = (Rank)ranks.find( str.at(0) );
 	assert ( c.rank_ != static_cast<Rank>(string::npos) );
@@ -55,10 +55,10 @@ istream &operator>>(istream &in, Card &c){
 		assert(str.at(1) == '0');
 		str.at(1) = str.at(2);
 	}
-	
+
 	//Read in the suit, make sure it's valid
 	c.suit_ = (Suit)suits.find( str.at(1) );
 	assert ( c.suit_ != static_cast<Suit>(string::npos) );
-	
+
 	return in;
 }

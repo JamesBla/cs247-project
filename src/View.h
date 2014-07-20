@@ -10,6 +10,7 @@
 #include <gtkmm/entry.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/table.h>
+#include <gtkmm.h>
 
 #include "Card.h"
 #include "DeckGUI.h"
@@ -29,6 +30,10 @@ public:
 	View(Controller*, Model*);
 	virtual ~View();
 	void update();
+	void onActionFileQuit();
+	void onActionFileSave();
+	void onActionFileOpen();
+	void onActionHelpAbout();
 	Glib::RefPtr<Gdk::Pixbuf> getNullCardImage() const;
 	Glib::RefPtr<Gdk::Pixbuf> getPlayOverlay() const;
 	Glib::RefPtr<Gdk::Pixbuf> getDiscardOverlay() const;
@@ -37,7 +42,7 @@ public:
 	void setHandView(std::vector<Card*> *, std::vector<Card*> *);
 	void setPlayedCardsView(bool clear);
 	std::string intToString(int);
-	
+
 private:
 	Controller* _controller;
 	Model* _model;
@@ -48,6 +53,7 @@ private:
   	virtual void onSeedInput();
 
   	void showDialogue(std::string, std::string);
+  	int showFileChooser(Gtk::FileChooserDialog&, Gtk::BuiltinStockID);
 
 	DeckGUI                         deck;             // Knows all of the card pixel buffers.
 	Glib::RefPtr<Gdk::Pixbuf> nullCardPixbuf;

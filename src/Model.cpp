@@ -1,6 +1,7 @@
 #include <cassert>
 #include <cstdlib>
 #include <iostream>
+#include <fstream>
 #include <vector>
 
 #include "Model.h"
@@ -241,4 +242,49 @@ int Model::getSeed() const{
 
 char Model::getPlayerType(int playerIndex) const{
 	return _playerTypes[playerIndex];
+}
+
+void Model::exportModel(ofstream& file) {
+	file << _seed << endl;
+	file << _state << endl;
+	file << _firstPlayer << endl;
+	file << _curPlayer << endl;
+	for (int i = 0; i < 4; i++) {
+		file << _playerTypes[i] << endl;
+	}
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 13; j++) {
+			file << _playedCards[i][j] << endl;
+		}
+	}
+	for (unsigned int i = 0; i < _deck.size(); i++) {
+		file << *(_deck[i]) << endl;
+	}
+	for (int i = 0; i < 4; i++) {
+		file << "player\n";
+		file << *(_players[i]);
+	}
+}
+
+void Model::reconstructModel(ifstream& file) {
+	file >> _seed;
+	int state;
+	file >> state;
+	_state = static_cast<State>(state);
+	file >> _firstPlayer >> _curPlayer;
+	for (int i = 0; i < 4; i++) {
+		file >> _playerTypes[i];
+	}
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 13; j++) {
+			file >> _playedCards[i][j];
+		}
+	}
+	for (int i = 0; i < 52; i++) {
+		Card* newCard = new Card(static_cast<Suit>(0), static_cast<Rank>(0));
+		file >> *newCard;
+		_deck.push_back(newCard);
+	}
+	// TODO read players from text file, recreate them
+	notify();
 }
