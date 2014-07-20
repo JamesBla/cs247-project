@@ -14,7 +14,8 @@ public:
 	Model();
 	virtual ~Model();
 
-	enum State { NONE, ROUND_STARTED, IN_PROGRESS, ROUND_ENDED, GAME_ENDED, RESET_VIEW };
+	enum State { NONE, ROUND_STARTED, IN_PROGRESS, 
+				 ROUND_ENDED, GAME_ENDED, RESET_VIEW, BAD_SAVEFILE};
 
 	// Accessors
 	static const Card* sevenOfSpades();
@@ -64,6 +65,10 @@ private:
 	State _state;
 	int _seed;
 	char _playerTypes[4];
+
+	std::string MichaelRonHash(std::string input);
+	static const std::string _key;
+	static const std::string _fileFormatSignature;
 };
 
 #endif

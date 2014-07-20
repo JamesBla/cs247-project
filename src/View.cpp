@@ -125,7 +125,11 @@ newGameButton("Start new game with seed:"), endGameButton("End current game"),
 }
 
 void View::update() {
-	if (_model->getState() == Model::RESET_VIEW){
+	if (_model->getState() == Model::BAD_SAVEFILE){
+		showDialogue("Error", "Invalid savefile");
+		onActionFileOpen();
+	}
+	else if (_model->getState() == Model::RESET_VIEW){
 		seedEntry.set_text(intToString(_model->getSeed()));
 		frame.set_label( "Cards in your hand:" );
 		set_title("Straights UI");

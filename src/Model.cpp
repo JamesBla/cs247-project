@@ -244,75 +244,110 @@ char Model::getPlayerType(int playerIndex) const{
 	return _playerTypes[playerIndex];
 }
 
+const string Model::_key = "MICHAELTU_RONMENG";
+const string Model::_fileFormatSignature = "StraightsFormat";
+
+string Model::MichaelRonHash(string input){
+	for (int i = 0; i < input.length(); i++){
+		input[i] ^= _key[ i% (_key.length()) ]; // crappy XOR "encryption"
+	}
+	return input;
+}
+
 void Model::exportModel(ofstream& file) {
-	file << _seed << endl;
-	file << _state << endl;
-	file << _firstPlayer << endl;
-	file << _curPlayer << endl;
+	ostringstream oss;
+	oss << _fileFormatSignature << endl;
+	oss << _seed << endl;
+	oss << _state << endl;
+	oss << _firstPlayer << endl;
+	oss << _curPlayer << endl;
 	for (int i = 0; i < 4; i++) {
-		file << _playerTypes[i] << endl;
+		oss << _playerTypes[i] << endl;
 	}
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 13; j++) {
-			file << _playedCards[i][j] << endl;
+			oss << _playedCards[i][j] << endl;
 		}
 	}
 	for (unsigned int i = 0; i < _deck.size(); i++) {
-		file << *(_deck[i]) << endl;
+		oss << *(_deck[i]) << endl;
 	}
 	for (int i = 0; i < 4; i++) {
-		file << "player\n";
-		file << *(_players[i]);
+		oss << "player\n";
+		oss << *(_players[i]);
 	}
+	file << MichaelRonHash(oss.str());
 }
 
 void Model::importModel(ifstream& file) {
-	file >> _seed;
+	
+	std::string str((std::istreambuf_iterator<char>(file)),
+                 std::istreambuf_iterator<char>());
+
+	istringstream iss;
+	
+	iss.str(MichaelRonHash(str));
+
+	string signatureCheck;
+
+	iss >> signatureCheck;
+	if (signatureCheck != _fileFormatSignature){
+		setState(Model::BAD_SAVEFILE);
+		return;
+	}
+	iss >> _seed;
+	
 	int state;
-	file >> state;
+
+	iss >> state;
 	_state = static_cast<State>(state);
-	file >> _firstPlayer >> _curPlayer;
+	iss >> _firstPlayer >> _curPlayer;
 	for (int i = 0; i < 4; i++) {
-		file >> _playerTypes[i];
+		iss >> _playerTypes[i];
 	}
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 13; j++) {
-			file >> _playedCards[i][j];
+			iss >> _playedCards[i][j];
 		}
 	}
 	for (int i = 0; i < 52; i++) {
 		Card* newCard = new Card(static_cast<Suit>(0), static_cast<Rank>(0));
-		file >> *newCard;
+		iss >> *newCard;
 		_deck.push_back(newCard);
 	}
 
 	string temp;
-	file >> temp; // hack to skip the first "player" tag
+	iss >> temp; // hack to skip the first "player" tag
 	Card* curCard = new Card(static_cast<Suit>(0), static_cast<Rank>(0));
 	for (int i = 0; i < 4; i++){
 
 		int score, roundScore, oldScore, number;
 		std::vector<Card*> hand, discards;
 		
-		file >> score >> roundScore >> oldScore >> number >> temp;
+		iss >> score >> roundScore >> oldScore >> number >> temp;
 		
 		string sections[] = {"discards", "player"};
 		for (int k = 0; k < 2; k++){
 
-			file >> temp; //first card or "discards"
+			iss >> temp; //first card or "discards"
 
-			while(temp != sections[k] && !file.eof()){ // while in hand section
-				istringstream iss;
-				iss.str(temp);
-				iss >> *curCard;
+			while(temp != sections[k] && !iss.eof() && temp.length() > 0){ // while in hand section
+				istringstream tempIss;
+				tempIss.str(temp);
+				tempIss >> *curCard;
 
 				for (int i = 0; i < _deck.size(); i++){
 					if (*(_deck[i]) == *curCard){
-						hand.push_back(_deck[i]);
+						if (k == 0){
+							hand.push_back(_deck[i]);
+						}
+						else{
+							discards.push_back(_deck[i]);
+						}
 						break;
 					}
 				}
-				file >> temp;
+				iss >> temp;
 			}
 		}
 		
